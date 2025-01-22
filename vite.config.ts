@@ -8,15 +8,20 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({ 
+      workbox: {
+        navigateFallback: '/Kumbulink/index.html', // Garante que qualquer URL seja tratada pelo index.html
+      },
       registerType: 'autoUpdate',
       manifest: {
         name: 'Kumbulink',
+        id: '/Kumbulink/',
         short_name: 'kumbulink',
         start_url: '/Kumbulink/',
-        description: 'Conectamos quem precisa trocar e enviar dinheiro, de forma direta, simples e segura',
+        description: 'Kumbulink: conectamos quem precisa trocar e enviar dinheiro, de forma direta, simples e segura',
         theme_color: '#2B4420',
         display: "standalone",
-        background_color: "#ffffff",
+        orientation: 'any',
+        background_color: "#E1EFDC",
         icons: [
           {
             src: '/Kumbulink/icon/48x48.png',
