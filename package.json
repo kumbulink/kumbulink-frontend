@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "yarn build",
-    "deploy": "tsc -b && vite build && gh-pages -d dist"
+    "deploy": "tsc -b && vite build && gh-pages -d dist",
+    "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/kumbulink.svg"
   },
   "dependencies": {
     "gh-pages": "^6.3.0",
@@ -21,6 +22,7 @@
     "@eslint/js": "^9.17.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@vite-pwa/assets-generator": "^0.2.6",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "^9.17.0",
     "eslint-plugin-react": "^7.37.4",
