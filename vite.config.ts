@@ -49,16 +49,22 @@ export default defineConfig({
             type: 'image/png'
           },
           {
-            "src": "Kumbulink/icon/maskable_icon.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
+            src: '/Kumbulink/icon/512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: '/Kumbulink/icon/maskable_icon.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ],
         screenshots: [
           {
             src: '/Kumbulink/desktop-screenshot.png',
-            sizes: '1516x938',
+            sizes: '1124x702',
             type: 'image/png',
             form_factor: 'wide',
             label: "Home screen"
@@ -72,6 +78,6 @@ export default defineConfig({
           },
         ]
       }
-     })
+    })
   ],
 })
