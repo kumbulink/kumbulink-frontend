@@ -8,10 +8,10 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({ 
-      workbox: {
-        navigateFallback: '/Kumbulink/index.html', // Garante que qualquer URL seja tratada pelo index.html
-      },
       registerType: 'autoUpdate',
+      devOptions: {
+        enabled: true
+      },
       manifest: {
         name: 'Kumbulink',
         id: '/Kumbulink/',
