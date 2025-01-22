@@ -37,8 +37,35 @@ export default defineConfig({
             src: '/Kumbulink/icon/192x192.png',
             sizes: '192x192',
             type: 'image/png'
+          },
+          {
+            src: '/Kumbulink/icon/512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
+          },
+          {
+            "src": "Kumbulink/icon/maskable_icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
           }
         ],
+        screenshots: [
+          {
+            src: '/Kumbulink/desktop-screenshot.png',
+            sizes: '1516x938',
+            type: 'image/png',
+            form_factor: 'wide',
+            label: "Home screen"
+          },
+          {
+            src: '/Kumbulink/mobile-screenshot.png',
+            sizes: '393x803',
+            type: 'image/png',
+            form_factor: 'narrow',
+            label: "Home screen"
+          },
+        ]
       }
      })
   ],
