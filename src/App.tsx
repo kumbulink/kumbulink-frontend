@@ -1,15 +1,11 @@
-import kumbulink from '/kumbulink.svg'
+import AppRoutes from './routes/AppRoutes'
 import './App.css'
 
 function App() {
 
   return (
     <>
-      <div>
-        <a href="#" target="_blank">
-          <img src={kumbulink} className="logo" alt="Vite logo" />
-        </a>
-      </div>
+      <AppRoutes />
     </>
   )
 }
