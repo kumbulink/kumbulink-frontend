@@ -7,27 +7,49 @@ const Step1: React.FC = () => {
   const { currentStep, nextStep } = useRegisterStore()
   const [showPassword, setShowPassword] = useState(false)
   const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')
   const [validations, setValidations] = useState({
     minLength: false,
     hasUpperCase: false,
     hasNumber: false,
-    hasSpecial: false
+    hasSpecial: false,
+    isEmailValid: false
   })
 
+  const validateEmail = (value: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    setValidations(prev => ({
+      ...prev,
+      isEmailValid: emailRegex.test(value)
+    }))
+  }
+
   const validatePassword = (value: string) => {
-    setValidations({
+    setValidations(prev => ({
+      ...prev,
       minLength: value.length >= 6,
       hasUpperCase: /[A-Z]/.test(value),
       hasNumber: /[0-9]/.test(value),
       hasSpecial: /[*!$&]/.test(value)
-    })
+    }))
   }
 
   useEffect(() => {
     validatePassword(password)
   }, [password])
 
-  const isPasswordValid = Object.values(validations).every(Boolean)
+  useEffect(() => {
+    validateEmail(email)
+  }, [email])
+
+  const isPasswordValid = Object.values({
+    minLength: validations.minLength,
+    hasUpperCase: validations.hasUpperCase,
+    hasNumber: validations.hasNumber,
+    hasSpecial: validations.hasSpecial
+  }).every(Boolean)
+
+  const isFormValid = isPasswordValid && validations.isEmailValid
 
   return (
     <div className='flex min-h-screen flex-col bg-white px-6'>
@@ -55,6 +77,8 @@ const Step1: React.FC = () => {
           <input
             type='email'
             placeholder='Digite seu melhor email'
+            value={email}
+            onChange={e => setEmail(e.target.value)}
             className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
           />
         </div>
@@ -159,12 +183,12 @@ const Step1: React.FC = () => {
         )}
         {currentStep < 4 && (
           <button
-            className={`mt-8 w-full rounded-lg py-4 text-white ${
-              isPasswordValid
+            className={`mt-20 w-full rounded-lg py-4 text-white ${
+              isFormValid
                 ? 'bg-primary-green'
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
-            disabled={isPasswordValid}
+            disabled={isFormValid}
             onClick={nextStep}
           >
             Continuar
