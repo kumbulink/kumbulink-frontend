@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useRegisterStore } from '../../../contexts/RegisterStore'
 
-const Step4: React.FC = () => {
+export const Step4: React.FC = () => {
   const [code, setCode] = useState(['', '', '', ''])
   const [countdown, setCountdown] = useState(52)
   const { currentStep, prevStep, nextStep } = useRegisterStore()
@@ -91,13 +91,13 @@ const Step4: React.FC = () => {
           onClick={() => {
             nextStep()
           }}
-          className='w-full bg-[#2B4420] text-white py-4 rounded-lg mb-6'
+          className='w-full bg-primary-green text-white py-4 rounded-lg mb-6'
         >
           Validar
         </button>
 
         {/* Progress Bar */}
-        <div className='h-1 w-1/3 bg-[#DA7739]' />
+        <div className='h-1 w-1/3 bg-primary-orange' />
       </div>
     </div>
   )

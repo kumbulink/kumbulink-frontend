@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router'
 import { useRegisterStore } from '../../../contexts/RegisterStore'
 
-import { Link } from 'react-router'
+import validator from 'validator'
 
-const Step1: React.FC = () => {
+export const Step1: React.FC = () => {
   const { currentStep, nextStep } = useRegisterStore()
-  const [showPassword, setShowPassword] = useState(false)
-  const [password, setPassword] = useState('')
-  const [email, setEmail] = useState('')
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [password, setPassword] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
   const [validations, setValidations] = useState({
     minLength: false,
     hasUpperCase: false,
@@ -17,10 +18,9 @@ const Step1: React.FC = () => {
   })
 
   const validateEmail = (value: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     setValidations(prev => ({
       ...prev,
-      isEmailValid: emailRegex.test(value)
+      isEmailValid: !!validator.isEmail(value) || false
     }))
   }
 
@@ -70,26 +70,59 @@ const Step1: React.FC = () => {
         </Link>
       </div>
 
-      <h1 className='text-2xl font-light mt-20 mb-8'>Crie seu login e senha</h1>
+      <h1
+        className='text-2xl font-light mt-20 mb-8'
+        role='heading'
+        aria-level={1}
+      >
+        Crie seu login e senha
+      </h1>
 
       <div className='space-y-4'>
         <div>
+          <label htmlFor='email' className='sr-only'>
+            Email
+          </label>
           <input
             type='email'
+            id='email'
+            name='email'
             placeholder='Digite seu melhor email'
             value={email}
             onChange={e => setEmail(e.target.value)}
             className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            aria-label='Digite seu email para cadastro'
+            aria-required='true'
+            aria-invalid={!validations.isEmailValid && email.length > 0}
+            aria-describedby='email-error'
           />
+          {!validations.isEmailValid && email.length > 0 && (
+            <span
+              id='email-error'
+              className='text-red-500 text-sm mt-1'
+              role='alert'
+            >
+              Por favor, insira um email válido
+            </span>
+          )}
         </div>
 
         <div className='relative'>
+          <label htmlFor='password' className='sr-only'>
+            Senha
+          </label>
           <input
             type={showPassword ? 'text' : 'password'}
+            id='password'
+            name='password'
             placeholder='Crie uma senha'
             value={password}
             onChange={e => setPassword(e.target.value)}
             className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            aria-label='Digite sua senha para cadastro'
+            aria-required='true'
+            aria-invalid={!isPasswordValid && password.length > 0}
+            aria-describedby='password-requirements'
           />
           <button
             type='button'
@@ -133,46 +166,55 @@ const Step1: React.FC = () => {
 
         {/* Password requirements section */}
         {password.length > 0 && (
-          <div className='rounded-lg bg-gray-100 p-4'>
+          <div
+            className='rounded-lg bg-gray-100 p-4'
+            id='password-requirements'
+            role='region'
+            aria-label='Requisitos da senha'
+          >
             <p className='mb-2 text-sm font-medium text-gray-900'>
               A senha deve conter:
             </p>
             <div className='space-y-2'>
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center gap-2' role='status'>
                 <div
                   className={`h-2 w-2 rounded-full ${
                     validations.minLength ? 'bg-green-500' : 'bg-red-500'
                   }`}
+                  aria-hidden='true'
                 ></div>
                 <span className='text-sm text-gray-600'>
                   No mínimo 6 caracteres
                 </span>
               </div>
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center gap-2' role='status'>
                 <div
                   className={`h-2 w-2 rounded-full ${
                     validations.hasUpperCase ? 'bg-green-500' : 'bg-red-500'
                   }`}
+                  aria-hidden='true'
                 ></div>
                 <span className='text-sm text-gray-600'>
                   Ao menos um caractere maiúsculo
                 </span>
               </div>
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center gap-2' role='status'>
                 <div
                   className={`h-2 w-2 rounded-full ${
                     validations.hasNumber ? 'bg-green-500' : 'bg-red-500'
                   }`}
+                  aria-hidden='true'
                 ></div>
                 <span className='text-sm text-gray-600'>
                   Ao menos um número
                 </span>
               </div>
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center gap-2' role='status'>
                 <div
                   className={`h-2 w-2 rounded-full ${
                     validations.hasSpecial ? 'bg-green-500' : 'bg-red-500'
                   }`}
+                  aria-hidden='true'
                 ></div>
                 <span className='text-sm text-gray-600'>
                   Ao menos um caractere especial (*!$&)
@@ -188,15 +230,16 @@ const Step1: React.FC = () => {
                 ? 'bg-primary-green'
                 : 'bg-gray-400 cursor-not-allowed'
             }`}
-            disabled={isFormValid}
+            disabled={!isFormValid}
             onClick={nextStep}
+            aria-label='Continuar para o próximo passo'
           >
             Continuar
           </button>
         )}
       </div>
 
-      <div className='mt-6 h-1 w-1/4 bg-primary-orange' />
+      <div className='mt-6 h-1 w-1/4 bg-primary-orange' role='presentation' />
     </div>
   )
 }

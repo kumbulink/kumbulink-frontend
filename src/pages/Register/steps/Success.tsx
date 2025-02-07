@@ -1,6 +1,6 @@
 import SuccessIcon from '/icons/success.svg'
 
-const Success: React.FC = () => {
+export const Success: React.FC = () => {
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-6'>
       {/* Status Bar Space */}

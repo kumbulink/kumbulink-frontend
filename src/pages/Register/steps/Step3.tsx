@@ -8,7 +8,7 @@ import 'react-phone-number-input/style.css'
 
 import { useRegisterStore } from '../../../contexts/RegisterStore'
 
-const Step3: React.FC = () => {
+export const Step3: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<Value>('' as Value)
   const { currentStep, prevStep, nextStep } = useRegisterStore()
 
@@ -89,14 +89,14 @@ const Step3: React.FC = () => {
         className={`mt-20 w-full rounded-lg py-4 text-white ${
           !isPhoneValid(phoneNumber) || !phoneNumber
             ? 'bg-gray-300 cursor-not-allowed'
-            : 'bg-[#2B4420] text-white'
+            : 'bg-primary-green text-white'
         }`}
       >
         Seguir para validação
       </button>
 
       {/* Progress Bar */}
-      <div className='mt-6 h-1 w-1/3 bg-[#DA7739]' />
+      <div className='mt-6 h-1 w-1/3 bg-primary-orange' />
     </div>
   )
 }

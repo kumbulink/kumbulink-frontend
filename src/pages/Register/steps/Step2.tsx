@@ -1,36 +1,107 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useState, useRef, useEffect } from 'react'
+
+import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
+import validator from 'validator'
 
 import { useRegisterStore } from '../../../contexts/RegisterStore'
 
-import DatePicker from 'react-datepicker'
-
 import CalendarIcon from '/icons/calendar.svg'
+
 import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
-
-import { useState } from 'react'
 
 import countries from '../../../shared/countries.json'
 
 const Flag = lazy(() => import('react-world-flags'))
 
-const Step2: React.FC = () => {
-  const { currentStep, prevStep, nextStep } = useRegisterStore()
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
-  const [showCountryDropdown, setShowCountryDropdown] = useState(false)
-  const [showDocumentDropdown, setShowDocumentDropdown] = useState(false)
-  const [selectedDocument, setSelectedDocument] = useState<string | null>(null)
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+const customTheme: CustomFlowbiteTheme['datepicker'] = {
+  root: {
+    base: 'relative',
+    input: {
+      base: 'w-full rounded-lg border border-gray-300 p-2 text-gray-600 placeholder:text-gray-400 !bg-white',
+      field: {
+        base: 'block w-full p-0 text-gray-600 !bg-white',
+        input: {
+          base: 'w-full border-0 p-0 focus:outline-none focus:ring-0 !bg-white !text-base !pl-2'
+        }
+      }
+    }
+  },
+  popup: {
+    footer: {
+      button: {
+        today: 'hidden',
+        clear: 'hidden'
+      }
+    }
+  }
+}
 
-  const handleCountrySelect = (country: string) => {
-    setSelectedCountry(country)
-    setSelectedDocument(null)
-    setShowCountryDropdown(false)
+const validatePassport = (passport: string, country: string) => {
+  const countryCode = countries.find(c => c.name === country)?.passportLocale
+  if (!countryCode) return false
+  return validator.isPassportNumber(passport, countryCode)
+}
+
+export const Step2: React.FC = () => {
+  const { currentStep, prevStep, nextStep } = useRegisterStore()
+  const [selectedCountry, setSelectedCountry] = useState<string>('')
+  const [selectedDocument, setSelectedDocument] = useState<string>('')
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [isDocumentValid, setIsDocumentValid] = useState<boolean>(false)
+  const [isCountryListOpen, setIsCountryListOpen] = useState(false)
+  const [fullName, setFullName] = useState<string>('')
+  const [termsAccepted, setTermsAccepted] = useState<boolean>(false)
+
+  const inputRef = useRef<HTMLInputElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const handleCountryInputClick = () => {
+    setIsCountryListOpen(true)
+    inputRef.current?.focus()
   }
 
-  const handleDocumentSelect = (document: string) => {
-    setSelectedDocument(document)
-    setShowDocumentDropdown(false)
+  const handleCountrySelect = (countryName: string) => {
+    setSelectedCountry(countryName)
+    setSelectedDocument('')
+    setIsCountryListOpen(false)
+  }
+
+  const handleDocumentChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedDocument(event.target.value)
+  }
+
+  const handleDocumentNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setIsDocumentValid(validatePassport(event.target.value, selectedCountry))
+  }
+
+  const selectedCountryData = countries.find(c => c.name === selectedCountry)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        inputRef.current &&
+        dropdownRef.current &&
+        !inputRef.current.contains(event.target as Node) &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsCountryListOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const isFormValid = () => {
+    const isNameValid = fullName.trim().length >= 3 && fullName.includes(' ')
+    const isDateValid = selectedDate !== null && selectedDate < new Date()
+
+    return isNameValid && isDateValid && isDocumentValid && termsAccepted
   }
 
   return (
@@ -61,62 +132,59 @@ const Step2: React.FC = () => {
           <input
             type='text'
             placeholder='Nome completo'
+            value={fullName}
+            onChange={e => setFullName(e.target.value)}
             className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
           />
         </div>
 
         <div className='relative'>
-          <DatePicker
-            selected={selectedDate}
+          <Datepicker
+            value={selectedDate}
             onChange={date => setSelectedDate(date)}
-            dateFormat='dd/MM/yyyy'
-            className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
-            placeholderText='Data de nascimento'
-            wrapperClassName='w-full'
-            showPopperArrow={false}
-            calendarClassName='!border-gray-200'
-            formatWeekDay={nameOfDay => nameOfDay.substring(0, 3)}
-            showMonthDropdown={true}
-            showYearDropdown={true}
-            previousMonthButtonLabel='<'
-            nextMonthButtonLabel='>'
+            icon={() => false}
+            rightIcon={() => (
+              <img src={CalendarIcon} alt='Calendar' className='w-6 h-6' />
+            )}
+            theme={customTheme}
+            placeholder='Data de nascimento'
+            language='pt-BR'
           />
-          <img
-            src={CalendarIcon}
-            alt='Calendar'
-            className='absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-6 h-6'
-          />
-          {/* <FaCalendarAlt className='absolute right-4 top-1/2 -translate-y-1/2 text-gray-400' /> */}
         </div>
 
-        <div className='relative'>
-          <button
-            type='button'
-            onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-            className='flex w-full items-center rounded-lg border border-gray-300 p-4'
-          >
-            {selectedCountry ? (
-              <>
-                <Suspense
-                  fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}
-                >
-                  <Flag
-                    height={20}
-                    width={30}
-                    className='mr-2'
-                    code={countries.find(c => c.name === selectedCountry)?.flag}
-                  />
-                </Suspense>
-                <span className='text-gray-700'>{selectedCountry}</span>
-              </>
-            ) : (
-              <span className='text-gray-500'>Selecione o país</span>
-            )}
-            <span className='ml-auto'>▼</span>
-          </button>
+        <div className='relative flex items-center'>
+          {selectedCountry && (
+            <div className='absolute left-4 z-10 flex items-center pointer-events-none'>
+              <Suspense fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}>
+                <Flag
+                  code={selectedCountryData?.iso}
+                  height={20}
+                  width={30}
+                  className='mr-2'
+                />
+              </Suspense>
+            </div>
+          )}
+          <input
+            ref={inputRef}
+            type='text'
+            value={selectedCountry}
+            onClick={handleCountryInputClick}
+            readOnly
+            placeholder='Selecione o país'
+            className={`w-full rounded-lg border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer ${
+              selectedCountry ? 'pl-16' : 'pl-4'
+            }`}
+          />
+          <span className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
+            ▼
+          </span>
 
-          {showCountryDropdown && (
-            <div className='absolute z-10 mt-1 w-full rounded-lg border border-gray-300 bg-white shadow-lg'>
+          {isCountryListOpen && (
+            <div
+              ref={dropdownRef}
+              className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-lg border border-gray-300 bg-white shadow-lg'
+            >
               {countries.map(country => (
                 <button
                   key={country.name}
@@ -127,10 +195,10 @@ const Step2: React.FC = () => {
                     fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}
                   >
                     <Flag
+                      code={country.iso}
                       height={20}
                       width={30}
                       className='mr-2'
-                      code={country.flag}
                     />
                   </Suspense>
                   <span>{country.name}</span>
@@ -141,37 +209,26 @@ const Step2: React.FC = () => {
         </div>
 
         {selectedCountry && (
-          <div className='relative mt-4'>
-            <button
-              type='button'
-              onClick={() => setShowDocumentDropdown(!showDocumentDropdown)}
-              className='flex w-full items-center rounded-lg border border-gray-300 p-4'
+          <div className='relative'>
+            <select
+              value={selectedDocument}
+              onChange={handleDocumentChange}
+              className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 appearance-none bg-white'
             >
-              {selectedDocument ? (
-                <span className='text-gray-700'>{selectedDocument}</span>
-              ) : (
-                <span className='text-gray-500'>
-                  Selecione o tipo de documento
-                </span>
-              )}
-              <span className='ml-auto'>▼</span>
-            </button>
-
-            {showDocumentDropdown && (
-              <div className='absolute z-10 mt-1 w-full rounded-lg border border-gray-300 bg-white shadow-lg'>
-                {countries
-                  .find(c => c.name === selectedCountry)
-                  ?.documents.map(doc => (
-                    <button
-                      key={doc}
-                      onClick={() => handleDocumentSelect(doc)}
-                      className='w-full p-4 text-left hover:bg-gray-100'
-                    >
-                      {doc}
-                    </button>
-                  ))}
-              </div>
-            )}
+              <option value='' disabled>
+                Selecione o tipo de documento
+              </option>
+              {countries
+                .find(c => c.name === selectedCountry)
+                ?.documents.map(doc => (
+                  <option key={doc} value={doc}>
+                    {doc}
+                  </option>
+                ))}
+            </select>
+            <span className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
+              ▼
+            </span>
           </div>
         )}
 
@@ -179,8 +236,9 @@ const Step2: React.FC = () => {
           <div>
             <input
               type='text'
-              placeholder='Número do documento'
+              placeholder='Número do passaporte'
               className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+              onChange={handleDocumentNumberChange}
             />
           </div>
         )}
@@ -191,7 +249,12 @@ const Step2: React.FC = () => {
 
         {/* Terms checkbox */}
         <label className='mt-4 flex items-start'>
-          <input type='checkbox' className='mt-1 mr-2 accent-primary-orange' />
+          <input
+            type='checkbox'
+            checked={termsAccepted}
+            onChange={e => setTermsAccepted(e.target.checked)}
+            className='mt-1 mr-2 accent-primary-orange'
+          />
           <span className='text-sm text-gray-600'>
             Li e concordo com os termos da{' '}
             <a href='#' className='text-primary-orange'>
@@ -203,8 +266,13 @@ const Step2: React.FC = () => {
         {/* Continue button */}
         <button
           type='submit'
-          className='mt-20 w-full rounded-lg bg-[#2B4420] py-4 text-white'
+          className={`mt-20 w-full rounded-lg py-4 text-white ${
+            isFormValid()
+              ? 'bg-primary-green'
+              : 'bg-gray-400 cursor-not-allowed'
+          }`}
           onClick={nextStep}
+          disabled={!isFormValid()}
         >
           Seguir para validação
         </button>
