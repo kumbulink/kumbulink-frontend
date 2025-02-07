@@ -108,51 +108,55 @@ const Step1: React.FC = () => {
         </div>
 
         {/* Password requirements section */}
-        <div className='rounded-lg bg-gray-100 p-4'>
-          <p className='mb-2 text-sm font-medium text-gray-900'>
-            A senha deve conter:
-          </p>
-          <div className='space-y-2'>
-            <div className='flex items-center gap-2'>
-              <div
-                className={`h-2 w-2 rounded-full ${
-                  validations.minLength ? 'bg-green-500' : 'bg-gray-300'
-                }`}
-              ></div>
-              <span className='text-sm text-gray-600'>
-                No mínimo 6 caracteres
-              </span>
-            </div>
-            <div className='flex items-center gap-2'>
-              <div
-                className={`h-2 w-2 rounded-full ${
-                  validations.hasUpperCase ? 'bg-green-500' : 'bg-gray-300'
-                }`}
-              ></div>
-              <span className='text-sm text-gray-600'>
-                Ao menos um caractere maiúsculo
-              </span>
-            </div>
-            <div className='flex items-center gap-2'>
-              <div
-                className={`h-2 w-2 rounded-full ${
-                  validations.hasNumber ? 'bg-green-500' : 'bg-gray-300'
-                }`}
-              ></div>
-              <span className='text-sm text-gray-600'>Ao menos um número</span>
-            </div>
-            <div className='flex items-center gap-2'>
-              <div
-                className={`h-2 w-2 rounded-full ${
-                  validations.hasSpecial ? 'bg-green-500' : 'bg-gray-300'
-                }`}
-              ></div>
-              <span className='text-sm text-gray-600'>
-                Ao menos um caractere especial (*!$&)
-              </span>
+        {password.length > 0 && (
+          <div className='rounded-lg bg-gray-100 p-4'>
+            <p className='mb-2 text-sm font-medium text-gray-900'>
+              A senha deve conter:
+            </p>
+            <div className='space-y-2'>
+              <div className='flex items-center gap-2'>
+                <div
+                  className={`h-2 w-2 rounded-full ${
+                    validations.minLength ? 'bg-green-500' : 'bg-red-500'
+                  }`}
+                ></div>
+                <span className='text-sm text-gray-600'>
+                  No mínimo 6 caracteres
+                </span>
+              </div>
+              <div className='flex items-center gap-2'>
+                <div
+                  className={`h-2 w-2 rounded-full ${
+                    validations.hasUpperCase ? 'bg-green-500' : 'bg-red-500'
+                  }`}
+                ></div>
+                <span className='text-sm text-gray-600'>
+                  Ao menos um caractere maiúsculo
+                </span>
+              </div>
+              <div className='flex items-center gap-2'>
+                <div
+                  className={`h-2 w-2 rounded-full ${
+                    validations.hasNumber ? 'bg-green-500' : 'bg-red-500'
+                  }`}
+                ></div>
+                <span className='text-sm text-gray-600'>
+                  Ao menos um número
+                </span>
+              </div>
+              <div className='flex items-center gap-2'>
+                <div
+                  className={`h-2 w-2 rounded-full ${
+                    validations.hasSpecial ? 'bg-green-500' : 'bg-red-500'
+                  }`}
+                ></div>
+                <span className='text-sm text-gray-600'>
+                  Ao menos um caractere especial (*!$&)
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
         {currentStep < 4 && (
           <button
             className={`mt-8 w-full rounded-lg py-4 text-white ${
