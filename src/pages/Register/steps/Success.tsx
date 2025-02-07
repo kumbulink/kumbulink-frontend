@@ -1,6 +1,21 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import SuccessIcon from '/icons/success.svg'
 
 export const Success: React.FC = () => {
+  const [countdown, setCountdown] = useState(6)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
+      return () => clearTimeout(timer)
+    } else {
+      void navigate('/login')
+    }
+  }, [countdown, navigate])
+
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-6'>
       {/* Status Bar Space */}
@@ -24,6 +39,10 @@ export const Success: React.FC = () => {
         <p className='text-center text-gray-600 text-base leading-relaxed'>
           Agora você faz parte da rede Kumbulink, você poderá enviar e receber
           dinheiro de onde estiver.
+        </p>
+
+        <p className='text-center text-gray-400 text-sm mt-16 leading-relaxed'>
+          Você será redirecionado para a página de Login em {countdown} segundos
         </p>
       </div>
     </div>

@@ -232,6 +232,12 @@ export const Step2: React.FC = () => {
           </div>
         )}
 
+        {!selectedDocument && (
+          <p className='text-sm text-gray-500'>
+            Selecione o país e tipo de documento
+          </p>
+        )}
+
         {selectedDocument && (
           <div>
             <input
@@ -242,10 +248,6 @@ export const Step2: React.FC = () => {
             />
           </div>
         )}
-
-        <p className='text-sm text-gray-500'>
-          Selecione o país e tipo de documento
-        </p>
 
         {/* Terms checkbox */}
         <label className='mt-4 flex items-start'>
