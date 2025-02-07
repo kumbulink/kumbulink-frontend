@@ -83,23 +83,20 @@ const Step3: React.FC = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className='mt-auto mb-6'>
-        {/* Button */}
-        <button
-          onClick={nextStep}
-          disabled={!isPhoneValid(phoneNumber) || !phoneNumber}
-          className={`w-full py-4 rounded-lg mb-6 ${
-            !isPhoneValid(phoneNumber) || !phoneNumber
-              ? 'bg-gray-300 cursor-not-allowed'
-              : 'bg-[#2B4420] text-white'
-          }`}
-        >
-          Seguir para validação
-        </button>
+      <button
+        onClick={nextStep}
+        disabled={!isPhoneValid(phoneNumber) || !phoneNumber}
+        className={`mt-20 w-full rounded-lg py-4 text-white ${
+          !isPhoneValid(phoneNumber) || !phoneNumber
+            ? 'bg-gray-300 cursor-not-allowed'
+            : 'bg-[#2B4420] text-white'
+        }`}
+      >
+        Seguir para validação
+      </button>
 
-        {/* Progress Bar */}
-        <div className='h-1 w-1/3 bg-[#DA7739]' />
-      </div>
+      {/* Progress Bar */}
+      <div className='mt-6 h-1 w-1/3 bg-[#DA7739]' />
     </div>
   )
 }
