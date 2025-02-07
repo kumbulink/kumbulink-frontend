@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Brasil",
+    "flag": "BRA",
+    "documents": ["CNH", "Passaporte", "CPF"]
+  },
+  {
+    "name": "Angola",
+    "flag": "AGO",
+    "documents": ["Bilhete de Identidade", "Passaporte"]
+  }
+]

@@ -1,0 +1,144 @@
+/* DatePicker custom styles */
+.react-datepicker {
+  border: 1px solid #ccc !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  padding: 12px !important;
+  background: white !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  width: 100% !important;
+}
+
+.react-datepicker-popper {
+  width: 100% !important;
+}
+
+.react-datepicker__month-container {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.react-datepicker__header {
+  background: white !important;
+  border-bottom: none !important;
+  padding: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+.react-datepicker__current-month {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  margin-bottom: 12px !important;
+  text-align: left !important;
+}
+
+.react-datepicker__day-names,
+.react-datepicker__week {
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+.react-datepicker__day-name {
+  color: #666 !important;
+  width: 36px !important;
+  font-size: 12px !important;
+  margin: 0 !important;
+  text-align: center !important;
+  line-height: 36px !important;
+}
+
+.react-datepicker__month {
+  margin: 0 !important;
+}
+
+.react-datepicker__day {
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  margin: 0 !important;
+  font-size: 13px !important;
+  color: #333 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #da7739 !important;
+  color: white !important;
+  border-radius: 50% !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: #da7739 !important;
+  color: white !important;
+  border-radius: 50% !important;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: transparent !important;
+}
+
+.react-datepicker__day--today {
+  font-weight: normal !important;
+  color: #da7739 !important;
+}
+
+.react-datepicker__day--outside-month {
+  color: #ccc !important;
+}
+
+.react-datepicker__input-container input {
+  width: 100% !important;
+  padding: 16px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  font-size: 16px !important;
+}
+
+.react-datepicker__navigation {
+  top: 12px !important;
+}
+
+.react-datepicker__navigation--previous {
+  left: auto !important;
+  right: 40px !important;
+}
+
+.react-datepicker__navigation--next {
+  right: 15px !important;
+}
+
+/* PhoneInput custom styles */
+.PhoneInput {
+  width: 100%;
+}
+
+/* Target the input element directly */
+.PhoneInput input:focus {
+  outline: none;
+}
+
+/* Target the container when input is focused */
+.PhoneInput--focus {
+  outline: none;
+}
+
+/* Override the default focus styles */
+.PhoneInputInput:focus {
+  outline: none;
+  /* border-color: oklch(0.869 0.022 252.894) !important; */
+  border-color: var(--color-gray-300) !important;
+  box-shadow: none !important;
+}
+
+/* Style for the country select button */
+.PhoneInputCountrySelect:focus {
+  outline: none;
+  /* border-color: oklch(0.869 0.022 252.894) !important; */
+  border-color: var(--color-gray-300) !important;
+}
+
+/* Container style when focused */
+.PhoneInput--focus .PhoneInputInput {
+  /* border-color: oklch(0.869 0.022 252.894) !important; */
+  border-color: var(--color-gray-300) !important;
+}
