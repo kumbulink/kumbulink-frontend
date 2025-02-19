@@ -20,6 +20,7 @@ const AppRoutes = () => {
             path='/'
             element={isAuthenticated ? <HomePage /> : <Navigate to='/login' />}
           />
+          <Route path='/home' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/register' element={<RegisterPage />} />
         </Route>

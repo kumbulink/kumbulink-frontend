@@ -18,26 +18,61 @@ export const HomePage = () => {
       to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
       bank: 'Banco Santander',
       timeAgo: '10 minutos'
-    }
+    },
+    {
+      from: { country: 'Brasil', amount: 100, currency: 'R$' },
+      to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
+      bank: 'Banco Santander',
+      timeAgo: '10 minutos'
+    },
+    {
+      from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
+      to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
+      bank: 'Banco Santander',
+      timeAgo: '10 minutos'
+    },
+    {
+      from: { country: 'Brasil', amount: 100, currency: 'R$' },
+      to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
+      bank: 'Banco Santander',
+      timeAgo: '10 minutos'
+    },
+    {
+      from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
+      to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
+      bank: 'Banco Santander',
+      timeAgo: '10 minutos'
+    },
+    {
+      from: { country: 'Brasil', amount: 100, currency: 'R$' },
+      to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
+      bank: 'Banco Santander',
+      timeAgo: '10 minutos'
+    },
+    {
+      from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
+      to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
+      bank: 'Banco Santander',
+      timeAgo: '10 minutos'
+    },
     // ... more offers
   ]
 
   return (
-    <div className='min-h-screen bg-[#2B4420]'>
-      {/* Header */}
-      <header className='px-4 py-2 flex items-center justify-between bg-[#2B4420]'>
+    <div className='min-h-screen bg-primary-green'>
+      <header className='px-4 py-2 flex items-center justify-between bg-primary-green'>
         <button
           onClick={() => setIsSideMenuOpen(true)}
           className='text-white p-2'
         >
           <MenuIcon />
         </button>
-        <img src='kumbulink-horizontal.svg' alt='Kumbulink' className='h-8' />
+        <img src='kumbulink-horizontal.svg' alt='Kumbulink' className='h-10' />
         <div className='w-8' />
       </header>
 
-      {/* Search Bar - Moved outside main content */}
-      <div className='px-4 py-2 bg-[#2B4420]'>
+      {/* Search Bar */}
+      <div className='px-4 py-2 bg-primary-green'>
         <SearchBar />
       </div>
 
@@ -55,7 +90,6 @@ export const HomePage = () => {
           </div>
         </div>
 
-        {/* Announce Button */}
         <div className='fixed bottom-8 left-4 right-4'>
           <button className='w-full bg-primary-orange text-white py-4 font-medium rounded-lg'>
             Anunciar
@@ -63,7 +97,6 @@ export const HomePage = () => {
         </div>
       </main>
 
-      {/* Side Menu */}
       <SideMenu
         isOpen={isSideMenuOpen}
         onClose={() => setIsSideMenuOpen(false)}

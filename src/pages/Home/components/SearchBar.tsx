@@ -1,3 +1,5 @@
+import { SearchIcon, FilterIcon } from '@shared/icons'
+
 export const SearchBar = () => (
   <div className='relative'>
     <input
@@ -8,12 +10,4 @@ export const SearchBar = () => (
     <SearchIcon className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400' />
     <FilterIcon className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400' />
   </div>
-)
-
-const SearchIcon = ({ className }: { className?: string }) => (
-  <svg className={`h-5 w-5 ${className}`} /* ... SVG path ... */ />
-)
-
-const FilterIcon = ({ className }: { className?: string }) => (
-  <svg className={`h-5 w-5 ${className}`} /* ... SVG path ... */ />
 )
