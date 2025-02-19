@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link } from 'react-router'
 
 export function LoginPage() {
   return (
@@ -41,16 +41,27 @@ export function LoginPage() {
           </div>
 
           <div>
-            <button
+            {/* <button
               type='submit'
               className='w-full bg-primary-green text-white py-2 rounded focus:outline-none focus:ring-2 focus:ring-primary-green'
             >
               Entrar
-            </button>
+            </button> */}
+            <Link to={{ pathname: '/home' }}>
+              <button
+                type='submit'
+                className='w-full bg-primary-green text-white py-2 rounded focus:outline-none focus:ring-2 focus:ring-primary-green'
+              >
+                Entrar
+              </button>
+            </Link>
           </div>
 
           <div className='text-center'>
-            <Link to={{ pathname: '/reset-password'}} className='text-primary-orange'>
+            <Link
+              to={{ pathname: '/reset-password' }}
+              className='text-primary-orange'
+            >
               Esqueci a senha
             </Link>
           </div>
@@ -81,5 +92,5 @@ export function LoginPage() {
         </p>
       </section>
     </main>
-  );
+  )
 }
