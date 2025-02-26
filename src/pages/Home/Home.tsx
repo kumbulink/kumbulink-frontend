@@ -1,62 +1,110 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+
+import axios, { AxiosResponse } from 'axios'
+
 import { SearchBar } from './components/SearchBar'
 import { ExchangeCard } from './components/ExchangeCard'
 import { SideMenu } from './components/SideMenu'
 
+interface Advertisement {
+  sender: string,
+  recipient: string
+  sourceAmount: string
+  targetAmount: string
+  tax: string
+  bank: string
+  paymentKey: string
+}
+
+interface ExchangeOffer {
+  from: any,
+  to: any,
+  bank: string,
+  timeAgo: string,
+}
+
 export const HomePage = () => {
+  // const [ads, setAds] = useState<Advertisement[]>([])
+  const [exchangeOffers, setExchange] = useState<ExchangeOffer[]>([])
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
 
-  const exchangeOffers = [
-    {
-      from: { country: 'Brasil', amount: 100, currency: 'R$' },
-      to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
-      bank: 'Banco Santander',
-      timeAgo: '10 minutos'
-    },
-    {
-      from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
-      to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
-      bank: 'Banco Santander',
-      timeAgo: '10 minutos'
-    },
-    {
-      from: { country: 'Brasil', amount: 100, currency: 'R$' },
-      to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
-      bank: 'Banco Santander',
-      timeAgo: '10 minutos'
-    },
-    {
-      from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
-      to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
-      bank: 'Banco Santander',
-      timeAgo: '10 minutos'
-    },
-    {
-      from: { country: 'Brasil', amount: 100, currency: 'R$' },
-      to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
-      bank: 'Banco Santander',
-      timeAgo: '10 minutos'
-    },
-    {
-      from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
-      to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
-      bank: 'Banco Santander',
-      timeAgo: '10 minutos'
-    },
-    {
-      from: { country: 'Brasil', amount: 100, currency: 'R$' },
-      to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
-      bank: 'Banco Santander',
-      timeAgo: '10 minutos'
-    },
-    {
-      from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
-      to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
-      bank: 'Banco Santander',
-      timeAgo: '10 minutos'
-    },
-    // ... more offers
-  ]
+  useEffect(() => {
+      const fetchAds = async () => {
+        try {
+          const ads: AxiosResponse<Advertisement[]> = await axios.get('http://localhost:8888/kumbulink-server/wp-json/wp/v2/anuncios')
+          
+          const offers = ads?.data.map(ad => {
+            const { origem, destino, valor_para_envio, valor_a_receber, banco, dados_bancarios } = ad?.acf
+            return {
+              from: { country: origem, amount: valor_para_envio, currency: 'R$' },
+              to: { country: destino, amount: valor_a_receber, currency: 'Kwz' },
+              bank: banco,
+              timeAgo: '10 minutos'
+            }
+          })
+          setExchange(offers)
+        } catch (err) {
+          console.error(err)
+    
+          return {}
+        }
+      }
+
+      void fetchAds();
+    }, [])
+
+  // const exchangeOffers = [
+  //   {
+  //     from: { country: 'Brasil', amount: 100, currency: 'R$' },
+  //     to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
+  //     bank: 'Banco Santander',
+  //     timeAgo: '10 minutos'
+  //   },
+  //   {
+  //     from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
+  //     to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
+  //     bank: 'Banco Santander',
+  //     timeAgo: '10 minutos'
+  //   },
+  //   {
+  //     from: { country: 'Brasil', amount: 100, currency: 'R$' },
+  //     to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
+  //     bank: 'Banco Santander',
+  //     timeAgo: '10 minutos'
+  //   },
+  //   {
+  //     from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
+  //     to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
+  //     bank: 'Banco Santander',
+  //     timeAgo: '10 minutos'
+  //   },
+  //   {
+  //     from: { country: 'Brasil', amount: 100, currency: 'R$' },
+  //     to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
+  //     bank: 'Banco Santander',
+  //     timeAgo: '10 minutos'
+  //   },
+  //   {
+  //     from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
+  //     to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
+  //     bank: 'Banco Santander',
+  //     timeAgo: '10 minutos'
+  //   },
+  //   {
+  //     from: { country: 'Brasil', amount: 100, currency: 'R$' },
+  //     to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
+  //     bank: 'Banco Santander',
+  //     timeAgo: '10 minutos'
+  //   },
+  //   {
+  //     from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
+  //     to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
+  //     bank: 'Banco Santander',
+  //     timeAgo: '10 minutos'
+  //   },
+  //   // ... more offers
+  // ]
 
   return (
     <div className='min-h-screen bg-primary-green'>
@@ -91,9 +139,11 @@ export const HomePage = () => {
         </div>
 
         <div className='fixed bottom-8 left-4 right-4'>
-          <button className='w-full bg-primary-orange text-white py-4 font-medium rounded-lg'>
-            Anunciar
-          </button>
+          <Link to={{ pathname: '/criar-anuncio' }}>
+            <button className='w-full bg-primary-orange text-white py-4 font-medium rounded-lg'>
+              Anunciar
+            </button>
+          </Link>
         </div>
       </main>
 

@@ -37,10 +37,10 @@ export const HelpIcon: FC = () => (
   <img src={helpIcon} className='w-5 h-5 text-gray-600' alt='' />
 )
 
-export const FilterIcon: FC = ({ className }: IconProps) => (
-  <img src={filterIcon} className={className} alt='' />
+export const FilterIcon = ({ className }: IconProps) => (
+  <img src={filterIcon} className={className ?? 'w-5 h-5 text-gray-600'} alt='' />
 )
 
-export const SearchIcon: FC = ({ className }: IconProps) => (
-  <img src={searchIcon} className={className} alt='' />
+export const SearchIcon = ({ className }: IconProps) => (
+  <img src={searchIcon} className={className ?? 'w-5 h-5 text-gray-600'} alt='' />
 )

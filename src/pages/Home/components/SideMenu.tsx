@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-import { AdsIcon, ConfigIcon, ProfileIcon, BusinessIcon, CloseIcon, HelpIcon } from '@shared/icons'
+import { AdsIcon, ConfigIcon, ProfileIcon, BusinessIcon, CloseIcon, HelpIcon } from '@/shared/ui/icons'
 
 interface SideMenuProps {
   isOpen: boolean

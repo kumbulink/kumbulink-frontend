@@ -9,7 +9,7 @@ interface ExchangeCardProps {
 
 const Flag = lazy(() => import('react-world-flags'))
 
-import countries from '../../../shared/countries.json'
+import countries from '@shared/utils/countries.json'
 
 export const ExchangeCard = ({
   from,
