@@ -1,49 +1,56 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
+import type { WP_REST_API_Post } from 'wp-types';
 
 import { SearchBar } from './components/SearchBar'
-import { ExchangeCard } from './components/ExchangeCard'
+import { OfferCard } from './components/OfferCard'
 import { SideMenu } from './components/SideMenu'
 
-interface Advertisement {
+import { MenuIcon } from '@/shared/ui/icons';
+
+interface ExchangeOffer {
+  id: number,
+  date: string,
   sender: string,
   recipient: string
   sourceAmount: string
   targetAmount: string
-  tax: string
+  tax?: string
   bank: string
   paymentKey: string
 }
 
-interface ExchangeOffer {
-  from: any,
-  to: any,
-  bank: string,
-  timeAgo: string,
+interface WPPostWithACF extends WP_REST_API_Post {
+  acf: ExchangeOffer;
 }
 
 export const HomePage = () => {
-  // const [ads, setAds] = useState<Advertisement[]>([])
-  const [exchangeOffers, setExchange] = useState<ExchangeOffer[]>([])
+  const [offers, setOffers] = useState<ExchangeOffer[]>([])
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
 
   useEffect(() => {
-      const fetchAds = async () => {
+      const fetchOffers = async () => {
         try {
-          const ads: AxiosResponse<Advertisement[]> = await axios.get('http://localhost:8888/kumbulink-server/wp-json/wp/v2/anuncios')
+          const offers = await axios.get<WPPostWithACF[]>('http://localhost:8888/kumbulink-server/wp-json/wp/v2/anuncios')
           
-          const offers = ads?.data.map(ad => {
-            const { origem, destino, valor_para_envio, valor_a_receber, banco, dados_bancarios } = ad?.acf
+          const parsedOffers = offers?.data.map(ad => {
+            const { sender, recipient, sourceAmount, targetAmount, bank, paymentKey } = ad.acf
+            const { id, date } = ad
+            
             return {
-              from: { country: origem, amount: valor_para_envio, currency: 'R$' },
-              to: { country: destino, amount: valor_a_receber, currency: 'Kwz' },
-              bank: banco,
-              timeAgo: '10 minutos'
+              id,
+              date,
+              sender,
+              recipient,
+              sourceAmount,
+              targetAmount,
+              bank,
+              paymentKey
             }
           })
-          setExchange(offers)
+          setOffers(parsedOffers || [])
         } catch (err) {
           console.error(err)
     
@@ -51,60 +58,8 @@ export const HomePage = () => {
         }
       }
 
-      void fetchAds();
+      void fetchOffers();
     }, [])
-
-  // const exchangeOffers = [
-  //   {
-  //     from: { country: 'Brasil', amount: 100, currency: 'R$' },
-  //     to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
-  //     bank: 'Banco Santander',
-  //     timeAgo: '10 minutos'
-  //   },
-  //   {
-  //     from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
-  //     to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
-  //     bank: 'Banco Santander',
-  //     timeAgo: '10 minutos'
-  //   },
-  //   {
-  //     from: { country: 'Brasil', amount: 100, currency: 'R$' },
-  //     to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
-  //     bank: 'Banco Santander',
-  //     timeAgo: '10 minutos'
-  //   },
-  //   {
-  //     from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
-  //     to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
-  //     bank: 'Banco Santander',
-  //     timeAgo: '10 minutos'
-  //   },
-  //   {
-  //     from: { country: 'Brasil', amount: 100, currency: 'R$' },
-  //     to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
-  //     bank: 'Banco Santander',
-  //     timeAgo: '10 minutos'
-  //   },
-  //   {
-  //     from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
-  //     to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
-  //     bank: 'Banco Santander',
-  //     timeAgo: '10 minutos'
-  //   },
-  //   {
-  //     from: { country: 'Brasil', amount: 100, currency: 'R$' },
-  //     to: { country: 'Angola', amount: 15655.99, currency: 'Kwz' },
-  //     bank: 'Banco Santander',
-  //     timeAgo: '10 minutos'
-  //   },
-  //   {
-  //     from: { country: 'Brasil', amount: 500.0, currency: 'R$' },
-  //     to: { country: 'Angola', amount: 73593.48, currency: 'Kwz' },
-  //     bank: 'Banco Santander',
-  //     timeAgo: '10 minutos'
-  //   },
-  //   // ... more offers
-  // ]
 
   return (
     <div className='min-h-screen bg-primary-green'>
@@ -128,14 +83,22 @@ export const HomePage = () => {
       <main className='bg-gray-100 min-h-[calc(100vh-8rem)]'>
         <div className='px-4 pt-4'>
           <div className='flex justify-end items-center'>
-            <span className='text-gray-700'>Filtro (5)</span>
+            <span className='text-gray-700'>Filtro (1)</span>
           </div>
 
-          <div className='space-y-4 mt-4 pb-24'>
-            {exchangeOffers.map((offer, index) => (
-              <ExchangeCard key={index} {...offer} />
-            ))}
-          </div>
+          {offers.length === 0 &&
+            <div className='space-y-4 mt-4 pl-5 pr-5'>
+              <p className='text-gray-500 text-2xl text-center mt-48'>Nenhum anúncio disponível. Sê quem dá o pontapé de saída!</p>
+            </div>
+          }
+
+          {offers.length > 0 && 
+            <div className='space-y-4 mt-4 pb-24'>
+              {offers.map((offer, index) => (
+                <OfferCard key={index} {...offer} />
+              ))}
+            </div>
+          }
         </div>
 
         <div className='fixed bottom-8 left-4 right-4'>
@@ -154,20 +117,3 @@ export const HomePage = () => {
     </div>
   )
 }
-
-const MenuIcon = () => (
-  <svg
-    xmlns='http://www.w3.org/2000/svg'
-    className='h-6 w-6'
-    fill='none'
-    viewBox='0 0 24 24'
-    stroke='currentColor'
-  >
-    <path
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      strokeWidth={2}
-      d='M4 6h16M4 12h16M4 18h16'
-    />
-  </svg>
-)

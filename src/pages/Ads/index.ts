@@ -1,1 +1,0 @@
-export { AdsPage } from './Ads'

@@ -2287,6 +2287,11 @@ date-fns@^3.6.0:
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-3.6.0.tgz#f20ca4fe94f8b754951b24240676e8618c0206bf"
   integrity sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==
 
+date-fns@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-4.1.0.tgz#64b3d83fff5aa80438f5b1a633c2e83b8a1c2d14"
+  integrity sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==
+
 debounce@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/debounce/-/debounce-2.1.0.tgz#eab25eaf254b848fcfccffbde75bdaa44842caa3"
@@ -5017,7 +5022,7 @@ typescript-eslint@^8.18.2:
     "@typescript-eslint/parser" "8.19.1"
     "@typescript-eslint/utils" "8.19.1"
 
-typescript@^5.7.3:
+typescript@>=4, typescript@^5.7.3:
   version "5.7.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.7.3.tgz#919b44a7dbb8583a9b856d162be24a54bf80073e"
   integrity sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==
@@ -5380,6 +5385,13 @@ world-countries@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/world-countries/-/world-countries-5.0.0.tgz#6f75ebcce3d5224d84e9117eaf0d75a7726b6501"
   integrity sha512-wAfOT9Y5i/xnxNOdKJKXdOCw9Q3yQLahBUeuRol+s+o20F6h2a4tLEbJ1lBCYwEQ30Sf9Meqeipk1gib3YwF5w==
+
+wp-types@^4.67.0:
+  version "4.67.0"
+  resolved "https://registry.yarnpkg.com/wp-types/-/wp-types-4.67.0.tgz#4199a88c983f0464f32aab9a16568d940c8ceeb7"
+  integrity sha512-pf8cDXo3cGLx4GR+lgLz4GzYglRXlv2mkUrkXYLvFDH76ZmYZERNWnvQdWgCJdWpPOXj5cTzv3qvrGKFcRKtXA==
+  dependencies:
+    typescript ">=4"
 
 wrappy@1:
   version "1.0.2"
