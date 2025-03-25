@@ -80,7 +80,7 @@ export const Step4: React.FC = () => {
         {/* Resend Link */}
         <div className='mt-4 text-sm'>
           <span className='text-gray-600'>Não recebeu o código? </span>
-          <button className='text-[#DA7739]'>Reenviar o código</button>
+          <button className='text-primary-orange'>Reenviar o código</button>
         </div>
       </div>
 
