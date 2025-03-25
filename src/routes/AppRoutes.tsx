@@ -4,10 +4,12 @@ import {
   Routes,
   Navigate
 } from 'react-router-dom'
-import { LoginPage } from '../pages/Login'
-import { RegisterPage } from '../pages/Register'
-import { HomePage } from '../pages/Home'
+import { LoginPage } from '../pages/login'
+import { RegisterPage } from '../pages/register'
+import { CreateOfferPage } from '../pages/create-offer'
+import { HomePage } from '../pages/home'
 import Layout from '../ui/Layout'
+import { ExchangeOfferPage } from '@/pages/offer'
 
 const isAuthenticated = true
 
@@ -22,7 +24,9 @@ const AppRoutes = () => {
           />
           <Route path='/home' element={<HomePage />} />
           <Route path='/login' element={<LoginPage />} />
-          <Route path='/register' element={<RegisterPage />} />
+          <Route path='/registrar' element={<RegisterPage />} />
+          <Route path='/criar-anuncio' element={<CreateOfferPage />} />
+          <Route path='/anuncio/:id' element={<ExchangeOfferPage />} />
         </Route>
       </Routes>
     </Router>

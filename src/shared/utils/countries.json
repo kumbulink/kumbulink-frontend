@@ -1,0 +1,23 @@
+[
+  {
+    "currency": "AOA",
+    "documents": ["Passaporte"],
+    "iso": "AGO",
+    "name": "Angola",
+    "passportLocale": "AO"
+  },
+  {
+    "currency": "BRL",
+    "documents": ["Passaporte"],
+    "iso": "BRA",
+    "name": "Brasil",
+    "passportLocale": "BR"
+  },
+  {
+    "currency": "EUR",
+    "documents": ["Passaporte"],
+    "iso": "PRT",
+    "name": "Portugal",
+    "passportLocale": "PT"
+  }
+]

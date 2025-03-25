@@ -31,7 +31,7 @@ export const Success: React.FC = () => {
         />
 
         {/* Title */}
-        <h1 className='text-[#2B4420] text-3xl font-medium mb-4'>
+        <h1 className='text-primary-green text-3xl font-medium mb-4'>
           Boas Vindas!
         </h1>
 
