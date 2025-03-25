@@ -1,4 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+import axios from 'axios'
+import type { WP_User } from 'wp-types'
 
 import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
 import validator from 'validator'
@@ -42,14 +45,21 @@ const validatePassport = (passport: string, country: string) => {
   return validator.isPassportNumber(passport, countryCode)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const JWT_TOKEN = import.meta.env.VITE_WP_JWT_TOKEN
+
 export const Step2: React.FC = () => {
-  const { currentStep, prevStep, nextStep } = useRegisterStore()
+  const { currentStep, prevStep, nextStep, formData, setFormData } =
+    useRegisterStore()
   const [selectedCountry, setSelectedCountry] = useState<string>('')
   const [selectedDocument, setSelectedDocument] = useState<string>('')
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [isDocumentValid, setIsDocumentValid] = useState<boolean>(false)
   const [fullName, setFullName] = useState<string>('')
   const [termsAccepted, setTermsAccepted] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [documentNumber, setDocumentNumber] = useState<string>('')
 
   const handleCountrySelect = (countryName: string) => {
     setSelectedCountry(countryName)
@@ -66,6 +76,7 @@ export const Step2: React.FC = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setIsDocumentValid(validatePassport(event.target.value, selectedCountry))
+    setDocumentNumber(event.target.value)
   }
 
   const isFormValid = () => {
@@ -74,6 +85,59 @@ export const Step2: React.FC = () => {
 
     return isNameValid && isDateValid && isDocumentValid && termsAccepted
   }
+
+  const handleRegister = async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      const username = formData.step2.fullName.split(' ').join('').toLowerCase()
+
+      const response = await axios.post<WP_User>(
+        'http://localhost:8888/kumbulink-server/wp-json/wp/v2/users',
+        {
+          username: username,
+          ...formData.step1,
+          ...formData.step2
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${JWT_TOKEN}`
+          }
+        }
+      )
+
+      if (response.status !== 201) {
+        throw new Error('Erro ao criar usuário')
+      }
+
+      nextStep()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao criar usuário')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    setFormData('step2', {
+      fullName,
+      birthDate: selectedDate,
+      country: selectedCountry,
+      documentType: selectedDocument,
+      documentNumber,
+      termsAccepted
+    })
+  }, [
+    setFormData,
+    fullName,
+    selectedDate,
+    selectedCountry,
+    selectedDocument,
+    documentNumber,
+    termsAccepted
+  ])
 
   return (
     <div className='flex min-h-screen flex-col bg-white px-6'>
@@ -181,18 +245,23 @@ export const Step2: React.FC = () => {
           </span>
         </label>
 
-        {/* Continue button */}
+        {error && (
+          <div className='p-4 mb-4 text-red-700 bg-red-100 rounded-lg'>
+            {error}
+          </div>
+        )}
+
         <button
           type='submit'
           className={`mt-20 w-full rounded-lg py-4 text-white ${
-            isFormValid()
+            isFormValid() && !isLoading
               ? 'bg-primary-green'
               : 'bg-gray-400 cursor-not-allowed'
           }`}
-          onClick={nextStep}
-          disabled={!isFormValid()}
+          onClick={handleRegister}
+          disabled={!isFormValid() || isLoading}
         >
-          Seguir para validação
+          {isLoading ? 'Cadastrando...' : 'Seguir para validação'}
         </button>
       </div>
 

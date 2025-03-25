@@ -67,7 +67,7 @@ export function LoginPage() {
           </div>
 
           {/* Login com Google */}
-          <div className='flex items-center justify-center'>
+          {/* <div className='flex items-center justify-center'>
             <button
               type='button'
               className='w-full flex items-center justify-center border border-gray-300 py-2 rounded focus:outline-none focus:ring-2 focus:ring-primary-green'
@@ -80,7 +80,7 @@ export function LoginPage() {
               />
               Entrar com Google
             </button>
-          </div>
+          </div> */}
         </form>
 
         {/* Link para criar conta */}
