@@ -4,6 +4,8 @@ import axios from 'axios'
 import type { WP_User } from 'wp-types'
 
 import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
+import { PopUp } from '@/components/PopUp'
+
 import validator from 'validator'
 
 import { useRegisterStore } from '../../../contexts/RegisterStore'
@@ -15,6 +17,7 @@ import '../style.css'
 
 import countries from '@shared/utils/countries.json'
 import { CountrySelector } from '@/components/CountrySelector'
+import { MembershipTerms, PrivacyPolicy } from '@/shared/ui/terms'
 
 const customTheme: CustomFlowbiteTheme['datepicker'] = {
   root: {
@@ -60,7 +63,8 @@ export const Step2: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [documentNumber, setDocumentNumber] = useState<string>('')
-
+  const [isPopUpOpen, setIsPopUpOpen] = useState(false)
+  const [popUpContent, setPopUpContent] = useState<React.ReactNode>(null)
   const handleCountrySelect = (countryName: string) => {
     setSelectedCountry(countryName)
     setSelectedDocument('')
@@ -117,6 +121,18 @@ export const Step2: React.FC = () => {
       setError(err instanceof Error ? err.message : 'Erro ao criar usuário')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleTerms = (type: 'membership' | 'privacy') => {
+    setIsPopUpOpen(true)
+
+    switch (type) {
+      case 'membership':
+        setPopUpContent(<MembershipTerms />)
+        break
+      case 'privacy':
+        setPopUpContent(<PrivacyPolicy />)
     }
   }
 
@@ -239,8 +255,20 @@ export const Step2: React.FC = () => {
           />
           <span className='text-sm text-gray-600'>
             Li e concordo com os termos da{' '}
-            <a href='#' className='text-primary-orange'>
-              termos da política de privacidade
+            <a
+              href='#'
+              className='text-primary-orange'
+              onClick={() => handleTerms('membership')}
+            >
+              contrato de adesão
+            </a>{' '}
+            da{' '}
+            <a
+              href='#'
+              className='text-primary-orange'
+              onClick={() => handleTerms('privacy')}
+            >
+              política de privacidade
             </a>
           </span>
         </label>
@@ -267,6 +295,10 @@ export const Step2: React.FC = () => {
 
       {/* Progress bar */}
       <div className='mt-6 h-1 w-1/3 bg-primary-orange' />
+
+      <PopUp isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+        {popUpContent}
+      </PopUp>
     </div>
   )
 }

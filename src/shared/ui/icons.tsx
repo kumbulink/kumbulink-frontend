@@ -46,6 +46,14 @@ export const BusinessIcon: FC = () => (
   <img src={businessIcon} className='w-5 h-5 text-gray-600' alt='' />
 )
 
+export const BankIcon: FC = () => (
+  <img src={businessIcon} className='w-5 h-5 text-gray-600' alt='' />
+)
+
+export const LogoutIcon: FC = () => (
+  <img src={businessIcon} className='w-5 h-5 text-gray-600' alt='' />
+)
+
 export const CloseIcon: FC = () => (
   <img src={closeIcon} className='w-5 h-5 text-gray-600' alt='' />
 )
@@ -55,9 +63,17 @@ export const HelpIcon: FC = () => (
 )
 
 export const FilterIcon = ({ className }: IconProps) => (
-  <img src={filterIcon} className={className ?? 'w-5 h-5 text-gray-600'} alt='' />
+  <img
+    src={filterIcon}
+    className={className ?? 'w-5 h-5 text-gray-600'}
+    alt=''
+  />
 )
 
 export const SearchIcon = ({ className }: IconProps) => (
-  <img src={searchIcon} className={className ?? 'w-5 h-5 text-gray-600'} alt='' />
+  <img
+    src={searchIcon}
+    className={className ?? 'w-5 h-5 text-gray-600'}
+    alt=''
+  />
 )

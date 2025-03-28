@@ -5,10 +5,10 @@ import { useRegisterStore } from '../../../contexts/RegisterStore'
 import validator from 'validator'
 
 export const Step1: React.FC = () => {
-  const { currentStep, nextStep, setFormData } = useRegisterStore()
+  const { currentStep, nextStep, formData, setFormData } = useRegisterStore()
   const [showPassword, setShowPassword] = useState<boolean>(false)
-  const [password, setPassword] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>(formData.step1.password)
+  const [email, setEmail] = useState<string>(formData.step1.email)
   const [validations, setValidations] = useState({
     minLength: false,
     hasUpperCase: false,
