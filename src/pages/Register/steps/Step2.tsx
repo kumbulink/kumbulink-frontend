@@ -4,7 +4,7 @@ import axios from 'axios'
 import type { WP_User } from 'wp-types'
 
 import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
-import { PopUp } from '@/components/PopUp'
+import { Popup } from '@/components/Popup'
 
 import validator from 'validator'
 
@@ -322,9 +322,9 @@ export const Step2: React.FC = () => {
       {/* Progress bar */}
       <div className='mt-6 h-1 w-1/3 bg-primary-orange' />
 
-      <PopUp isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
         {popUpContent}
-      </PopUp>
+      </Popup>
     </div>
   )
 }

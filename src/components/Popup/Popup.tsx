@@ -1,13 +1,13 @@
 import { ReactNode } from 'react'
 import { CloseIcon } from '@/shared/ui/icons'
 
-interface PopUpProps {
+interface PopupProps {
   isOpen: boolean
   onClose: () => void
   children?: ReactNode
 }
 
-export const PopUp = ({ isOpen, onClose, children }: PopUpProps) => {
+export const Popup = ({ isOpen, onClose, children }: PopupProps) => {
   if (!isOpen) return null
 
   return (
