@@ -1,7 +1,7 @@
 [
   {
     "currency": "AOA",
-    "documents": ["Passaporte"],
+    "documents": ["Passaporte", "Bilhete de Identidade"],
     "iso": "AGO",
     "name": "Angola",
     "passportLocale": "AO"

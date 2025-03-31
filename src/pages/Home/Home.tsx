@@ -10,7 +10,7 @@ import { SideMenu } from './components/SideMenu'
 import { CreateAdPopUp } from './components/CreateAdPopUp'
 
 import { MenuIcon } from '@/shared/ui/icons'
-import { PopUp } from '@/components/PopUp'
+import { Popup } from '@/components/Popup'
 
 interface ExchangeOffer {
   id: number
@@ -138,9 +138,9 @@ export const HomePage = () => {
         onClose={() => setIsSideMenuOpen(false)}
       />
 
-      <PopUp isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
         <CreateAdPopUp />
-      </PopUp>
+      </Popup>
     </div>
   )
 }

@@ -4,7 +4,7 @@ import axios from 'axios'
 import type { WP_User } from 'wp-types'
 
 import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
-import { PopUp } from '@/components/PopUp'
+import { Popup } from '@/components/Popup'
 
 import validator from 'validator'
 
@@ -48,6 +48,11 @@ const validatePassport = (passport: string, country: string) => {
   return validator.isPassportNumber(passport, countryCode)
 }
 
+const validateAngolanID = (id: string) => {
+  // Angolan ID format: 9 digits
+  return /^\d{9}$/.test(id)
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const JWT_TOKEN = import.meta.env.VITE_WP_JWT_TOKEN
 
@@ -79,8 +84,18 @@ export const Step2: React.FC = () => {
   const handleDocumentNumberChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setIsDocumentValid(validatePassport(event.target.value, selectedCountry))
-    setDocumentNumber(event.target.value)
+    const value = event.target.value
+    setDocumentNumber(value)
+
+    if (selectedCountry === 'Angola') {
+      if (selectedDocument === 'Passaporte') {
+        setIsDocumentValid(validatePassport(value, selectedCountry))
+      } else if (selectedDocument === 'Bilhete de Identidade') {
+        setIsDocumentValid(validateAngolanID(value))
+      }
+    } else {
+      setIsDocumentValid(validatePassport(value, selectedCountry))
+    }
   }
 
   const isFormValid = () => {
@@ -238,10 +253,21 @@ export const Step2: React.FC = () => {
           <div>
             <input
               type='text'
-              placeholder='Número do passaporte'
+              placeholder={
+                selectedDocument === 'Bilhete de Identidade'
+                  ? 'Número do bilhete de identidade'
+                  : 'Número do passaporte'
+              }
               className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
               onChange={handleDocumentNumberChange}
             />
+            {documentNumber && !isDocumentValid && (
+              <p className='text-sm text-red-500 mt-1'>
+                {selectedDocument === 'Bilhete de Identidade'
+                  ? 'Bilhete de identidade inválido. Use 9 dígitos.'
+                  : 'Passaporte inválido.'}
+              </p>
+            )}
           </div>
         )}
 
@@ -296,9 +322,9 @@ export const Step2: React.FC = () => {
       {/* Progress bar */}
       <div className='mt-6 h-1 w-1/3 bg-primary-orange' />
 
-      <PopUp isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
         {popUpContent}
-      </PopUp>
+      </Popup>
     </div>
   )
 }
