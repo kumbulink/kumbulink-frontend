@@ -1,0 +1,34 @@
+.PhoneInput {
+  width: 100%;
+}
+
+/* Target the input element directly */
+.PhoneInput input:focus {
+  outline: none;
+}
+
+/* Target the container when input is focused */
+.PhoneInput--focus {
+  outline: none;
+}
+
+/* Override the default focus styles */
+.PhoneInputInput:focus {
+  outline: none;
+  /* border-color: oklch(0.869 0.022 252.894) !important; */
+  border-color: var(--color-gray-300) !important;
+  box-shadow: none !important;
+}
+
+/* Style for the country select button */
+.PhoneInputCountrySelect:focus {
+  outline: none;
+  /* border-color: oklch(0.869 0.022 252.894) !important; */
+  border-color: var(--color-gray-300) !important;
+}
+
+/* Container style when focused */
+.PhoneInput--focus .PhoneInputInput {
+  /* border-color: oklch(0.869 0.022 252.894) !important; */
+  border-color: var(--color-gray-300) !important;
+}
