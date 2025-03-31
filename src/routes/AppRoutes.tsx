@@ -5,7 +5,7 @@ import {
   Navigate
 } from 'react-router-dom'
 import { LoginPage } from '@/pages/login'
-import { RegisterPage } from '@/pages/register'
+import { RegisterPage } from '@/pages/tmp_xpto'
 import { CreateOfferPage } from '@/pages/create-offer'
 import { HomePage } from '@/pages/home'
 import Layout from '../ui/Layout'
