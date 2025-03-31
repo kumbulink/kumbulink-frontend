@@ -23,7 +23,7 @@ export const useUserStore = create<UserStore>()(
         logout: () => {
           localStorage.removeItem('jwt_token')
           set({ user: null })
-          window.location.href = '/Kumbulink/'
+          window.location.href = '/'
         }
       }),
       {

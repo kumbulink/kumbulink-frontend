@@ -15,7 +15,7 @@ const isAuthenticated = localStorage.getItem('jwt_token')
 
 const AppRoutes = () => {
   return (
-    <Router basename='/Kumbulink/'>
+    <Router basename='/'>
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route path='/' element={<HomePage />} />
