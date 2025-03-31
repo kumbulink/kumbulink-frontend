@@ -4,24 +4,41 @@ on:
   push:
     branches:
       - main
+      - chore/github-actions
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout do código
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Instalar dependências
-        run: yarn install && yarn build
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
 
-      - name: Configurar credenciais AWS
+      - name: Clear Yarn cache
+        run: yarn cache clean
+
+      - name: Remove TypeScript cache
+        run: rm -rf node_modules/.cache dist .turbo
+
+      - name: Clean Install Dependencies with Yarn
+        run: |
+          rm -rf node_modules
+          yarn install
+
+      - name: Build the project
+        run: yarn build
+
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Fazer upload para o S3
+      - name: Upload to S3
         run: aws s3 sync ./dist s3://${{ secrets.S3_BUCKET_NAME }} --delete
