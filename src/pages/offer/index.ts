@@ -1,1 +1,1 @@
-export { ExchangeOfferPage } from './ExchangeOfferPage'
+export { ExchangeOfferPage } from './exchange-offer-page'

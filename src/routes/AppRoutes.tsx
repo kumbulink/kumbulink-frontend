@@ -4,10 +4,10 @@ import {
   Routes,
   Navigate
 } from 'react-router-dom'
-import { LoginPage } from '../pages/login'
-import { RegisterPage } from '../pages/register'
-import { CreateOfferPage } from '../pages/create-offer'
-import { HomePage } from '../pages/home'
+import { LoginPage } from '@/pages/login'
+import { RegisterPage } from '@/pages/register'
+import { CreateOfferPage } from '@/pages/create-offer'
+import { HomePage } from '@/pages/home'
 import Layout from '../ui/Layout'
 import { ExchangeOfferPage } from '@/pages/offer'
 

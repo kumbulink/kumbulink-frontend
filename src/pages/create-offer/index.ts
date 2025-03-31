@@ -1,1 +1,1 @@
-export { CreateOfferPage } from './CreateOfferPage'
+export { CreateOfferPage } from './create-offer-page'
