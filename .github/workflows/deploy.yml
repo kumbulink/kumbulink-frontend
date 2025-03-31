@@ -22,6 +22,9 @@ jobs:
       - name: Clear Yarn cache
         run: yarn cache clean
 
+      - name: Remove TypeScript cache
+        run: rm -rf node_modules/.cache dist .turbo
+
       - name: Clean Install Dependencies with Yarn
         run: |
           rm -rf node_modules
