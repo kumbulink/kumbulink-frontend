@@ -33,7 +33,7 @@ export function LoginPage() {
 
     try {
       const { data } = await axios.post<LoginResponse>(
-        'http://localhost:8888/kumbulink-server/wp-json/jwt-auth/v1/token',
+        'https://kumbulink.com/wp-json/jwt-auth/v1/token',
         {
           username: email,
           password: password

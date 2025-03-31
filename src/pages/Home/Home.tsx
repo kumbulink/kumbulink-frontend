@@ -39,7 +39,7 @@ export const HomePage = () => {
     const fetchOffers = async () => {
       try {
         const offers = await axios.get<WPPostWithACF[]>(
-          'http://localhost:8888/kumbulink-server/wp-json/wp/v2/anuncios'
+          'https://kumbulink.com/wp-json/wp/v2/anuncios'
         )
 
         const parsedOffers = offers?.data.map(ad => {

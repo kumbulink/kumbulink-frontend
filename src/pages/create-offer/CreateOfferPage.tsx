@@ -10,7 +10,7 @@ import { formatCurrency } from '@/shared/utils/currency'
 import { HiPencil } from 'react-icons/hi'
 
 interface FormState {
-  sender: string,
+  sender: string
   recipient: string
   sourceAmount: string
   targetAmount: string
@@ -21,7 +21,7 @@ interface FormState {
 
 const toNumeric = (value: string) => {
   const numeric = value.replace(/\D/g, '')
-  
+
   return numeric === '' ? 0 : parseInt(numeric, 10)
 }
 
@@ -39,24 +39,24 @@ export const CreateOfferPage: React.FC = () => {
   })
 
   useEffect(() => {
-    setForm((prevForm) => {
+    setForm(prevForm => {
       const { targetAmount, sourceAmount } = prevForm
       const targetNumber = toNumeric(targetAmount)
       const sourceNumber = toNumeric(sourceAmount)
-  
+
       const tax = targetNumber ? sourceNumber / targetNumber : 0
-  
+
       return { ...prevForm, tax: tax.toFixed(4) }
     })
   }, [form.sourceAmount, form.targetAmount])
 
   const isFormValid =
-    form.sender && 
-    form.recipient && 
-    form.sourceAmount && 
-    form.targetAmount && 
-    form.tax && 
-    form.bank && 
+    form.sender &&
+    form.recipient &&
+    form.sourceAmount &&
+    form.targetAmount &&
+    form.tax &&
+    form.bank &&
     form.paymentKey
 
   const handleChange = (
@@ -64,35 +64,37 @@ export const CreateOfferPage: React.FC = () => {
   ) => {
     const { name, value } = e.target
     const numericValue = toNumeric(value)
-    const currency = name === 'sourceAmount' ? senderCurrencyCode : recipientCurrencyCode
+    const currency =
+      name === 'sourceAmount' ? senderCurrencyCode : recipientCurrencyCode
 
-    setForm((prev) => ({ ...prev, [name]: formatCurrency(numericValue, currency) }))
+    setForm(prev => ({
+      ...prev,
+      [name]: formatCurrency(numericValue, currency)
+    }))
   }
 
-  const handleCountryRecipientSelected = (
-    recipient: string
-  ) => {
-    const countryCurrency = countries.find(country => country.name === recipient)?.currency ?? 'BRL'
+  const handleCountryRecipientSelected = (recipient: string) => {
+    const countryCurrency =
+      countries.find(country => country.name === recipient)?.currency ?? 'BRL'
     const numericValue = form.targetAmount.replace(/\D/g, '')
 
-    setForm({ 
-      ...form, 
-      recipient, 
+    setForm({
+      ...form,
+      recipient,
       targetAmount: formatCurrency(parseInt(numericValue), countryCurrency)
     })
     setRecipientCurrency(countryCurrency)
   }
 
-  const handleCountrySenderSelected = (
-    sender: string
-  ) => {
-    const countryCurrency = countries.find(country => country.name === sender)?.currency ?? 'BRL'
+  const handleCountrySenderSelected = (sender: string) => {
+    const countryCurrency =
+      countries.find(country => country.name === sender)?.currency ?? 'BRL'
     const numericValue = form.sourceAmount.replace(/\D/g, '')
-    
-    setForm({ 
-      ...form, 
-      sender, 
-      sourceAmount: formatCurrency(parseInt(numericValue), countryCurrency) 
+
+    setForm({
+      ...form,
+      sender,
+      sourceAmount: formatCurrency(parseInt(numericValue), countryCurrency)
     })
     setSenderCurrency(countryCurrency)
   }
@@ -100,7 +102,7 @@ export const CreateOfferPage: React.FC = () => {
   return (
     <div className='max-w-md mx-auto p-4'>
       <div className='flex items-center pt-4 mb-20'>
-        <BackButton pathname='/home' />
+        <BackButton pathname='/' />
         <h1 className='text-lg'>Anunciar</h1>
       </div>
 
@@ -134,7 +136,9 @@ export const CreateOfferPage: React.FC = () => {
               placeholder='Digite o valor'
               className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
             />
-            <span className='text-gray-500 text-xs'>{recipientCurrencyCode}</span>
+            <span className='text-gray-500 text-xs'>
+              {recipientCurrencyCode}
+            </span>
           </div>
         </div>
 
@@ -160,7 +164,9 @@ export const CreateOfferPage: React.FC = () => {
 
         <div className='mt-6  '>
           <h2 className='mb-4'>Dados bancários</h2>
-          <label className='text-gray-800 text-xs'>Chave para transferência</label>
+          <label className='text-gray-800 text-xs'>
+            Chave para transferência
+          </label>
           <div className='relative items-center border border-gray-300 rounded-md mb-4'>
             <input
               type='text'
@@ -174,7 +180,9 @@ export const CreateOfferPage: React.FC = () => {
 
           <button
             className={`w-full p-4 rounded-sm font-bold shadow-lg  ${
-              isFormValid ? 'bg-primary-green text-stone-50' : 'bg-gray-100 text-gray-400'
+              isFormValid
+                ? 'bg-primary-green text-stone-50'
+                : 'bg-gray-100 text-gray-400'
             }`}
             disabled={!isFormValid}
           >
