@@ -11,19 +11,18 @@ import { HomePage } from '../pages/home'
 import Layout from '../ui/Layout'
 import { ExchangeOfferPage } from '@/pages/offer'
 
-const isAuthenticated = true
+const isAuthenticated = localStorage.getItem('jwt_token')
 
 const AppRoutes = () => {
   return (
-    <Router basename='/Kumbulink'>
+    <Router basename='/'>
       <Routes>
         <Route path='/' element={<Layout />}>
+          <Route path='/' element={<HomePage />} />
           <Route
-            path='/'
-            element={isAuthenticated ? <HomePage /> : <Navigate to='/login' />}
+            path='/login'
+            element={isAuthenticated ? <Navigate to='/' /> : <LoginPage />}
           />
-          <Route path='/home' element={<HomePage />} />
-          <Route path='/login' element={<LoginPage />} />
           <Route path='/registrar' element={<RegisterPage />} />
           <Route path='/criar-anuncio' element={<CreateOfferPage />} />
           <Route path='/anuncio/:id' element={<ExchangeOfferPage />} />

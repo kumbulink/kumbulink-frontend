@@ -8,7 +8,11 @@ import react from 'eslint-plugin-react'
 export default tseslint.config(
   { ignores: ['dist'] },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked, ...tseslint.configs.stylisticTypeChecked],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommendedTypeChecked,
+      ...tseslint.configs.stylisticTypeChecked
+    ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
@@ -16,7 +20,7 @@ export default tseslint.config(
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
         tsconfigRootDir: import.meta.dirname
-      },
+      }
     },
     plugins: {
       'react-hooks': reactHooks,
@@ -30,8 +34,9 @@ export default tseslint.config(
       'react/prop-types': 'off',
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
+        { allowConstantExport: true }
       ],
-    },
-  },
+      '@typescript-eslint/no-misused-promises': 'off'
+    }
+  }
 )

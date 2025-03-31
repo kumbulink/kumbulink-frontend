@@ -21,7 +21,6 @@ export const Step3: React.FC = () => {
 
   return (
     <div className='flex min-h-screen flex-col bg-white px-6'>
-      {/* Header */}
       <div className='flex items-center pt-4'>
         {currentStep > 1 && (
           <>
@@ -41,7 +40,6 @@ export const Step3: React.FC = () => {
         )}
       </div>
 
-      {/* Main Content */}
       <div className='mt-20'>
         <h1 className='text-2xl font-light mb-8'>
           Vamos validar sua identidade
@@ -82,7 +80,6 @@ export const Step3: React.FC = () => {
         </div>
       </div>
 
-      {/* Bottom Section */}
       <button
         onClick={nextStep}
         disabled={!isPhoneValid(phoneNumber) || !phoneNumber}

@@ -29,7 +29,6 @@ export const Step4: React.FC = () => {
 
   return (
     <div className='flex min-h-screen flex-col bg-white px-6'>
-      {/* Header */}
       <div className='flex items-center pt-4'>
         {currentStep > 1 && (
           <>
@@ -49,13 +48,11 @@ export const Step4: React.FC = () => {
         )}
       </div>
 
-      {/* Main Content */}
       <div className='mt-20'>
         <h1 className='text-2xl font-light mb-16'>
           Vamos validar sua identidade
         </h1>
 
-        {/* Code Inputs */}
         <div className='flex justify-between mb-6'>
           {code.map((digit, index) => (
             <input

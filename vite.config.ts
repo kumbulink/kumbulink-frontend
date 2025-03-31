@@ -2,11 +2,11 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import path from 'path';
+import path from 'path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/Kumbulink/',
+  base: '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
@@ -14,7 +14,7 @@ export default defineConfig({
       '@components': path.resolve(__dirname, 'src/components'),
       '@icons': path.resolve(__dirname, 'public/icons'),
       '@shared': path.resolve(__dirname, 'src/shared')
-    },
+    }
   },
   plugins: [
     tailwindcss(),
@@ -26,9 +26,9 @@ export default defineConfig({
       },
       manifest: {
         name: 'Kumbulink',
-        id: '/Kumbulink/',
+        id: '/',
         short_name: 'kumbulink',
-        start_url: '/Kumbulink/',
+        start_url: '/',
         description:
           'Kumbulink: conectamos quem precisa trocar e enviar dinheiro, de forma direta, simples e segura',
         theme_color: '#2B4420',
@@ -37,38 +37,38 @@ export default defineConfig({
         background_color: '#E1EFDC',
         icons: [
           {
-            src: '/Kumbulink/icons/48x48.png',
+            src: '/icons/48x48.png',
             sizes: '48x48',
             type: 'image/png'
           },
           {
-            src: '/Kumbulink/icons/96x96.png',
+            src: '/icons/96x96.png',
             sizes: '96x96',
             type: 'image/png'
           },
           {
-            src: '/Kumbulink/icons/144x144.png',
+            src: '/icons/144x144.png',
             sizes: '144x144',
             type: 'image/png'
           },
           {
-            src: '/Kumbulink/icons/192x192.png',
+            src: '/icons/192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/Kumbulink/icons/512x512.png',
+            src: '/icons/512x512.png',
             sizes: '512x512',
             type: 'image/png'
           },
           {
-            src: '/Kumbulink/icons/512x512.png',
+            src: '/icons/512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/Kumbulink/icons/maskable_icon.png',
+            src: '/icons/maskable_icon.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
@@ -76,14 +76,14 @@ export default defineConfig({
         ],
         screenshots: [
           {
-            src: '/Kumbulink/desktop-screenshot.png',
+            src: '/desktop-screenshot.png',
             sizes: '1124x702',
             type: 'image/png',
             form_factor: 'wide',
             label: 'Home screen'
           },
           {
-            src: '/Kumbulink/mobile-screenshot.png',
+            src: '/mobile-screenshot.png',
             sizes: '393x803',
             type: 'image/png',
             form_factor: 'narrow',

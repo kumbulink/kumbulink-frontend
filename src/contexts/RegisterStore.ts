@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { devtools, persist, createJSONStorage } from 'zustand/middleware'
 
 interface RegisterData {
   step1: {
@@ -36,39 +36,47 @@ interface RegisterStore {
 }
 
 export const useRegisterStore = create<RegisterStore>()(
-  devtools(set => ({
-    currentStep: 1,
-    formData: {
-      step1: {
-        email: '',
-        password: ''
-      },
-      step2: {
-        fullName: '',
-        birthDate: null,
-        country: '',
-        documentType: '',
-        documentNumber: '',
-        termsAccepted: false
-      },
-      step3: {
-        phoneNumber: ''
-      },
-      step4: {
-        verificationCode: ''
-      }
-    },
-    setFormData: (step, data) =>
-      set(state => ({
+  devtools(
+    persist(
+      set => ({
+        currentStep: 1,
         formData: {
-          ...state.formData,
-          [step]: {
-            ...state.formData[step],
-            ...data
+          step1: {
+            email: '',
+            password: ''
+          },
+          step2: {
+            fullName: '',
+            birthDate: null,
+            country: '',
+            documentType: '',
+            documentNumber: '',
+            termsAccepted: false
+          },
+          step3: {
+            phoneNumber: ''
+          },
+          step4: {
+            verificationCode: ''
           }
-        }
-      })),
-    nextStep: () => set(state => ({ currentStep: state.currentStep + 1 })),
-    prevStep: () => set(state => ({ currentStep: state.currentStep - 1 }))
-  }))
+        },
+        setFormData: (step, data) =>
+          set(state => ({
+            formData: {
+              ...state.formData,
+              [step]: {
+                ...state.formData[step],
+                ...data
+              }
+            }
+          })),
+        nextStep: () => set(state => ({ currentStep: state.currentStep + 1 })),
+        prevStep: () => set(state => ({ currentStep: state.currentStep - 1 }))
+      }),
+      {
+        name: 'register-storage',
+        storage: createJSONStorage(() => localStorage)
+      }
+    )
+  )
 )
