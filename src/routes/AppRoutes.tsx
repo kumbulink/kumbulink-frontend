@@ -4,12 +4,12 @@ import {
   Routes,
   Navigate
 } from 'react-router-dom'
-import { LoginPage } from '@/pages-xpto/login'
-import { RegisterPage } from '@/pages-xpto/tmp_xpto'
-import { CreateOfferPage } from '@/pages-xpto/create-offer'
-import { HomePage } from '@/pages-xpto/home'
+import { LoginPage } from '@/pages/login'
+import { RegisterPage } from '@/pages/register'
+import { CreateOfferPage } from '@/pages/create-offer'
+import { HomePage } from '@/pages/home'
 import Layout from '../ui/Layout'
-import { ExchangeOfferPage } from '@/pages-xpto/offer'
+import { ExchangeOfferPage } from '@/pages/offer'
 
 const isAuthenticated = localStorage.getItem('jwt_token')
 
