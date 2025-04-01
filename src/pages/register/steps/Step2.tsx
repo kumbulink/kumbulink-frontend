@@ -16,7 +16,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
 
 import countries from '@shared/utils/countries.json'
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1e9ff04 (chore(sidemenu): add login button)
 import { CountrySelector } from '@components/CountrySelector'
 import { MembershipTerms, PrivacyPolicy } from '@shared/ui/terms'
 
