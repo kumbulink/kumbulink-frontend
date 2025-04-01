@@ -7,10 +7,10 @@ import type { WP_REST_API_Post } from 'wp-types'
 import { SearchBar } from './components/SearchBar'
 import { OfferCard } from './components/OfferCard'
 import { SideMenu } from './components/SideMenu'
-import { CreateAdPopUp } from './components/CreateAdPopUp'
 
-import { MenuIcon } from '@/shared/ui/icons'
-import { Popup } from '@/components/Popup'
+import { MenuIcon } from '@shared/ui/icons'
+import { JoinUsPopup } from '@components/JoinUsPopup'
+import { Popup } from '@components/Popup'
 
 interface ExchangeOffer {
   id: number
@@ -139,7 +139,7 @@ export const HomePage = () => {
       />
 
       <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
-        <CreateAdPopUp />
+        <JoinUsPopup />
       </Popup>
     </div>
   )

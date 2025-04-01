@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export const CreateAdPopUp = () => {
+export const JoinUsPopup = () => {
   return (
     <div className='relative bg-white w-full max-w-md p-8'>
       <div className='flex justify-end mb-8'>
@@ -12,10 +12,12 @@ export const CreateAdPopUp = () => {
       </div>
 
       <div className='space-y-4'>
-        <h2 className='text-[30px] leading-tight'>
-          <span className='text-primary-orange font-normal'>JUNTA-TE À</span>
+        <h2 className='leading-tight'>
+          <span className='text-[30px] text-primary-orange font-normal'>
+            JUNTA-TE À
+          </span>
           <br />
-          <span className='font-bold'>KUMBULINK</span>
+          <span className='font-bold text-[50px] font-geo'>KUMBULINK</span>
         </h2>
 
         <p className='text-[16px] leading-7 text-gray-700 max-w-[280px]'>

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react'
 
 import countries from '@shared/utils/countries.json'
 
-import { CountrySelector } from '@/components/CountrySelector'
-import { BackButton } from '@/components/BackButton'
+import { CountrySelector } from '@components/CountrySelector'
+import { BackButton } from '@components/BackButton'
 
-import { formatCurrency } from '@/shared/utils/currency'
+import { formatCurrency } from '@shared/utils/currency'
 
 import { HiPencil } from 'react-icons/hi'
 

@@ -3,6 +3,7 @@
 @theme {
   --color-primary-green: #2b4420;
   --color-primary-orange: #da7739;
+  --font-geo: 'Geo', serif;
 }
 
 html {

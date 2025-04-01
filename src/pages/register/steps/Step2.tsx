@@ -4,7 +4,7 @@ import axios from 'axios'
 import type { WP_User } from 'wp-types'
 
 import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
-import { Popup } from '@/components/Popup'
+import { Popup } from '@components/Popup'
 
 import validator from 'validator'
 
@@ -16,8 +16,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
 
 import countries from '@shared/utils/countries.json'
-import { CountrySelector } from '@/components/CountrySelector'
-import { MembershipTerms, PrivacyPolicy } from '@/shared/ui/terms'
+import { CountrySelector } from '@components/CountrySelector'
+import { MembershipTerms, PrivacyPolicy } from '@shared/ui/terms'
 
 const customTheme: CustomFlowbiteTheme['datepicker'] = {
   root: {

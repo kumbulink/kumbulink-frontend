@@ -9,7 +9,7 @@ import {
   HelpIcon,
   LogoutIcon,
   CloseIcon
-} from '@/shared/ui/icons'
+} from '@shared/ui/icons'
 
 interface SideMenuProps {
   isOpen: boolean
@@ -103,6 +103,24 @@ export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
               </Link>
             ))}
         </nav>
+
+        {!isAuthenticated && (
+          <div className='p-4'>
+            <Link
+              to='/login'
+              className='block w-full bg-primary-green text-white py-3 rounded text-center text-xs hover:bg-primary-green/90'
+            >
+              Entrar
+            </Link>
+
+            <Link
+              to='/registrar'
+              className='block text-primary-orange text-center mt-2 text-xs hover:underline'
+            >
+              Ainda não tem registo?
+            </Link>
+          </div>
+        )}
 
         {isAuthenticated && (
           <div className='p-4'>
