@@ -113,7 +113,7 @@ export const Step2: React.FC = () => {
       const username = formData.step2.fullName.split(' ').join('').toLowerCase()
 
       const response = await axios.post<WP_User>(
-        'https://kumbulink.com/wp-json/wp/v2/users',
+        'https://api.kumbulink.com/wp-json/wp/v2/users',
         {
           username: username,
           ...formData.step1,

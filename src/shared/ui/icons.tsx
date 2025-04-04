@@ -8,6 +8,7 @@ import closeIcon from '/icons/close.svg'
 import helpIcon from '/icons/help.svg'
 import filterIcon from '/icons/filter.svg'
 import searchIcon from '/icons/search.svg'
+import chevronRightIcon from '/icons/chevron-right.svg'
 
 interface IconProps {
   className?: string
@@ -73,6 +74,14 @@ export const FilterIcon = ({ className }: IconProps) => (
 export const SearchIcon = ({ className }: IconProps) => (
   <img
     src={searchIcon}
+    className={className ?? 'w-5 h-5 text-gray-600'}
+    alt=''
+  />
+)
+
+export const ChevronRightIcon = ({ className }: IconProps) => (
+  <img
+    src={chevronRightIcon}
     className={className ?? 'w-5 h-5 text-gray-600'}
     alt=''
   />

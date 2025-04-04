@@ -8,6 +8,8 @@ import { SearchBar } from './components/SearchBar'
 import { OfferCard } from './components/OfferCard'
 import { SideMenu } from './components/SideMenu'
 
+import { OfferCardPopup } from '@components/OfferCardPopup'
+
 import { MenuIcon } from '@shared/ui/icons'
 import { JoinUsPopup } from '@components/JoinUsPopup'
 import { Popup } from '@components/Popup'
@@ -39,7 +41,7 @@ export const HomePage = () => {
     const fetchOffers = async () => {
       try {
         const offers = await axios.get<WPPostWithACF[]>(
-          'https://kumbulink.com/wp-json/wp/v2/anuncios'
+          'https://api.kumbulink.com/wp-json/wp/v2/classifieds'
         )
 
         const parsedOffers = offers?.data.map(ad => {
@@ -145,7 +147,21 @@ export const HomePage = () => {
       />
 
       <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
-        <JoinUsPopup />
+        <OfferCardPopup
+          id='1'
+          sourceAmount='100'
+          sourceCurrency='USD'
+          sourceCountry='United States'
+          sourceBank='Bank of America'
+          targetAmount='100'
+          targetCurrency='USD'
+          targetCountry='Angola'
+          targetBank='Banco de Angola'
+          exchangeRate='100'
+          tax='100'
+          totalAmount='100'
+          onAccept={() => {}}
+        />
       </Popup>
     </div>
   )
