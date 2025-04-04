@@ -16,6 +16,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
 
 import countries from '@shared/utils/countries.json'
+
 import { CountrySelector } from '@components/CountrySelector'
 import { MembershipTerms, PrivacyPolicy } from '@shared/ui/terms'
 

@@ -104,6 +104,7 @@ export const HomePage = () => {
 
       <main className='bg-gray-100 min-h-[calc(100vh-8rem)] relative'>
         <div className='px-4 pt-4 pb-32'>
+
           {offers.length === 0 && (
             <div className='space-y-4 mt-4 pl-5 pr-5'>
               <p className='text-gray-500 text-2xl text-center mt-48'>

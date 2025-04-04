@@ -9,6 +9,7 @@ import {
   HelpIcon,
   LogoutIcon,
   CloseIcon
+
 } from '@shared/ui/icons'
 
 interface SideMenuProps {
