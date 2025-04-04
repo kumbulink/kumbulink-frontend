@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { ChevronRightIcon } from '@/shared/ui/icons'
-import ReactMarkdown from 'react-markdown'
 
 interface CollapseProps {
   title: string
@@ -48,7 +47,7 @@ export const Collapse = ({ title, children }: CollapseProps) => {
                 </span>
               ),
               pre: ({ children, ...props }) => (
-                <div className='bg-gray-100 p-2 rounded' {...props}>
+                <div className='bg-gray-100 p-2 rounded' {...propsReactMarkdown}>
                   {children}
                 </div>
               )

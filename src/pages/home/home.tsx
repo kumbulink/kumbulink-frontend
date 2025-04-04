@@ -8,8 +8,6 @@ import { SearchBar } from './components/SearchBar'
 import { OfferCard } from './components/OfferCard'
 import { SideMenu } from './components/SideMenu'
 
-import { OfferCardPopup } from '@components/OfferCardPopup'
-
 import { MenuIcon } from '@shared/ui/icons'
 import { JoinUsPopup } from '@components/JoinUsPopup'
 import { Popup } from '@components/Popup'
@@ -104,7 +102,6 @@ export const HomePage = () => {
 
       <main className='bg-gray-100 min-h-[calc(100vh-8rem)] relative'>
         <div className='px-4 pt-4 pb-32'>
-
           {offers.length === 0 && (
             <div className='space-y-4 mt-4 pl-5 pr-5'>
               <p className='text-gray-500 text-2xl text-center mt-48'>
@@ -148,21 +145,7 @@ export const HomePage = () => {
       />
 
       <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
-        <OfferCardPopup
-          id='1'
-          sourceAmount='100'
-          sourceCurrency='USD'
-          sourceCountry='United States'
-          sourceBank='Bank of America'
-          targetAmount='100'
-          targetCurrency='USD'
-          targetCountry='Angola'
-          targetBank='Banco de Angola'
-          exchangeRate='100'
-          tax='100'
-          totalAmount='100'
-          onAccept={() => {}}
-        />
+        <JoinUsPopup />
       </Popup>
     </div>
   )
