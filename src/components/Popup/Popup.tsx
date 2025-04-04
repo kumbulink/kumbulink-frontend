@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { CloseIcon } from '@/shared/ui/icons'
+import { CloseIcon } from '@shared/ui/icons'
 
 interface PopupProps {
   isOpen: boolean

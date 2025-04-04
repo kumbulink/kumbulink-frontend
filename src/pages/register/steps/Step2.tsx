@@ -4,7 +4,7 @@ import axios from 'axios'
 import type { WP_User } from 'wp-types'
 
 import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
-import { Popup } from '@/components/Popup'
+import { Popup } from '@components/Popup'
 
 import validator from 'validator'
 
@@ -16,8 +16,9 @@ import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
 
 import countries from '@shared/utils/countries.json'
-import { CountrySelector } from '@/components/CountrySelector'
-import { MembershipTerms, PrivacyPolicy } from '@/shared/ui/terms'
+
+import { CountrySelector } from '@components/CountrySelector'
+import { MembershipTerms, PrivacyPolicy } from '@shared/ui/terms'
 
 const customTheme: CustomFlowbiteTheme['datepicker'] = {
   root: {
@@ -113,7 +114,7 @@ export const Step2: React.FC = () => {
       const username = formData.step2.fullName.split(' ').join('').toLowerCase()
 
       const response = await axios.post<WP_User>(
-        'https://kumbulink.com/wp-json/wp/v2/users',
+        'https://api.kumbulink.com/wp-json/wp/v2/users',
         {
           username: username,
           ...formData.step1,

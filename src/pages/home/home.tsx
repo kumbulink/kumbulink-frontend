@@ -7,10 +7,12 @@ import type { WP_REST_API_Post } from 'wp-types'
 import { SearchBar } from './components/SearchBar'
 import { OfferCard } from './components/OfferCard'
 import { SideMenu } from './components/SideMenu'
-import { CreateAdPopUp } from './components/CreateAdPopUp'
 
-import { MenuIcon } from '@/shared/ui/icons'
-import { Popup } from '@/components/Popup'
+import { OfferCardPopup } from '@components/OfferCardPopup'
+
+import { MenuIcon } from '@shared/ui/icons'
+import { JoinUsPopup } from '@components/JoinUsPopup'
+import { Popup } from '@components/Popup'
 
 interface ExchangeOffer {
   id: number
@@ -39,7 +41,7 @@ export const HomePage = () => {
     const fetchOffers = async () => {
       try {
         const offers = await axios.get<WPPostWithACF[]>(
-          'https://kumbulink.com/wp-json/wp/v2/anuncios'
+          'https://api.kumbulink.com/wp-json/wp/v2/classifieds'
         )
 
         const parsedOffers = offers?.data.map(ad => {
@@ -100,11 +102,8 @@ export const HomePage = () => {
         <SearchBar />
       </div>
 
-      <main className='bg-gray-100 min-h-[calc(100vh-8rem)]'>
-        <div className='px-4 pt-4'>
-          <div className='flex justify-end items-center'>
-            <span className='text-gray-700'>Filtro (1)</span>
-          </div>
+      <main className='bg-gray-100 min-h-[calc(100vh-8rem)] relative'>
+        <div className='px-4 pt-4 pb-32'>
 
           {offers.length === 0 && (
             <div className='space-y-4 mt-4 pl-5 pr-5'>
@@ -115,7 +114,7 @@ export const HomePage = () => {
           )}
 
           {offers.length > 0 && (
-            <div className='space-y-4 mt-4 pb-24'>
+            <div className='space-y-4 mt-4'>
               {offers.map((offer, index) => (
                 <OfferCard key={index} {...offer} />
               ))}
@@ -123,7 +122,17 @@ export const HomePage = () => {
           )}
         </div>
 
-        <div className='fixed bottom-8 left-4 right-4'>
+        <div
+          className='fixed bottom-0 left-0 right-0 h-48 pointer-events-none'
+          style={{
+            background:
+              'linear-gradient(to top, rgb(243 244 246) 15%, rgba(243, 244, 246, 0.9) 30%, rgba(243, 244, 246, 0.7) 50%, rgba(243, 244, 246, 0.3) 70%, rgba(243, 244, 246, 0) 85%)',
+            backdropFilter: 'blur(1.5px)',
+            WebkitBackdropFilter: 'blur(1.5px)'
+          }}
+        />
+
+        <div className='fixed bottom-8 left-4 right-4 z-50'>
           <button
             onClick={handleAnunciarClick}
             className='w-full bg-primary-orange text-white py-4 font-medium rounded-lg'
@@ -139,7 +148,21 @@ export const HomePage = () => {
       />
 
       <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
-        <CreateAdPopUp />
+        <OfferCardPopup
+          id='1'
+          sourceAmount='100'
+          sourceCurrency='USD'
+          sourceCountry='United States'
+          sourceBank='Bank of America'
+          targetAmount='100'
+          targetCurrency='USD'
+          targetCountry='Angola'
+          targetBank='Banco de Angola'
+          exchangeRate='100'
+          tax='100'
+          totalAmount='100'
+          onAccept={() => {}}
+        />
       </Popup>
     </div>
   )
