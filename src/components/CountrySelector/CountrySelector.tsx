@@ -1,4 +1,5 @@
-import { lazy, Suspense, useState, useRef, useEffect } from 'react'
+import { lazy, Suspense, useState, useRef } from 'react'
+import { useClickOutside } from '@shared/hooks/useClickOutside'
 
 import countries from '@shared/utils/countries.json'
 
@@ -26,21 +27,7 @@ export const CountrySelector = ({ handleSelect }: CountrySelectorProps) => {
     setIsCountryListOpen(false)
   }
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        inputRef.current &&
-        dropdownRef.current &&
-        !inputRef.current.contains(event.target as Node) &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsCountryListOpen(false)
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+  useClickOutside(dropdownRef, () => setIsCountryListOpen(false))
 
   const selectedCountryData = countries.find(c => c.name === selectedCountry)
 
@@ -84,9 +71,7 @@ export const CountrySelector = ({ handleSelect }: CountrySelectorProps) => {
               onClick={() => handleCountrySelect(country.name)}
               className='flex w-full items-center p-4 hover:bg-gray-100'
             >
-              <Suspense
-                fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}
-              >
+              <Suspense fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}>
                 <Flag
                   code={country.iso}
                   height={20}
