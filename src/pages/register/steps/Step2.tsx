@@ -319,7 +319,7 @@ export const Step2: React.FC = () => {
           onClick={handleRegister}
           disabled={!isFormValid() || isLoading}
         >
-          {isLoading ? 'Cadastrando...' : 'Seguir para validação'}
+          {isLoading ? 'Cadastrando...' : 'Cadastrar'}
         </button>
       </div>
 
