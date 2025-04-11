@@ -78,7 +78,7 @@ export const CreateOfferPage: React.FC = () => {
           value={form.sourceAmount}
           onChange={handleCountrySenderSelected}
         />
-        <BankSelector />
+        <BankSelector addBank={() => {}} />
         <p className='text-gray-400 text-xs'>
           Só a Kumbulink terá acesso aos teus dados bancários.
         </p>
@@ -90,7 +90,7 @@ export const CreateOfferPage: React.FC = () => {
           value={form.targetAmount}
           onChange={handleCountryRecipientSelected}
         />
-        <BankSelector />
+        <BankSelector addBank={() => {}} />
         <p className='text-gray-400 text-xs'>
           Só a Kumbulink terá acesso aos teus dados bancários.
         </p>
