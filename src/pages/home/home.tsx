@@ -8,8 +8,6 @@ import { SearchBar } from './components/SearchBar'
 import { OfferCard } from './components/OfferCard'
 import { SideMenu } from './components/SideMenu'
 
-import { OfferCardPopup } from '@components/OfferCardPopup'
-
 import { MenuIcon } from '@shared/ui/icons'
 import { JoinUsPopup } from '@components/JoinUsPopup'
 import { Popup } from '@components/Popup'
@@ -147,21 +145,7 @@ export const HomePage = () => {
       />
 
       <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
-        <OfferCardPopup
-          id='1'
-          sourceAmount='100'
-          sourceCurrency='USD'
-          sourceCountry='United States'
-          sourceBank='Bank of America'
-          targetAmount='100'
-          targetCurrency='USD'
-          targetCountry='Angola'
-          targetBank='Banco de Angola'
-          exchangeRate='100'
-          tax='100'
-          totalAmount='100'
-          onAccept={() => {}}
-        />
+        <JoinUsPopup />
       </Popup>
     </div>
   )
