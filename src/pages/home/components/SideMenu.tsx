@@ -9,10 +9,6 @@ import {
   HelpIcon,
   LogoutIcon,
   CloseIcon
-<<<<<<< HEAD
-
-=======
->>>>>>> 1e9ff04 (chore(sidemenu): add login button)
 } from '@shared/ui/icons'
 
 interface SideMenuProps {

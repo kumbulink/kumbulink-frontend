@@ -1,7 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
+
 import { useUserStore } from '@/store/userStore'
+
+import http from '@/shared/utils/http.ts'
 
 interface LoginResponse {
   token: string
@@ -32,7 +35,7 @@ export function LoginPage() {
     setIsLoading(true)
 
     try {
-      const { data } = await axios.post<LoginResponse>(
+      const { data } = await http.post<LoginResponse>(
         'https://api.kumbulink.com/wp-json/jwt-auth/v1/token',
         {
           username: email,
