@@ -1,6 +1,7 @@
 import type { FC } from 'react'
 
 import adsIcon from '/icons/ads.svg'
+import addIcon from '/icons/add.svg'
 import configIcon from '/icons/config.svg'
 import profileIcon from '/icons/profile.svg'
 import businessIcon from '/icons/business.svg'
@@ -29,6 +30,10 @@ export const MenuIcon = () => (
       d='M4 6h16M4 12h16M4 18h16'
     />
   </svg>
+)
+
+export const AddIcon = ({ className }: IconProps) => (
+  <img src={addIcon} className={className ?? 'w-5 h-5 text-gray-600'} alt='' />
 )
 
 export const AdsIcon: FC = () => (

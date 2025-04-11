@@ -23,7 +23,10 @@ const AppRoutes = () => {
             path='/login'
             element={isAuthenticated ? <Navigate to='/' /> : <LoginPage />}
           />
-          <Route path='/registrar' element={<RegisterPage />} />
+          <Route
+            path='/registrar'
+            element={isAuthenticated ? <Navigate to='/' /> : <RegisterPage />}
+          />
           <Route path='/criar-anuncio' element={<CreateOfferPage />} />
           <Route path='/anuncio/:id' element={<ExchangeOfferPage />} />
           <Route path='/help' element={<HelpPage />} />

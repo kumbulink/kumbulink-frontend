@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
+import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
 
-import axios from 'axios'
 import type { WP_User } from 'wp-types'
 
-import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
-import { Popup } from '@components/Popup'
-
+import http from '@shared/utils/http.ts'
 import validator from 'validator'
+
+import countries from '@shared/utils/countries.json'
+
+import { Popup } from '@components/Popup'
+import { CountrySelector } from '@components/CountrySelector'
 
 import { useRegisterStore } from '../../../contexts/RegisterStore'
 
@@ -15,9 +18,6 @@ import CalendarIcon from '/icons/calendar.svg'
 import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
 
-import countries from '@shared/utils/countries.json'
-
-import { CountrySelector } from '@components/CountrySelector'
 import { MembershipTerms, PrivacyPolicy } from '@shared/ui/terms'
 
 const customTheme: CustomFlowbiteTheme['datepicker'] = {
@@ -55,7 +55,7 @@ const validateAngolanID = (id: string) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const JWT_TOKEN = import.meta.env.VITE_WP_JWT_TOKEN
+// const JWT_TOKEN = import.meta.env.VITE_WP_JWT_TOKEN
 
 export const Step2: React.FC = () => {
   const { currentStep, prevStep, nextStep, formData, setFormData } =
@@ -113,18 +113,13 @@ export const Step2: React.FC = () => {
 
       const username = formData.step2.fullName.split(' ').join('').toLowerCase()
 
-      const response = await axios.post<WP_User>(
-        'https://api.kumbulink.com/wp-json/wp/v2/users',
+      const response = await http.post<WP_User>(
+        'https://api.kumbulink.com/wp-json/custom/v1/create-user',
         {
           username: username,
           ...formData.step1,
-          ...formData.step2
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${JWT_TOKEN}`
-          }
+          ...formData.step2,
+          name: formData.step2.fullName
         }
       )
 
@@ -316,7 +311,7 @@ export const Step2: React.FC = () => {
           onClick={handleRegister}
           disabled={!isFormValid() || isLoading}
         >
-          {isLoading ? 'Cadastrando...' : 'Seguir para validação'}
+          {isLoading ? 'Cadastrando...' : 'Cadastrar'}
         </button>
       </div>
 
