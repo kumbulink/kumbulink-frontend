@@ -36,7 +36,7 @@ export function LoginPage() {
 
     try {
       const { data } = await http.post<LoginResponse>(
-        'https://api.kumbulink.com/wp-json/jwt-auth/v1/token',
+        '/jwt-auth/v1/token',
         {
           username: email,
           password: password
