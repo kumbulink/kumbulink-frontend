@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { ChevronRightIcon } from '@/shared/ui/icons'
-import ReactMarkdown from 'react-markdown'
 
 interface CollapseProps {
   title: string

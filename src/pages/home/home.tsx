@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import axios from 'axios'
+import http from '@shared/utils/http.ts'
 import type { WP_REST_API_Post } from 'wp-types'
 
 import { SearchBar } from './components/SearchBar'
 import { OfferCard } from './components/OfferCard'
 import { SideMenu } from './components/SideMenu'
+import { OfferDetailsPopup } from './components/OfferDetailsPopup'
+import { Spinner } from '@shared/ui/Spinner'
 
 import { MenuIcon } from '@shared/ui/icons'
 import { JoinUsPopup } from '@components/JoinUsPopup'
@@ -24,7 +26,7 @@ interface ExchangeOffer {
   paymentKey: string
 }
 
-interface WPPostWithACF extends WP_REST_API_Post {
+export interface WPPostWithACF extends WP_REST_API_Post {
   acf: ExchangeOffer
 }
 
@@ -32,15 +34,15 @@ export const HomePage = () => {
   const [offers, setOffers] = useState<ExchangeOffer[]>([])
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
+  const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const isAuthenticated = localStorage.getItem('jwt_token')
   const navigate = useNavigate()
 
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const offers = await axios.get<WPPostWithACF[]>(
-          'https://api.kumbulink.com/wp-json/wp/v2/classifieds'
-        )
+        const offers = await http.get<WPPostWithACF[]>('/wp/v2/classifieds')
 
         const parsedOffers = offers?.data.map(ad => {
           const {
@@ -75,16 +77,42 @@ export const HomePage = () => {
     void fetchOffers()
   }, [])
 
-  const handleAnunciarClick = () => {
+  const handleCreateAdClick = () => {
     if (!isAuthenticated) {
+      setPopupContent(<JoinUsPopup />)
       setIsPopUpOpen(true)
     } else {
       void navigate('/criar-anuncio')
     }
   }
 
+  const handleOfferCardClick = async (id: number) => {
+    // if (!isAuthenticated) {
+    //   setPopupContent(<JoinUsPopup />)
+    //   setIsPopUpOpen(true)
+    //   return
+    // }
+    setIsLoading(true)
+    try {
+      const response = await http.get<WPPostWithACF>(`/wp/v2/classifieds/${id}`)
+      setPopupContent(
+        <OfferDetailsPopup
+          offer={response.data}
+          onClose={() => setIsPopUpOpen(false)}
+        />
+      )
+      setIsLoading(false)
+      setIsPopUpOpen(true)
+    } catch (err) {
+      setIsLoading(false)
+      console.error(err)
+    }
+  }
+
   return (
     <div className='min-h-screen bg-primary-green'>
+      {isLoading && <Spinner />}
+
       <header className='px-4 py-2 flex items-center justify-between bg-primary-green'>
         <button
           onClick={() => setIsSideMenuOpen(true)}
@@ -113,7 +141,11 @@ export const HomePage = () => {
           {offers.length > 0 && (
             <div className='space-y-4 mt-4'>
               {offers.map((offer, index) => (
-                <OfferCard key={index} {...offer} />
+                <OfferCard
+                  key={index}
+                  {...offer}
+                  handleClick={handleOfferCardClick}
+                />
               ))}
             </div>
           )}
@@ -131,7 +163,7 @@ export const HomePage = () => {
 
         <div className='fixed bottom-8 left-4 right-4 z-50'>
           <button
-            onClick={handleAnunciarClick}
+            onClick={handleCreateAdClick}
             className='w-full bg-primary-orange text-white py-4 font-medium rounded-lg'
           >
             Anunciar
@@ -145,7 +177,7 @@ export const HomePage = () => {
       />
 
       <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
-        <JoinUsPopup />
+        {popupContent}
       </Popup>
     </div>
   )

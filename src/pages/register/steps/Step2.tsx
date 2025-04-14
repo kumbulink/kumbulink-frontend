@@ -113,15 +113,12 @@ export const Step2: React.FC = () => {
 
       const username = formData.step2.fullName.split(' ').join('').toLowerCase()
 
-      const response = await http.post<WP_User>(
-        'https://api.kumbulink.com/wp-json/custom/v1/create-user',
-        {
-          username: username,
-          ...formData.step1,
-          ...formData.step2,
-          name: formData.step2.fullName
-        }
-      )
+      const response = await http.post<WP_User>('/custom/v1/create-user', {
+        username: username,
+        ...formData.step1,
+        ...formData.step2,
+        name: formData.step2.fullName
+      })
 
       if (response.status !== 201) {
         throw new Error('Erro ao criar usuário')
