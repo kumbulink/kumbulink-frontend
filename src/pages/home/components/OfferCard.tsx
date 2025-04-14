@@ -13,6 +13,7 @@ interface OfferCardProps {
   tax?: string
   bank: string
   paymentKey?: string
+  handleClick: (id: number) => void
 }
 
 const Flag = lazy(() => import('react-world-flags'))
@@ -26,7 +27,8 @@ export const OfferCard = ({
   recipient,
   sourceAmount,
   targetAmount,
-  bank
+  bank,
+  handleClick
 }: OfferCardProps) => {
   const getCountryCode = (country: string) => {
     const countryCode = countries.find(c => c.name === country)
@@ -40,12 +42,11 @@ export const OfferCard = ({
     return countryCode?.currency
   }
 
-  const handleClick = () => {
-    console.log('clicked', id)
-  }
-
   return (
-    <div className='bg-white rounded-lg p-4 shadow-sm' onClick={handleClick}>
+    <div
+      className='bg-white rounded-lg p-4 shadow-sm cursor-pointer'
+      onClick={() => handleClick(id)}
+    >
       <div className='flex items-center justify-between mt-2'>
         <div>
           <div className='font-medium mt-1'>

@@ -48,7 +48,6 @@ export function LoginPage() {
         }
       )
 
-      console.log(data, 'data')
       setUser({
         token: data.token,
         email: data.user_email,
