@@ -31,6 +31,7 @@ interface RegisterStore {
     step: T,
     data: Partial<RegisterData[T]>
   ) => void
+  resetSteps: () => void
   nextStep: () => void
   prevStep: () => void
 }
@@ -67,6 +68,30 @@ export const useRegisterStore = create<RegisterStore>()(
               [step]: {
                 ...state.formData[step],
                 ...data
+              }
+            }
+          })),
+        resetSteps: () =>
+          set(() => ({
+            currentStep: 1,
+            formData: {
+              step1: {
+                email: '',
+                password: ''
+              },
+              step2: {
+                fullName: '',
+                birthDate: null,
+                country: '',
+                documentType: '',
+                documentNumber: '',
+                termsAccepted: false
+              },
+              step3: {
+                phoneNumber: ''
+              },
+              step4: {
+                verificationCode: ''
               }
             }
           })),

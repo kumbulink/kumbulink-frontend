@@ -1,8 +1,17 @@
-import { Link } from 'react-router'
+import { useNavigate } from 'react-router-dom'
+import { useRegisterStore } from '@/contexts/RegisterStore'
 
 import SuccessIcon from '/icons/success.svg'
 
 export const Success: React.FC = () => {
+  const navigate = useNavigate()
+  const { resetSteps } = useRegisterStore()
+
+  const handleEnter = () => {
+    resetSteps()
+    void navigate('/login')
+  }
+
   return (
     <div className='flex min-h-screen flex-col items-center bg-white px-6'>
       <div className='flex flex-col items-center justify-center flex-1'>
@@ -22,14 +31,13 @@ export const Success: React.FC = () => {
         </p>
 
         <div className='space-y-4 w-full mt-16'>
-          <Link to={{ pathname: '/login' }}>
-            <button
-              type='submit'
-              className='w-full rounded-lg py-4 text-white bg-primary-orange'
-            >
-              Entrar
-            </button>
-          </Link>
+          <button
+            onClick={handleEnter}
+            type='submit'
+            className='w-full rounded-lg py-4 text-white bg-primary-orange'
+          >
+            Entrar
+          </button>
         </div>
       </div>
     </div>
