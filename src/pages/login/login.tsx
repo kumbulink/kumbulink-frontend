@@ -11,6 +11,8 @@ interface LoginResponse {
   user_email: string
   user_nicename: string
   user_display_name: string
+  document_id: string
+  document_type: string
 }
 
 interface WordPressError {
@@ -49,13 +51,13 @@ export function LoginPage() {
       )
 
       setUser({
-        token: data.token,
         email: data.user_email,
         nicename: data.user_nicename,
-        displayName: data.user_display_name
+        displayName: data.user_display_name,
+        documentId: data.document_id,
+        documentType: data.document_type
       })
 
-      localStorage.setItem('jwt_token', data.token)
       void navigate('/')
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {

@@ -4,7 +4,7 @@ import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
 import type { WP_User } from 'wp-types'
 
 import http from '@shared/utils/http.ts'
-import validator from 'validator'
+import { validatePassport, validateAngolanID } from '@shared/utils/validation'
 
 import countries from '@shared/utils/countries.json'
 
@@ -42,20 +42,6 @@ const customTheme: CustomFlowbiteTheme['datepicker'] = {
     }
   }
 }
-
-const validatePassport = (passport: string, country: string) => {
-  const countryCode = countries.find(c => c.name === country)?.passportLocale
-  if (!countryCode) return false
-  return validator.isPassportNumber(passport, countryCode)
-}
-
-const validateAngolanID = (id: string) => {
-  // Angolan ID format: 9 digits
-  return /^\d{9}$/.test(id)
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-// const JWT_TOKEN = import.meta.env.VITE_WP_JWT_TOKEN
 
 export const Step2: React.FC = () => {
   const { currentStep, prevStep, nextStep, formData, setFormData } =
@@ -257,7 +243,7 @@ export const Step2: React.FC = () => {
             {documentNumber && !isDocumentValid && (
               <p className='text-sm text-red-500 mt-1'>
                 {selectedDocument === 'Bilhete de Identidade'
-                  ? 'Bilhete de identidade inválido. Use 9 dígitos.'
+                  ? 'Bilhete de identidade inválido. Use 9 dígitos, 2 letras e 3 dígitos.'
                   : 'Passaporte inválido.'}
               </p>
             )}
