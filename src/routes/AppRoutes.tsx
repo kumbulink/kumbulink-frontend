@@ -11,6 +11,7 @@ import { HomePage } from '@/pages/home'
 import Layout from '../ui/Layout'
 import { ExchangeOfferPage } from '@/pages/offer'
 import { HelpPage } from '@/pages/help'
+import { ProfilePage } from '@/pages/profile'
 const isAuthenticated = localStorage.getItem('jwt_token')
 
 const AppRoutes = () => {
@@ -30,6 +31,10 @@ const AppRoutes = () => {
           <Route path='/criar-anuncio' element={<CreateOfferPage />} />
           <Route path='/anuncio/:id' element={<ExchangeOfferPage />} />
           <Route path='/help' element={<HelpPage />} />
+          <Route
+            path='/profile'
+            element={isAuthenticated ? <Navigate to='/' /> : <ProfilePage />}
+          />
         </Route>
       </Routes>
     </Router>
