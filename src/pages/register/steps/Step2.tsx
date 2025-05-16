@@ -164,7 +164,7 @@ export const Step2: React.FC = () => {
   ])
 
   return (
-    <div className='flex min-h-screen flex-col bg-white px-6'>
+    <div className='flex min-h-screen flex-col bg-white px-4'>
       <div className='flex items-center pt-4'>
         {currentStep > 1 && (
           <>
@@ -179,7 +179,7 @@ export const Step2: React.FC = () => {
                 />
               </svg>
             </button>
-            <span className='text-lg'>Cadastro</span>
+            <span className='text-2xl'>Cadastro</span>
           </>
         )}
       </div>

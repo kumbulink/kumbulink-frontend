@@ -106,7 +106,7 @@ export const OfferCardPopup = ({
           <span className='text-gray-700'>{exchangeRate} Kz</span>
         </div>
         <div className='flex justify-between'>
-          <span className='text-gray-600'>Taxa de Compra</span>
+          <span className='text-gray-600'>Taxa de Serviço</span>
           <span className='text-gray-700'>{tax} Kwanzas (3%)</span>
         </div>
       </div>

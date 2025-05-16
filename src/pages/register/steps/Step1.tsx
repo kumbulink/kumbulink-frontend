@@ -58,7 +58,7 @@ export const Step1: React.FC = () => {
   const isFormValid = isPasswordValid && validations.isEmailValid
 
   return (
-    <div className='flex min-h-screen flex-col bg-white px-6'>
+    <div className='flex min-h-screen flex-col bg-white px-4'>
       <div>
         <Link to={{ pathname: '/' }} className='flex items-center pt-4'>
           <button className='mr-4'>
@@ -72,7 +72,7 @@ export const Step1: React.FC = () => {
               />
             </svg>
           </button>
-          <span className='text-lg'>Cadastro</span>
+          <span className='text-2xl'>Cadastro</span>
         </Link>
       </div>
 

@@ -20,7 +20,7 @@ export const Step3: React.FC = () => {
   }
 
   return (
-    <div className='flex min-h-screen flex-col bg-white px-6'>
+    <div className='flex min-h-screen flex-col bg-white px-4'>
       <div className='flex items-center pt-4'>
         {currentStep > 1 && (
           <>

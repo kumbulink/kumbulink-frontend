@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from 'react-router-dom'
 
 interface BackButtonProps {
   pathname: string
@@ -6,7 +6,7 @@ interface BackButtonProps {
 
 export const BackButton = ({ pathname }: BackButtonProps) => {
   return (
-    <Link to={{ pathname }}>
+    <Link to={{ pathname }} className='items-center pt-1'>
       <button className='mr-4'>
         <svg width='24' height='24' viewBox='0 0 24 24' fill='none'>
           <path
