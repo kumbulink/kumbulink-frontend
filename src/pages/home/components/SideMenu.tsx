@@ -35,7 +35,7 @@ export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isOpen, onClose])
 
-  const isAuthenticated = localStorage.getItem('jwt_token')
+  const isAuthenticated = useUserStore(state => state.user !== null)
 
   const menuItems = [
     { icon: ProfileIcon, label: 'Minha conta', href: '/profile' },

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { useUserStore } from '@/store/userStore'
+
 import http from '@shared/utils/http.ts'
 import type { WP_REST_API_Post } from 'wp-types'
 
@@ -36,7 +38,7 @@ export const HomePage = () => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
   const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const isAuthenticated = localStorage.getItem('jwt_token')
+  const isAuthenticated = useUserStore(state => state.user !== null)
   const navigate = useNavigate()
 
   useEffect(() => {

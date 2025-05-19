@@ -7,7 +7,7 @@ import { useUserStore } from '@/store/userStore'
 import http from '@/shared/utils/http.ts'
 
 interface LoginResponse {
-  token: string
+  id: number
   user_email: string
   user_nicename: string
   user_display_name: string
@@ -51,6 +51,7 @@ export function LoginPage() {
       )
 
       setUser({
+        id: data.id,
         email: data.user_email,
         nicename: data.user_nicename,
         displayName: data.user_display_name,

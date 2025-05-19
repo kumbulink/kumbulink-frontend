@@ -4,6 +4,9 @@ import {
   Routes,
   Navigate
 } from 'react-router-dom'
+
+import { useUserStore } from '@/store/userStore'
+
 import { LoginPage } from '@/pages/login'
 import { RegisterPage } from '@/pages/register'
 import { CreateOfferPage } from '@/pages/create-offer'
@@ -12,9 +15,10 @@ import Layout from '../ui/Layout'
 import { ExchangeOfferPage } from '@/pages/offer'
 import { HelpPage } from '@/pages/help'
 import { ProfilePage } from '@/pages/profile'
-const isAuthenticated = localStorage.getItem('jwt_token')
 
 const AppRoutes = () => {
+  const isAuthenticated = useUserStore(state => state.user !== null)
+
   return (
     <Router basename='/'>
       <Routes>
@@ -24,16 +28,15 @@ const AppRoutes = () => {
             path='/login'
             element={isAuthenticated ? <Navigate to='/' /> : <LoginPage />}
           />
-          <Route
-            path='/registrar'
-            element={isAuthenticated ? <Navigate to='/' /> : <RegisterPage />}
-          />
+          <Route path='/registrar' element={<RegisterPage />} />
           <Route path='/criar-anuncio' element={<CreateOfferPage />} />
           <Route path='/anuncio/:id' element={<ExchangeOfferPage />} />
           <Route path='/help' element={<HelpPage />} />
           <Route
             path='/profile'
-            element={isAuthenticated ? <Navigate to='/' /> : <ProfilePage />}
+            element={
+              !isAuthenticated ? <Navigate to='/login' /> : <ProfilePage />
+            }
           />
         </Route>
       </Routes>

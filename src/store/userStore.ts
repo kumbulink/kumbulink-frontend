@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { devtools, persist, createJSONStorage } from 'zustand/middleware'
 
 interface User {
+  id: number
   email: string
   nicename: string
   displayName: string
@@ -22,14 +23,14 @@ export const useUserStore = create<UserStore>()(
         user: null,
         setUser: user => set({ user }),
         logout: () => {
-          localStorage.removeItem('jwt_token')
           set({ user: null })
           window.location.href = '/'
         }
       }),
       {
         name: 'user-storage',
-        storage: createJSONStorage(() => localStorage)
+        storage: createJSONStorage(() => localStorage),
+        partialize: state => ({ user: state.user })
       }
     )
   )
