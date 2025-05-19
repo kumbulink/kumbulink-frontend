@@ -1,9 +1,11 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useState, useRef } from 'react'
 
 import type { WPPostWithACF } from '../home'
 
-const Flag = lazy(() => import('react-world-flags'))
 import countries from '@shared/utils/countries.json'
+import http from '@/shared/utils/http'
+
+const Flag = lazy(() => import('react-world-flags'))
 
 interface OfferDetailsPopupProps {
   offer: WPPostWithACF | null
@@ -15,6 +17,8 @@ export const OfferDetailsPopup = ({
   onClose
 }: OfferDetailsPopupProps) => {
   const [copyFeedback, setCopyFeedback] = useState(false)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   if (!offer) return null
 
@@ -44,6 +48,39 @@ export const OfferDetailsPopup = ({
       setTimeout(() => setCopyFeedback(false), 2000)
     } catch (err) {
       console.error('Failed to copy:', err)
+    }
+  }
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) setSelectedFile(file)
+  }
+
+  const handleFileClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleUpload = async () => {
+    if (!selectedFile) return
+
+    const formData = new FormData()
+    formData.append('file', selectedFile)
+    formData.append('post_id', String(51))
+    formData.append('type', 'seller')
+
+    try {
+      const response = await http.post('/custom/v1/payment-proof', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+
+      console.log(response)
+
+      // setStatus('Comprovante enviado com sucesso!')
+    } catch (err) {
+      console.error(err)
+      // setStatus('Erro ao enviar comprovante.')
     }
   }
 
@@ -140,12 +177,24 @@ export const OfferDetailsPopup = ({
       </div>
 
       <div className='mt-4'>
-        <div className='flex justify-between items-center'>
-          <span className='text-sm text-gray-600'>Anexar comprovativo</span>
-          <button className='text-primary-orange font-medium'>Anexar</button>
-        </div>
-        <div className='text-xs text-gray-400 mt-1'>
-          Ficheiros jpg, png ou pdf
+        <h3 className='text-gray-500 text-sm mb-2'>Anexar comprovativo</h3>
+        <div className='relative'>
+          <input
+            ref={fileInputRef}
+            type='file'
+            accept='.jpg,.jpeg,.png,.pdf'
+            className='hidden'
+            onChange={handleFileChange}
+          />
+          <div
+            onClick={handleFileClick}
+            className='flex justify-between items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50'
+          >
+            <span className='text-gray-400 text-sm'>
+              Ficheiros jpg, png ou pdf
+            </span>
+            <button className='text-primary-orange font-medium'>Anexar</button>
+          </div>
         </div>
       </div>
 
@@ -157,7 +206,7 @@ export const OfferDetailsPopup = ({
           Voltar
         </button>
         <button
-          onClick={onClose}
+          onClick={handleUpload}
           className='flex-1 cursor-pointer py-3 bg-primary-orange text-white font-medium rounded-lg'
         >
           OK
