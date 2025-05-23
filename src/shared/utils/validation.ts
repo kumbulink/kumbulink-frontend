@@ -1,6 +1,17 @@
 import validator from 'validator'
 import countries from './countries.json'
 
+const customValidators = {
+  isPassportNumber: (passport: string, countryCode: string) => {
+    // validator doesn't support Angola passport number validation
+    if (countryCode === 'AO') {
+      // Angolan passport format: 2 letters followed by 7 digits
+      return /^[A-Z]{1}\d{7}$/.test(passport.toUpperCase())
+    }
+    return validator.isPassportNumber(passport, countryCode)
+  }
+}
+
 /**
  * Document Validation
  */
@@ -10,7 +21,8 @@ export const validatePassport = (
 ): boolean => {
   const countryCode = countries.find(c => c.name === country)?.passportLocale
   if (!countryCode) return false
-  return validator.isPassportNumber(passport, countryCode)
+
+  return customValidators.isPassportNumber(passport, countryCode)
 }
 
 export const validateAngolanID = (biNumber: string): boolean => {

@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { CurrencyInput } from '@components/CurrencyInput'
 import { BankSelector } from '@components/BankSelector'
 import { BackButton } from '@components/BackButton'
+import { Popup } from '@components/Popup/Popup'
+import { AddBankPopup } from './components/AddBankPopup'
 
 interface FormState {
   sender: string
@@ -28,6 +30,7 @@ export const CreateOfferPage: React.FC = () => {
     senderBank: 'Xpto',
     recipientBank: 'Xpto'
   })
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
 
   useEffect(() => {
     setForm(prevForm => {
@@ -78,7 +81,7 @@ export const CreateOfferPage: React.FC = () => {
           value={form.sourceAmount}
           onChange={handleCountrySenderSelected}
         />
-        <BankSelector addBank={() => {}} />
+        <BankSelector addBank={() => setIsPopupOpen(true)} />
         <p className='text-gray-400 text-xs'>
           Só a Kumbulink terá acesso aos teus dados bancários.
         </p>
@@ -90,7 +93,7 @@ export const CreateOfferPage: React.FC = () => {
           value={form.targetAmount}
           onChange={handleCountryRecipientSelected}
         />
-        <BankSelector addBank={() => {}} />
+        <BankSelector addBank={() => setIsPopupOpen(true)} />
         <p className='text-gray-400 text-xs'>
           Só a Kumbulink terá acesso aos teus dados bancários.
         </p>
@@ -125,6 +128,10 @@ export const CreateOfferPage: React.FC = () => {
           Publicar anúncio
         </button>
       </div>
+
+      <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
+        <AddBankPopup onClose={() => setIsPopupOpen(false)} />
+      </Popup>
     </div>
   )
 }
