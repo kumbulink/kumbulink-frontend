@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import fs from 'fs'
 import path from 'path'
 
 // https://vite.dev/config/
@@ -15,6 +16,15 @@ export default defineConfig({
       '@icons': path.resolve(__dirname, 'public/icons'),
       '@shared': path.resolve(__dirname, 'src/shared')
     }
+  },
+  server: {
+    https: {
+      key: fs.readFileSync(
+        path.resolve(__dirname, 'local.kumbulink.com-key.pem')
+      ),
+      cert: fs.readFileSync(path.resolve(__dirname, 'local.kumbulink.com.pem'))
+    },
+    host: 'local.kumbulink.com' // importante usar o mesmo host do certificado
   },
   plugins: [
     tailwindcss(),
