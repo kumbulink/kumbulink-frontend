@@ -95,7 +95,7 @@ export const ProfilePage = () => {
       const response = await http.post(`/wp/v2/users/${userData.id}`, {
         display_name: userData.displayName,
         email: userData.email,
-        meta: {
+        acf: {
           document_id: userData.documentId,
           document_type: userData.documentType
         }
