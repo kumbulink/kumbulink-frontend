@@ -1,9 +1,13 @@
 import { lazy, Suspense, useState, useRef } from 'react'
+import { useUserStore } from '@/store/userStore'
 
 import type { WPPostWithACF } from '../home'
 
 import countries from '@shared/utils/countries.json'
 import http from '@/shared/utils/http'
+
+import { JoinUsPopup } from '@/components/JoinUsPopup'
+import { Popup } from '@/components/Popup'
 
 const Flag = lazy(() => import('react-world-flags'))
 
@@ -19,6 +23,8 @@ export const OfferDetailsPopup = ({
   const [copyFeedback, setCopyFeedback] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const isAuthenticated = useUserStore(state => state.user !== null)
+  const [isPopUpOpen, setIsPopUpOpen] = useState(false)
 
   if (!offer) return null
 
@@ -61,6 +67,10 @@ export const OfferDetailsPopup = ({
   }
 
   const handleUpload = async () => {
+    if (!isAuthenticated) {
+      setIsPopUpOpen(true)
+    }
+
     if (!selectedFile) return
 
     const formData = new FormData()
@@ -212,6 +222,9 @@ export const OfferDetailsPopup = ({
           OK
         </button>
       </div>
+      <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+        <JoinUsPopup />
+      </Popup>
     </div>
   )
 }
