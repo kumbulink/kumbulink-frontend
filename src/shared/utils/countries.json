@@ -12,12 +12,5 @@
     "iso": "BRA",
     "name": "Brasil",
     "passportLocale": "BR"
-  },
-  {
-    "currency": "EUR",
-    "documents": ["Passaporte"],
-    "iso": "PRT",
-    "name": "Portugal",
-    "passportLocale": "PT"
   }
 ]
