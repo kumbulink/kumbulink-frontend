@@ -95,7 +95,7 @@ export const OfferDetailsPopup = ({
   }
 
   return (
-    <div className='p-4 bg-white rounded-lg w-[400px]'>
+    <div className='p-4 bg-white rounded-lg w-full max-w-md'>
       <h2 className='text-xl font-medium mb-4'>Anúncio #{id}</h2>
 
       <div className='flex items-center justify-between mb-4'>
