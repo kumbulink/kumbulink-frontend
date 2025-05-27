@@ -1,20 +1,30 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { useClickOutside } from '@shared/hooks/useClickOutside'
-
 import { AddIcon } from '@shared/ui/icons'
+import http from '@shared/utils/http'
+import { useUserStore } from '@/store/userStore'
 
 export const BankSelector = ({ addBank }: { addBank: () => void }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const user = useUserStore(state => state.user)
 
   const [selectedBank, setSelectedBank] = useState<string>('')
   const [isBankListOpen, setIsBankListOpen] = useState(false)
+  const [banks, setBanks] = useState<unknown[]>([])
+  const [loadingBanks, setLoadingBanks] = useState(false)
+  const [errorBanks, setErrorBanks] = useState<string | null>(null)
 
-  const banks = [
-    { name: 'Banco do Brasil', code: 'BB' },
-    { name: 'Banco de Portugal', code: 'BP' },
-    { name: 'Banco de Angola', code: 'BA' }
-  ]
+  useEffect(() => {
+    if (!user?.id) return
+    setLoadingBanks(true)
+    setErrorBanks(null)
+    http
+      .get(`/wp/v2/banks?author=${user.id}`)
+      .then(res => setBanks(res.data as unknown[]))
+      .catch(() => setErrorBanks('Erro ao buscar bancos cadastrados.'))
+      .finally(() => setLoadingBanks(false))
+  }, [user?.id])
 
   useClickOutside(dropdownRef, () => setIsBankListOpen(false))
 
@@ -50,15 +60,34 @@ export const BankSelector = ({ addBank }: { addBank: () => void }) => {
           ref={dropdownRef}
           className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-lg border border-gray-300 bg-white shadow-lg'
         >
-          {banks.map(bank => (
-            <button
-              key={bank.name}
-              onClick={() => handleBankSelect(bank.name)}
-              className='flex w-full items-center p-4 hover:bg-gray-100'
-            >
-              <span>{bank.name}</span>
-            </button>
-          ))}
+          {loadingBanks && (
+            <div className='p-4 text-center text-gray-400'>
+              Carregando bancos...
+            </div>
+          )}
+          {errorBanks && (
+            <div className='p-4 text-center text-red-500'>{errorBanks}</div>
+          )}
+          {!loadingBanks && !errorBanks && banks.length === 0 && (
+            <div className='p-4 text-center text-gray-400'>
+              Nenhuma conta cadastrada
+            </div>
+          )}
+          {!loadingBanks &&
+            !errorBanks &&
+            banks.map(bank => (
+              <button
+                key={bank.id}
+                onClick={() =>
+                  handleBankSelect(
+                    bank.acf?.bank || bank.title?.rendered || 'Banco'
+                  )
+                }
+                className='flex w-full items-center p-4 hover:bg-gray-100'
+              >
+                <span>{bank.acf?.bank || bank.title?.rendered || 'Banco'}</span>
+              </button>
+            ))}
           <button
             key={123}
             onClick={() => addBank()}

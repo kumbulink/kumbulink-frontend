@@ -1,9 +1,13 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { CountrySelector } from '@components/CountrySelector'
+import { useClickOutside } from '@shared/hooks/useClickOutside'
+
 import http from '@shared/utils/http'
+import banks from '@shared/utils/banks.json'
 
 export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
   const [PopupForm, setPopupForm] = useState({
+    accountName: '',
     country: 'Portugal',
     bank: '',
     recipientName: '',
@@ -13,9 +17,30 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [isBankListOpen, setIsBankListOpen] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState<string | null>(null)
+
+  const inputRef = useRef<HTMLInputElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const handleBankInputClick = () => {
+    setIsBankListOpen(true)
+    inputRef.current?.focus()
+  }
+
+  useClickOutside(dropdownRef, () => setIsBankListOpen(false))
 
   const isPopupFormValid =
-    PopupForm.country && PopupForm.bank && PopupForm.recipientName
+    PopupForm.country &&
+    PopupForm.bank &&
+    PopupForm.recipientName &&
+    PopupForm.accountName &&
+    PopupForm.paymentKey
+
+  const handleBankSelect = (bankName: string) => {
+    setPopupForm(f => ({ ...f, bank: bankName }))
+    setIsBankListOpen(false)
+  }
 
   const handleSubmit = async () => {
     if (!isPopupFormValid) return
@@ -23,7 +48,7 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
     setError(null)
     try {
       await http.post('https://api.kumbulink.com/wp-json/wp/v2/banks', {
-        title: PopupForm.bank,
+        title: PopupForm.accountName,
         acf: {
           country: PopupForm.country,
           recipient_name: PopupForm.recipientName,
@@ -43,8 +68,8 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
   }
 
   return (
-    <div className='bg-white rounded-xl p-6 w-[360px] max-w-full relative'>
-      <h2 className='text-lg font-medium mb-6 text-center'>Conta de destino</h2>
+    <div className='bg-white rounded-sm p-6 w-[360px] max-w-full relative'>
+      <h2 className='text-title font-small mt-6 mb-6'>Conta de destino</h2>
       <form
         className='space-y-3'
         onSubmit={e => {
@@ -53,33 +78,77 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
         }}
       >
         <div>
-          <label className='block text-sm mb-1'>País</label>
-          <CountrySelector
-            handleSelect={countryName =>
-              setPopupForm(f => ({ ...f, country: countryName }))
+          <label className='sr-only'>Nome da conta</label>
+          <input
+            type='text'
+            value={PopupForm.accountName}
+            onChange={e =>
+              setPopupForm(f => ({ ...f, accountName: e.target.value }))
             }
+            placeholder='Nome da conta. Ex: Conta principal, conta da mãe, minha conta da familia...'
+            className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
           />
         </div>
         <div>
-          <label className='block text-sm mb-1'>Selecione o banco</label>
-          <select
-            className='w-full rounded-lg border border-gray-200 p-3 text-gray-500 bg-gray-50'
-            value={PopupForm.bank}
-            onChange={e => setPopupForm(f => ({ ...f, bank: e.target.value }))}
-          >
-            <option value=''>Selecione o banco</option>
-            <option value='Banco de Portugal'>Banco de Portugal</option>
-            <option value='Millennium BCP'>Millennium BCP</option>
-            <option value='Santander'>Santander</option>
-          </select>
+          <label className='sr-only'>País</label>
+          <CountrySelector
+            handleSelect={countryName => {
+              setPopupForm(f => ({ ...f, country: countryName, bank: '' }))
+              setPaymentMethod(null)
+            }}
+          />
         </div>
+        <div className='relative flex'>
+          <label className='sr-only'>Selecione o banco</label>
+          <input
+            ref={inputRef}
+            type='text'
+            value={PopupForm.bank}
+            onClick={handleBankInputClick}
+            readOnly
+            placeholder='Selecione o banco'
+            className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer pl-4'
+          />
+          <span className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
+            ▼
+          </span>
+
+          {isBankListOpen && (
+            <div
+              ref={dropdownRef}
+              className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-lg border border-gray-300 bg-white shadow-lg'
+            >
+              {banks
+                .filter(bank => bank.country === PopupForm.country)
+                .map(
+                  (bank: {
+                    code: string
+                    name: string
+                    payment_method: string
+                  }) => (
+                    <button
+                      key={bank.name}
+                      onClick={() => {
+                        handleBankSelect(bank.name)
+                        setPaymentMethod(bank.payment_method)
+                      }}
+                      className='flex w-full items-center p-4 hover:bg-gray-100'
+                    >
+                      <span>
+                        {bank.code ? `${bank.code} - ${bank.name}` : bank.name}
+                      </span>
+                    </button>
+                  )
+                )}
+            </div>
+          )}
+        </div>
+
         <div>
-          <label className='block text-sm mb-1'>
-            Nome completo do destinatário
-          </label>
+          <label className='sr-only'>Nome completo do destinatário</label>
           <input
             type='text'
-            className='w-full rounded-lg border border-gray-200 p-3 text-gray-500 bg-gray-50'
+            className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
             placeholder='Nome completo do destinatário'
             value={PopupForm.recipientName}
             onChange={e =>
@@ -89,10 +158,10 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
         </div>
         <div className='flex space-x-2'>
           <div className='flex-1'>
-            <label className='block text-xs text-gray-400 mb-1'>Agência</label>
+            <label className='sr-only'>Agência</label>
             <input
               type='text'
-              className='w-full rounded-lg border border-gray-200 p-3 text-gray-500 bg-gray-50'
+              className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
               placeholder='Agência'
               value={PopupForm.agency}
               onChange={e =>
@@ -102,10 +171,10 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
             <span className='text-xs text-gray-400'>Opcional</span>
           </div>
           <div className='flex-1'>
-            <label className='block text-xs text-gray-400 mb-1'>Conta</label>
+            <label className='sr-only'>Conta</label>
             <input
               type='text'
-              className='w-full rounded-lg border border-gray-200 p-3 text-gray-500 bg-gray-50'
+              className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
               placeholder='Conta'
               value={PopupForm.account}
               onChange={e =>
@@ -116,11 +185,13 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
           </div>
         </div>
         <div>
-          <label className='block text-sm mb-1'>Digite o MBWAY</label>
+          <label className='sr-only'>Digite o {paymentMethod ?? 'PIX'}</label>
           <input
             type='text'
-            className='w-full rounded-lg border border-gray-200 p-3 text-gray-500 bg-gray-50'
-            placeholder='Digite o MBWAY'
+            className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            placeholder={`Digite o ${
+              paymentMethod?.toUpperCase() ?? 'código de pagamento'
+            }`}
             value={PopupForm.paymentKey}
             onChange={e =>
               setPopupForm(f => ({ ...f, paymentKey: e.target.value }))
@@ -130,7 +201,7 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
         <div className='flex justify-between mt-6'>
           <button
             type='button'
-            className='px-8 py-2 border border-primary-orange text-primary-orange rounded-lg font-medium'
+            className='px-8 py-2 border border-primary-orange text-primary-orange rounded-sm font-medium'
             onClick={onClose}
             disabled={loading}
           >
@@ -138,7 +209,7 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
           </button>
           <button
             type='submit'
-            className={`px-8 py-2 rounded-lg font-medium text-white ${
+            className={`px-8 py-2 rounded-sm font-medium text-white ${
               isPopupFormValid && !loading
                 ? 'bg-primary-orange'
                 : 'bg-gray-200 text-gray-400'
