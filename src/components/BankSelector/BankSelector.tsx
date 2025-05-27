@@ -4,6 +4,16 @@ import { AddIcon } from '@shared/ui/icons'
 import http from '@shared/utils/http'
 import { useUserStore } from '@/store/userStore'
 
+interface Bank {
+  id: number
+  title: {
+    rendered: string
+  }
+  acf: {
+    bank: string
+  }
+}
+
 export const BankSelector = ({ addBank }: { addBank: () => void }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -11,7 +21,7 @@ export const BankSelector = ({ addBank }: { addBank: () => void }) => {
 
   const [selectedBank, setSelectedBank] = useState<string>('')
   const [isBankListOpen, setIsBankListOpen] = useState(false)
-  const [banks, setBanks] = useState<unknown[]>([])
+  const [banks, setBanks] = useState<Bank[]>([])
   const [loadingBanks, setLoadingBanks] = useState(false)
   const [errorBanks, setErrorBanks] = useState<string | null>(null)
 
@@ -21,7 +31,7 @@ export const BankSelector = ({ addBank }: { addBank: () => void }) => {
     setErrorBanks(null)
     http
       .get(`/wp/v2/banks?author=${user.id}`)
-      .then(res => setBanks(res.data as unknown[]))
+      .then(res => setBanks(res.data as Bank[]))
       .catch(() => setErrorBanks('Erro ao buscar bancos cadastrados.'))
       .finally(() => setLoadingBanks(false))
   }, [user?.id])
