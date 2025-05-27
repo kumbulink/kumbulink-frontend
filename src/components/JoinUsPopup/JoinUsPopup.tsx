@@ -27,7 +27,7 @@ export const JoinUsPopup = () => {
 
         <div className='pt-4'>
           <Link
-            to='/registrar'
+            to='/register'
             className='block w-full bg-primary-green text-white py-3 rounded text-center font-medium text-lg hover:bg-primary-green/90'
           >
             Registar

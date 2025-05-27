@@ -114,7 +114,7 @@ export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
             </Link>
 
             <Link
-              to='/registrar'
+              to='/register'
               className='block text-primary-orange text-center mt-2 text-xs hover:underline'
             >
               Ainda não tem registo?

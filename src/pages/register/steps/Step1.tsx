@@ -72,12 +72,12 @@ export const Step1: React.FC = () => {
               />
             </svg>
           </button>
-          <span className='text-2xl'>Cadastro</span>
+          <span className='text-title'>Cadastro</span>
         </Link>
       </div>
 
       <h1
-        className='text-2xl font-light mt-20 mb-8'
+        className='text-title font-light mt-20 mb-8'
         role='heading'
         aria-level={1}
       >

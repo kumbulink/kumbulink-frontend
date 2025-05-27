@@ -66,11 +66,18 @@ export const CreateOfferPage: React.FC = () => {
     }))
   }
 
+  const setBank = (bank: string) => {
+    setForm(prev => ({
+      ...prev,
+      senderBank: bank
+    }))
+  }
+
   return (
     <div className='max-w-md mx-auto p-4'>
       <div className='flex items-center pt-4 mb-20'>
         <BackButton pathname='/' />
-        <h1 className='text-lg'>Anunciar</h1>
+        <h1 className='text-title'>Anunciar</h1>
       </div>
 
       <div className='space-y-4'>

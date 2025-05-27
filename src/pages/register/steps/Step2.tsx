@@ -165,12 +165,12 @@ export const Step2: React.FC = () => {
                 />
               </svg>
             </button>
-            <span className='text-2xl'>Cadastro</span>
+            <span className='text-title'>Cadastro</span>
           </>
         )}
       </div>
 
-      <h1 className='text-2xl font-light mt-20 mb-8'>Insira seus dados</h1>
+      <h1 className='text-title font-light mt-20 mb-8'>Insira seus dados</h1>
 
       <div className='space-y-4'>
         <div>

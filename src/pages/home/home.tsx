@@ -84,7 +84,7 @@ export const HomePage = () => {
       setPopupContent(<JoinUsPopup />)
       setIsPopUpOpen(true)
     } else {
-      void navigate('/criar-anuncio')
+      void navigate('/create-offer')
     }
   }
 

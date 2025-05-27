@@ -133,7 +133,7 @@ export const ProfilePage = () => {
       <div className='flex min-h-screen flex-col bg-white px-4'>
         <div className='flex items-center pt-4'>
           <BackButton pathname='/' />
-          <span className='text-2xl'>Minhas Informações</span>
+          <span className='text-title'>Minhas Informações</span>
         </div>
 
         <div className='pt-3 mt-20'>

@@ -71,7 +71,7 @@ export const HelpPage = () => {
   }, [searchQuery])
 
   return (
-    <div className='min-h-screen bg-white'>
+    <div className='min-h-screen bg-white p-4'>
       {/* Header */}
       <header className='px-4 py-3 flex items-center gap-4 border-b border-gray-200'>
         <Link to='/' className='text-gray-700'>
@@ -85,7 +85,7 @@ export const HelpPage = () => {
             />
           </svg>
         </Link>
-        <h1 className='text-xl text-gray-900'>Ajuda</h1>
+        <h1 className='text-title text-gray-900'>Ajuda</h1>
       </header>
 
       {/* Search Bar com feedback visual */}

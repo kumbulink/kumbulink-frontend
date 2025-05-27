@@ -158,7 +158,7 @@ export function LoginPage() {
         {/* Link para criar conta */}
         <p className='text-center text-gray-700'>
           Não possui uma conta?{' '}
-          <Link to={{ pathname: '/registrar' }} className='text-primary-orange'>
+          <Link to={{ pathname: '/register' }} className='text-primary-orange'>
             Crie aqui.
           </Link>
         </p>
