@@ -14,7 +14,13 @@ interface Bank {
   }
 }
 
-export const BankSelector = ({ addBank }: { addBank: () => void }) => {
+export const BankSelector = ({
+  addBank,
+  setBank
+}: {
+  addBank: () => void
+  setBank: (bank: string) => void
+}) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const user = useUserStore(state => state.user)
@@ -45,6 +51,7 @@ export const BankSelector = ({ addBank }: { addBank: () => void }) => {
 
   const handleBankSelect = (bankName: string) => {
     setSelectedBank(bankName)
+    setBank(bankName)
     setIsBankListOpen(false)
   }
 

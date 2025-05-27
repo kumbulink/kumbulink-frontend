@@ -23,12 +23,12 @@ const toNumeric = (value: string) => {
 
 export const CreateOfferPage: React.FC = () => {
   const [form, setForm] = useState<FormState>({
-    sender: 'Angola',
-    recipient: 'Portugal',
-    sourceAmount: '0',
-    targetAmount: '0',
-    senderBank: 'Xpto',
-    recipientBank: 'Xpto'
+    sender: '',
+    recipient: '',
+    sourceAmount: '',
+    targetAmount: '',
+    senderBank: '',
+    recipientBank: ''
   })
   const [isPopupOpen, setIsPopupOpen] = useState(false)
 
@@ -88,7 +88,7 @@ export const CreateOfferPage: React.FC = () => {
           value={form.sourceAmount}
           onChange={handleCountrySenderSelected}
         />
-        <BankSelector addBank={() => setIsPopupOpen(true)} />
+        <BankSelector addBank={() => setIsPopupOpen(true)} setBank={setBank} />
         <p className='text-gray-400 text-xs'>
           Só a Kumbulink terá acesso aos teus dados bancários.
         </p>
@@ -100,7 +100,7 @@ export const CreateOfferPage: React.FC = () => {
           value={form.targetAmount}
           onChange={handleCountryRecipientSelected}
         />
-        <BankSelector addBank={() => setIsPopupOpen(true)} />
+        <BankSelector addBank={() => setIsPopupOpen(true)} setBank={setBank} />
         <p className='text-gray-400 text-xs'>
           Só a Kumbulink terá acesso aos teus dados bancários.
         </p>
@@ -137,7 +137,7 @@ export const CreateOfferPage: React.FC = () => {
       </div>
 
       <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-        <AddBankPopup onClose={() => setIsPopupOpen(false)} />
+        <AddBankPopup setBank={setBank} onClose={() => setIsPopupOpen(false)} />
       </Popup>
     </div>
   )

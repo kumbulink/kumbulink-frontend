@@ -10,6 +10,8 @@ import helpIcon from '/icons/help.svg'
 import filterIcon from '/icons/filter.svg'
 import searchIcon from '/icons/search.svg'
 import chevronRightIcon from '/icons/chevron-right.svg'
+import deleteIcon from '/icons/delete.svg'
+import editIcon from '/icons/edit.svg'
 
 interface IconProps {
   className?: string
@@ -90,4 +92,16 @@ export const ChevronRightIcon = ({ className }: IconProps) => (
     className={className ?? 'w-5 h-5 text-gray-600'}
     alt=''
   />
+)
+
+export const DeleteIcon = ({ className }: IconProps) => (
+  <img
+    src={deleteIcon}
+    className={className ?? 'w-5 h-5 text-gray-600'}
+    alt=''
+  />
+)
+
+export const EditIcon = ({ className }: IconProps) => (
+  <img src={editIcon} className={className ?? 'w-5 h-5 text-gray-600'} alt='' />
 )

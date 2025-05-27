@@ -14,6 +14,7 @@ import { HomePage } from '@/pages/home'
 import Layout from '../ui/Layout'
 import { ExchangeOfferPage } from '@/pages/offer'
 import { HelpPage } from '@/pages/help'
+import { BankListPage } from '@/pages/bank-list'
 import { ProfilePage } from '@/pages/profile'
 
 const AppRoutes = () => {

@@ -10,7 +10,7 @@ export const Collapse = ({ title, children }: CollapseProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div>
+    <div className='bg-white mb-2'>
       <button
         className='w-full px-4 py-4 flex items-center justify-between text-left'
         onClick={() => setIsOpen(!isOpen)}

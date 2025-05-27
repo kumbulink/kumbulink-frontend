@@ -5,7 +5,13 @@ import { useClickOutside } from '@shared/hooks/useClickOutside'
 import http from '@shared/utils/http'
 import banks from '@shared/utils/banks.json'
 
-export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
+export const AddBankPopup = ({
+  onClose,
+  setBank
+}: {
+  onClose: () => void
+  setBank: (bank: string) => void
+}) => {
   const [PopupForm, setPopupForm] = useState({
     accountName: '',
     country: 'Portugal',
@@ -60,6 +66,7 @@ export const AddBankPopup = ({ onClose }: { onClose: () => void }) => {
         post_status: 'publish'
       })
       setLoading(false)
+      setBank(PopupForm.bank)
       onClose()
     } catch {
       setLoading(false)
