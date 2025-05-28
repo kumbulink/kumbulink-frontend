@@ -34,29 +34,34 @@ export const BankListPage = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
-  const [bankToDelete, setBankToDelete] = useState<Bank | null>(null)
   const [popupContent, setPopupContent] = useState<React.ReactNode | null>(null)
 
-  useEffect(() => {
+  const fetchBanks = useCallback(async () => {
     setLoading(true)
-    http
-      .get(`/wp/v2/banks?author=${user?.id}`)
-      .then(res => {
-        setBanks(res?.data as Bank[])
-      })
-      .catch(err => {
-        setError((err as AxiosError).message)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [])
+    try {
+      const { data } = await http.get<Bank[]>(`/wp/v2/banks?author=${user?.id}`)
+      setBanks(data)
+    } catch (err) {
+      setError((err as AxiosError).message)
+    } finally {
+      setLoading(false)
+    }
+  }, [user?.id])
 
-  const handleOptionClick = (option: 'delete' | 'edit') => {
+  useEffect(() => {
+    void fetchBanks()
+  }, [fetchBanks])
+
+  const handleOptionClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    option: 'delete' | 'edit' | 'add'
+  ) => {
+    const bankId = e?.currentTarget?.dataset?.bankId ?? null
+    console.log(bankId)
     if (option === 'delete') {
       setPopupContent(
-        <DeletePopup
-          handleConfirmDelete={handleConfirmDelete}
+        <DeleteConfirmation
+          handleConfirmDelete={() => handleConfirmDelete(Number(bankId))}
           handleCancelDelete={handleCancelDelete}
         />
       )
@@ -64,38 +69,40 @@ export const BankListPage = () => {
       return
     }
 
-    setPopupContent(
-      <EditPopup
-        handleConfirmDelete={handleConfirmDelete}
-        handleCancelDelete={handleCancelDelete}
-      />
-    )
-    setIsPopupOpen(true)
+    if (option === 'add' || option === 'edit') {
+      setPopupContent(
+        <BankForm
+          bankId={Number(bankId)}
+          onCancel={() => setIsPopupOpen(false)}
+          onSuccess={handleFormSuccess}
+        />
+      )
+      setIsPopupOpen(true)
+      return
+    }
   }
 
-  // const handleDeleteClick = (bank: Bank) => {
-  //   setBankToDelete(bank)
-  //   setIsPopupOpen(true)
-  // }
+  const handleFormSuccess = () => {
+    setIsPopupOpen(false)
+    void fetchBanks()
+  }
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = (idToDelete: number) => {
     http
-      .delete(`/wp/v2/banks/${bankToDelete?.id}`)
+      .delete(`/wp/v2/banks/${idToDelete}`)
       .then(() => {
-        setBanks(banks?.filter(bank => bank.id !== bankToDelete?.id) ?? null)
+        setBanks(banks?.filter(bank => bank.id !== idToDelete) ?? null)
       })
       .catch(err => {
         setError((err as AxiosError).message)
       })
       .finally(() => {
-        setBankToDelete(null)
         setIsPopupOpen(false)
       })
   }
 
   const handleCancelDelete = () => {
     setIsPopupOpen(false)
-    setBankToDelete(null)
   }
 
   return (
@@ -104,8 +111,8 @@ export const BankListPage = () => {
         <BackButton pathname='/' />
         <h1 className='text-title'>Bancos cadastrados</h1>
       </div>
-      <div className='flex-1 flex flex-col justify-start mt-8'>
-        {loading && <div className='px-4'>Loading...</div>}
+      <div className='flex-1 flex flex-col justify-start mt-8 pt-4 px-4'>
+        {loading && <div className='px-4'>Carregando...</div>}
         {error && <div className='px-4 text-red-500'>Error: {error}</div>}
         <div className='divide-y divide-gray-200'>
           {banks?.map(bank => (
@@ -124,15 +131,17 @@ export const BankListPage = () => {
                 </div>
                 <span className='flex items-center gap-4'>
                   <button
+                    data-bank-id={bank.id}
                     className='text-primary-orange p-1'
                     title='Deletar'
-                    onClick={() => handleOptionClick('delete')}
+                    onClick={e => handleOptionClick(e, 'delete')}
                   >
                     <DeleteIcon className='h-5 w-5' />
                   </button>
                   <button
+                    data-bank-id={bank.id}
                     className='text-green-700 p-1'
-                    onClick={() => handleOptionClick('edit')}
+                    onClick={e => handleOptionClick(e, 'edit')}
                     title='Editar'
                   >
                     <EditIcon className='h-5 w-5' />
@@ -144,7 +153,10 @@ export const BankListPage = () => {
         </div>
       </div>
       <div className='px-4 pb-8 mt-20'>
-        <button className='w-full bg-primary-orange text-white rounded shadow py-3 text-base font-medium'>
+        <button
+          className='w-full bg-primary-orange text-white rounded shadow py-3 text-base font-medium'
+          onClick={e => handleOptionClick(e, 'add')}
+        >
           Adicionar
         </button>
       </div>

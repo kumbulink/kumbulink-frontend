@@ -33,6 +33,8 @@ export const CreateOfferPage: React.FC = () => {
     recipientBank: ''
   })
   const [isPopupOpen, setIsPopupOpen] = useState(false)
+  const [bankDestinationTitle, setBankDestinationTitle] = useState('')
+  const [refreshList, setRefreshList] = useState(0)
 
   useEffect(() => {
     setForm(prevForm => {
@@ -68,13 +70,6 @@ export const CreateOfferPage: React.FC = () => {
     }))
   }
 
-  const setBank = (bank: string) => {
-    setForm(prev => ({
-      ...prev,
-      senderBank: bank
-    }))
-  }
-
   return (
     <div className='max-w-md mx-auto p-4'>
       <div className='flex items-center pt-4 mb-20'>
@@ -90,7 +85,17 @@ export const CreateOfferPage: React.FC = () => {
           value={form.sourceAmount}
           onChange={handleCountrySenderSelected}
         />
-        <BankSelector addBank={() => setIsPopupOpen(true)} setBank={setBank} />
+        <BankSelector
+          refreshList={refreshList}
+          addBank={() => {
+            setIsPopupOpen(true)
+            setBankDestinationTitle('Conta de recebimento')
+          }}
+          setBank={value => {
+            setIsPopupOpen(false)
+            setForm(prev => ({ ...prev, senderBank: value }))
+          }}
+        />
         <p className='text-gray-400 text-xs'>
           Só a Kumbulink terá acesso aos teus dados bancários.
         </p>
@@ -102,7 +107,18 @@ export const CreateOfferPage: React.FC = () => {
           value={form.targetAmount}
           onChange={handleCountryRecipientSelected}
         />
-        <BankSelector addBank={() => setIsPopupOpen(true)} setBank={setBank} />
+        <BankSelector
+          refreshList={refreshList}
+          addBank={() => {
+            setIsPopupOpen(true)
+            setBankDestinationTitle('Conta de recebimento')
+          }}
+          setBank={value => {
+            setIsPopupOpen(false)
+            setBankDestinationTitle('')
+            setForm(prev => ({ ...prev, recipientBank: value }))
+          }}
+        />
         <p className='text-gray-400 text-xs'>
           Só a Kumbulink terá acesso aos teus dados bancários.
         </p>
@@ -139,7 +155,14 @@ export const CreateOfferPage: React.FC = () => {
       </div>
 
       <PopupWrapper isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-        <AddBankPopup setBank={setBank} onClose={() => setIsPopupOpen(false)} />
+        <BankForm
+          title={bankDestinationTitle}
+          onSuccess={() => {
+            setIsPopupOpen(false)
+            setRefreshList(prev => prev + 1)
+          }}
+          onCancel={() => setIsPopupOpen(false)}
+        />
       </PopupWrapper>
     </div>
   )
