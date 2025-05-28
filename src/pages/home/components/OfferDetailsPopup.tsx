@@ -3,11 +3,8 @@ import { useUserStore } from '@/store/userStore'
 
 import type { WPPostWithACF } from '../home'
 
-import countries from '@shared/utils/countries.json'
-import http from '@/shared/utils/http'
-
-import { JoinUsPopup } from '@/components/JoinUsPopup'
-import { Popup } from '@/components/Popup'
+import { countries, http } from '@/shared/utils'
+import { JoinUsPopup, PopupWrapper } from '@/shared/ui/popup'
 
 const Flag = lazy(() => import('react-world-flags'))
 
@@ -222,9 +219,9 @@ export const OfferDetailsPopup = ({
           OK
         </button>
       </div>
-      <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
         <JoinUsPopup />
-      </Popup>
+      </PopupWrapper>
     </div>
   )
 }

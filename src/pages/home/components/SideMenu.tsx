@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { useUserStore } from '@/store/userStore'
 import { useRef, useEffect } from 'react'
+
+import { useUserStore } from '@/store/userStore'
 import {
   ProfileIcon,
   AdsIcon,
@@ -9,7 +10,7 @@ import {
   HelpIcon,
   LogoutIcon,
   CloseIcon
-} from '@shared/ui/icons'
+} from '@/shared/ui'
 
 interface SideMenuProps {
   isOpen: boolean

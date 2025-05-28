@@ -1,23 +1,43 @@
-import { useRef, useState } from 'react'
-import { CountrySelector } from '@components/CountrySelector'
-import { useClickOutside } from '@shared/hooks/useClickOutside'
+import { useRef, useState, useEffect } from 'react'
 
-import http from '@shared/utils/http'
-import banks from '@shared/utils/banks.json'
+import { CountrySelector } from '@/shared/ui'
+import { useClickOutside } from '@shared/hooks'
+import { http, banks } from '@shared/utils'
 
-export const AddBankPopup = ({
-  onClose,
-  setBank
+interface BankResponse {
+  id: number
+  title: {
+    rendered: string
+  }
+  acf: {
+    account_name: string
+    country: string
+    bank: string
+    recipient_name: string
+    branch: string
+    account_number: string
+    payment_key: string
+  }
+}
+
+export const BankForm = ({
+  title = 'Conta de Destino',
+  bankId,
+  onCancel,
+  onSuccess
 }: {
-  onClose: () => void
-  setBank: (bank: string) => void
+  title?: string | null
+  bankId?: number | null
+  onCancel?: () => void
+  onSuccess: () => void
 }) => {
-  const [PopupForm, setPopupForm] = useState({
+  const [BankForm, setBankForm] = useState({
+    id: 0,
     accountName: '',
-    country: 'Portugal',
+    country: '',
     bank: '',
     recipientName: '',
-    agency: '',
+    branch: '',
     account: '',
     paymentKey: ''
   })
@@ -29,45 +49,90 @@ export const AddBankPopup = ({
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  const buttonLabel = bankId ? 'Guardar' : 'Adicionar'
+  const buttonLoadingLabel = bankId ? 'Guardando...' : 'Adicionando...'
+
+  useEffect(() => {
+    const fetchBank = async () => {
+      if (bankId) {
+        try {
+          const {
+            data: {
+              title: { rendered: accountName },
+              acf: {
+                country,
+                bank,
+                recipient_name: recipientName,
+                branch,
+                account_number: account,
+                payment_key: paymentKey
+              }
+            }
+          } = await http.get<BankResponse>(`/wp/v2/banks/${bankId}`)
+          console.log('countryName', country)
+          setBankForm({
+            id: bankId,
+            accountName,
+            country,
+            bank,
+            recipientName,
+            branch,
+            account,
+            paymentKey
+          })
+        } catch {
+          setBankForm(f => ({ ...f, id: bankId }))
+        }
+      }
+    }
+    void fetchBank()
+  }, [bankId])
+
+  useClickOutside(dropdownRef, () => setIsBankListOpen(false))
+
   const handleBankInputClick = () => {
     setIsBankListOpen(true)
     inputRef.current?.focus()
   }
 
-  useClickOutside(dropdownRef, () => setIsBankListOpen(false))
-
-  const isPopupFormValid =
-    PopupForm.country &&
-    PopupForm.bank &&
-    PopupForm.recipientName &&
-    PopupForm.accountName &&
-    PopupForm.paymentKey
+  const isBankFormValid =
+    BankForm.country &&
+    BankForm.bank &&
+    BankForm.recipientName &&
+    BankForm.accountName &&
+    BankForm.paymentKey
 
   const handleBankSelect = (bankName: string) => {
-    setPopupForm(f => ({ ...f, bank: bankName }))
+    setBankForm(f => ({ ...f, bank: bankName }))
     setIsBankListOpen(false)
   }
 
   const handleSubmit = async () => {
-    if (!isPopupFormValid) return
+    if (!isBankFormValid) return
     setLoading(true)
     setError(null)
+
+    let url = `https://api.kumbulink.com/wp-json/wp/v2/banks`
+
+    if (bankId) {
+      url = `https://api.kumbulink.com/wp-json/wp/v2/banks/${bankId}`
+    }
+
     try {
-      await http.post('https://api.kumbulink.com/wp-json/wp/v2/banks', {
-        title: PopupForm.accountName,
+      await http.post(url, {
+        title: BankForm.accountName,
         acf: {
-          country: PopupForm.country,
-          recipient_name: PopupForm.recipientName,
-          bank: PopupForm.bank,
-          branch: PopupForm.agency,
-          account_number: PopupForm.account,
-          payment_key: PopupForm.paymentKey
+          country: BankForm.country,
+          recipient_name: BankForm.recipientName,
+          bank: BankForm.bank,
+          branch: BankForm.branch,
+          account_number: BankForm.account,
+          payment_key: BankForm.paymentKey
         },
-        post_status: 'publish'
+        status: 'publish'
       })
       setLoading(false)
-      setBank(PopupForm.bank)
-      onClose()
+      onSuccess?.()
     } catch {
       setLoading(false)
       setError('Erro ao adicionar banco. Tente novamente.')
@@ -75,8 +140,8 @@ export const AddBankPopup = ({
   }
 
   return (
-    <div className='bg-white rounded-sm p-6 w-[360px] max-w-full relative'>
-      <h2 className='text-title font-small mt-6 mb-6'>Conta de destino</h2>
+    <div className='bg-white rounded-sm p-6 w-full max-w-full relative'>
+      <h2 className='text-title font-small mt-6 mb-6'>{title}</h2>
       <form
         className='space-y-3'
         onSubmit={e => {
@@ -88,9 +153,9 @@ export const AddBankPopup = ({
           <label className='sr-only'>Nome da conta</label>
           <input
             type='text'
-            value={PopupForm.accountName}
+            value={BankForm.accountName}
             onChange={e =>
-              setPopupForm(f => ({ ...f, accountName: e.target.value }))
+              setBankForm(f => ({ ...f, accountName: e.target.value }))
             }
             placeholder='Nome da conta. Ex: Conta principal, conta da mãe, minha conta da familia...'
             className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
@@ -99,8 +164,9 @@ export const AddBankPopup = ({
         <div>
           <label className='sr-only'>País</label>
           <CountrySelector
+            defaultCountry={BankForm.country ?? null}
             handleSelect={countryName => {
-              setPopupForm(f => ({ ...f, country: countryName, bank: '' }))
+              setBankForm(f => ({ ...f, country: countryName, bank: '' }))
               setPaymentMethod(null)
             }}
           />
@@ -110,7 +176,7 @@ export const AddBankPopup = ({
           <input
             ref={inputRef}
             type='text'
-            value={PopupForm.bank}
+            value={BankForm.bank}
             onClick={handleBankInputClick}
             readOnly
             placeholder='Selecione o banco'
@@ -126,7 +192,7 @@ export const AddBankPopup = ({
               className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-lg border border-gray-300 bg-white shadow-lg'
             >
               {banks
-                .filter(bank => bank.country === PopupForm.country)
+                .filter(bank => bank.country === BankForm.country)
                 .map(
                   (bank: {
                     code: string
@@ -157,9 +223,9 @@ export const AddBankPopup = ({
             type='text'
             className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
             placeholder='Nome completo do destinatário'
-            value={PopupForm.recipientName}
+            value={BankForm.recipientName}
             onChange={e =>
-              setPopupForm(f => ({ ...f, recipientName: e.target.value }))
+              setBankForm(f => ({ ...f, recipientName: e.target.value }))
             }
           />
         </div>
@@ -170,9 +236,9 @@ export const AddBankPopup = ({
               type='text'
               className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
               placeholder='Agência'
-              value={PopupForm.agency}
+              value={BankForm.branch}
               onChange={e =>
-                setPopupForm(f => ({ ...f, agency: e.target.value }))
+                setBankForm(f => ({ ...f, branch: e.target.value }))
               }
             />
             <span className='text-xs text-gray-400'>Opcional</span>
@@ -183,9 +249,9 @@ export const AddBankPopup = ({
               type='text'
               className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
               placeholder='Conta'
-              value={PopupForm.account}
+              value={BankForm.account}
               onChange={e =>
-                setPopupForm(f => ({ ...f, account: e.target.value }))
+                setBankForm(f => ({ ...f, account: e.target.value }))
               }
             />
             <span className='text-xs text-gray-400'>Opcional</span>
@@ -199,9 +265,9 @@ export const AddBankPopup = ({
             placeholder={`Digite o ${
               paymentMethod?.toUpperCase() ?? 'código de pagamento'
             }`}
-            value={PopupForm.paymentKey}
+            value={BankForm.paymentKey}
             onChange={e =>
-              setPopupForm(f => ({ ...f, paymentKey: e.target.value }))
+              setBankForm(f => ({ ...f, paymentKey: e.target.value }))
             }
           />
         </div>
@@ -209,7 +275,7 @@ export const AddBankPopup = ({
           <button
             type='button'
             className='px-8 py-2 border border-primary-orange text-primary-orange rounded-sm font-medium'
-            onClick={onClose}
+            onClick={() => onCancel?.()}
             disabled={loading}
           >
             Cancelar
@@ -217,13 +283,13 @@ export const AddBankPopup = ({
           <button
             type='submit'
             className={`px-8 py-2 rounded-sm font-medium text-white ${
-              isPopupFormValid && !loading
+              isBankFormValid && !loading
                 ? 'bg-primary-orange'
                 : 'bg-gray-200 text-gray-400'
             }`}
-            disabled={!isPopupFormValid || loading}
+            disabled={!isBankFormValid || loading}
           >
-            {loading ? 'Adicionando...' : 'Adicionar'}
+            {loading ? buttonLoadingLabel : buttonLabel}
           </button>
         </div>
         {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
@@ -232,4 +298,4 @@ export const AddBankPopup = ({
   )
 }
 
-export default AddBankPopup
+export default BankForm

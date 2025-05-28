@@ -1,20 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useUserStore } from '@/store/userStore'
-
-import http from '@shared/utils/http.ts'
 import type { WP_REST_API_Post } from 'wp-types'
+
+import { useUserStore } from '@/store/userStore'
 
 import { SearchBar } from './components/SearchBar'
 import { OfferCard } from './components/OfferCard'
 import { SideMenu } from './components/SideMenu'
 import { OfferDetailsPopup } from './components/OfferDetailsPopup'
-import { Spinner } from '@shared/ui/Spinner'
 
-import { MenuIcon } from '@shared/ui/icons'
-import { JoinUsPopup } from '@components/JoinUsPopup'
-import { Popup } from '@components/Popup'
+import { http } from '@shared/utils'
+import { Spinner, MenuIcon, JoinUsPopup, PopupWrapper } from '@shared/ui'
 
 interface ExchangeOffer {
   id: number
@@ -178,9 +175,9 @@ export const HomePage = () => {
         onClose={() => setIsSideMenuOpen(false)}
       />
 
-      <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
         {popupContent}
-      </Popup>
+      </PopupWrapper>
     </div>
   )
 }

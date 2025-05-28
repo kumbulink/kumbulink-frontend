@@ -1,3 +1,4 @@
+import { http } from '@/shared/utils'
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage } from 'zustand/middleware'
 
@@ -22,7 +23,12 @@ export const useUserStore = create<UserStore>()(
       set => ({
         user: null,
         setUser: user => set({ user }),
-        logout: () => {
+        logout: async () => {
+          try {
+            await http.post('/custom/v1/logout')
+          } catch (error) {
+            console.error('Logout error:', error)
+          }
           set({ user: null })
           window.location.href = '/'
         }

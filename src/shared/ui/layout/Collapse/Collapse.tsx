@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { ChevronRightIcon } from '@/shared/ui/icons'
+
+import { ChevronRightIcon } from '@/shared/ui'
 
 interface CollapseProps {
   title: string

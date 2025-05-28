@@ -1,14 +1,18 @@
-import http from '@/shared/utils/http'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { AxiosError } from 'axios'
 
 import { useUserStore } from '@/store/userStore'
 
-import { BackButton } from '@/components/BackButton'
-import { Popup } from '@/components/Popup'
+import { DeleteConfirmation } from './components/DeleteConfirmation'
 
-import { DeleteIcon, EditIcon } from '@/shared/ui/icons'
-
-import { AxiosError } from 'axios'
+import {
+  PopupWrapper,
+  DeleteIcon,
+  EditIcon,
+  BankForm,
+  BackButton
+} from '@/shared/ui'
+import { http } from '@/shared/utils'
 
 interface Bank {
   id: number
@@ -29,8 +33,9 @@ export const BankListPage = () => {
   const [banks, setBanks] = useState<Bank[] | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false)
+  const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [bankToDelete, setBankToDelete] = useState<Bank | null>(null)
+  const [popupContent, setPopupContent] = useState<React.ReactNode | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -47,10 +52,31 @@ export const BankListPage = () => {
       })
   }, [])
 
-  const handleDeleteClick = (bank: Bank) => {
-    setBankToDelete(bank)
-    setIsDeletePopupOpen(true)
+  const handleOptionClick = (option: 'delete' | 'edit') => {
+    if (option === 'delete') {
+      setPopupContent(
+        <DeletePopup
+          handleConfirmDelete={handleConfirmDelete}
+          handleCancelDelete={handleCancelDelete}
+        />
+      )
+      setIsPopupOpen(true)
+      return
+    }
+
+    setPopupContent(
+      <EditPopup
+        handleConfirmDelete={handleConfirmDelete}
+        handleCancelDelete={handleCancelDelete}
+      />
+    )
+    setIsPopupOpen(true)
   }
+
+  // const handleDeleteClick = (bank: Bank) => {
+  //   setBankToDelete(bank)
+  //   setIsPopupOpen(true)
+  // }
 
   const handleConfirmDelete = () => {
     http
@@ -63,12 +89,12 @@ export const BankListPage = () => {
       })
       .finally(() => {
         setBankToDelete(null)
-        setIsDeletePopupOpen(false)
+        setIsPopupOpen(false)
       })
   }
 
   const handleCancelDelete = () => {
-    setIsDeletePopupOpen(false)
+    setIsPopupOpen(false)
     setBankToDelete(null)
   }
 
@@ -100,11 +126,15 @@ export const BankListPage = () => {
                   <button
                     className='text-primary-orange p-1'
                     title='Deletar'
-                    onClick={() => handleDeleteClick(bank)}
+                    onClick={() => handleOptionClick('delete')}
                   >
                     <DeleteIcon className='h-5 w-5' />
                   </button>
-                  <button className='text-green-700 p-1' title='Editar'>
+                  <button
+                    className='text-green-700 p-1'
+                    onClick={() => handleOptionClick('edit')}
+                    title='Editar'
+                  >
                     <EditIcon className='h-5 w-5' />
                   </button>
                 </span>
@@ -118,30 +148,10 @@ export const BankListPage = () => {
           Adicionar
         </button>
       </div>
-      <Popup isOpen={isDeletePopupOpen} onClose={handleCancelDelete}>
-        <div className='flex items-center justify-center min-h-screen z-0'>
-          <div className='bg-white rounded-lg p-6 w-full max-w-xs'>
-            <div className='text-red-600 font-bold mb-2'>ATENÇÃO!</div>
-            <div className='mb-6 text-black text-base'>
-              Tem certeza que deseja excluir o banco cadastrado?
-            </div>
-            <div className='flex gap-2'>
-              <button
-                className='flex-1 border border-primary-orange text-primary-orange rounded py-2 font-medium'
-                onClick={handleConfirmDelete}
-              >
-                Sim
-              </button>
-              <button
-                className='flex-1 bg-primary-orange text-white rounded py-2 font-medium'
-                onClick={handleCancelDelete}
-              >
-                Não
-              </button>
-            </div>
-          </div>
-        </div>
-      </Popup>
+
+      <PopupWrapper isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
+        {popupContent}
+      </PopupWrapper>
     </div>
   )
 }

@@ -1,17 +1,29 @@
-import { lazy, Suspense, useState, useRef } from 'react'
-import { useClickOutside } from '@shared/hooks/useClickOutside'
+import { lazy, Suspense, useEffect, useState, useRef } from 'react'
 
-import countries from '@shared/utils/countries.json'
+import { useClickOutside } from '@shared/hooks'
+import { countries } from '@shared/utils'
 
 const Flag = lazy(() => import('react-world-flags'))
 
 interface CountrySelectorProps {
   handleSelect: (countryName: string) => void
+  defaultCountry?: string | null
 }
 
-export const CountrySelector = ({ handleSelect }: CountrySelectorProps) => {
-  const [selectedCountry, setSelectedCountry] = useState<string>('')
+export const CountrySelector = ({
+  handleSelect,
+  defaultCountry
+}: CountrySelectorProps) => {
+  const [selectedCountry, setSelectedCountry] = useState<string>(
+    defaultCountry ?? ''
+  )
   const [isCountryListOpen, setIsCountryListOpen] = useState(false)
+
+  useEffect(() => {
+    if (defaultCountry) {
+      setSelectedCountry(defaultCountry)
+    }
+  }, [defaultCountry])
 
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -29,7 +41,9 @@ export const CountrySelector = ({ handleSelect }: CountrySelectorProps) => {
 
   useClickOutside(dropdownRef, () => setIsCountryListOpen(false))
 
-  const selectedCountryData = countries.find(c => c.name === selectedCountry)
+  const selectedCountryData = countries.find(
+    c => c.name === selectedCountry || c.name === defaultCountry
+  )
 
   return (
     <div className='relative flex items-center'>

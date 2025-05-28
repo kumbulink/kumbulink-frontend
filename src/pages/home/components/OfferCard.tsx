@@ -3,6 +3,8 @@ import { lazy, Suspense } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
+import { countries } from '@shared/utils'
+
 interface OfferCardProps {
   id: number
   date: string
@@ -17,8 +19,6 @@ interface OfferCardProps {
 }
 
 const Flag = lazy(() => import('react-world-flags'))
-
-import countries from '@shared/utils/countries.json'
 
 export const OfferCard = ({
   id,

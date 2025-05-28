@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 
-import { CurrencyInput } from '@components/CurrencyInput'
-import { BankSelector } from '@components/BankSelector'
-import { BackButton } from '@components/BackButton'
-import { Popup } from '@components/Popup/Popup'
-import { AddBankPopup } from './components/AddBankPopup'
+import {
+  CurrencyInput,
+  BackButton,
+  BankSelector,
+  PopupWrapper,
+  BankForm
+} from '@shared/ui'
 
 interface FormState {
   sender: string
@@ -136,9 +138,9 @@ export const CreateOfferPage: React.FC = () => {
         </button>
       </div>
 
-      <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
+      <PopupWrapper isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
         <AddBankPopup setBank={setBank} onClose={() => setIsPopupOpen(false)} />
-      </Popup>
+      </PopupWrapper>
     </div>
   )
 }

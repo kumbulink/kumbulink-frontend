@@ -3,13 +3,16 @@ import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
 
 import type { WP_User } from 'wp-types'
 
-import http from '@shared/utils/http.ts'
-import { validatePassport, validateAngolanID } from '@shared/utils/validation'
+import {
+  http,
+  validatePassport,
+  validateAngolanID,
+  countries
+} from '@shared/utils'
 
-import countries from '@shared/utils/countries.json'
+import { PopupWrapper, MembershipTerms, PrivacyPolicy } from '@shared/ui'
 
-import { Popup } from '@components/Popup'
-import { CountrySelector } from '@components/CountrySelector'
+import { CountrySelector } from '@/shared/ui/selectors/CountrySelector'
 
 import { useRegisterStore } from '../../../contexts/RegisterStore'
 
@@ -17,8 +20,6 @@ import CalendarIcon from '/icons/calendar.svg'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
-
-import { MembershipTerms, PrivacyPolicy } from '@shared/ui/terms'
 
 const customTheme: CustomFlowbiteTheme['datepicker'] = {
   root: {
@@ -301,9 +302,9 @@ export const Step2: React.FC = () => {
       {/* Progress bar */}
       <div className='mt-6 h-1 w-1/3 bg-primary-orange' />
 
-      <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
         {popUpContent}
-      </Popup>
+      </PopupWrapper>
     </div>
   )
 }

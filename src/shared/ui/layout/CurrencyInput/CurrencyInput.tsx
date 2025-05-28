@@ -1,7 +1,7 @@
 import { lazy, Suspense, useRef, useState } from 'react'
+
 import { useClickOutside } from '@shared/hooks/useClickOutside'
-import countries from '@shared/utils/countries.json'
-import { formatCurrency } from '@shared/utils/currency'
+import { formatCurrency, countries } from '@shared/utils'
 
 const Flag = lazy(() => import('react-world-flags'))
 
@@ -14,7 +14,7 @@ export const CurrencyInput = ({
   value = '0',
   onChange
 }: CurrencyInputProps) => {
-  const [selectedCurrency, setSelectedCurrency] = useState<string>('1')
+  const [selectedCurrency, setSelectedCurrency] = useState<string>('')
   const [isCurrencyListOpen, setIsCurrencyListOpen] = useState(false)
 
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -35,7 +35,7 @@ export const CurrencyInput = ({
   const numericValue = parseInt(value || '0', 10)
   const formattedValue = formatCurrency(
     numericValue,
-    selectedCountryData?.currency ?? 'EUR'
+    selectedCountryData?.currency ?? 'BRL'
   )
 
   return (
@@ -49,7 +49,7 @@ export const CurrencyInput = ({
           >
             <Suspense fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}>
               <Flag
-                code={selectedCountryData?.iso ?? 'PRT'}
+                code={selectedCountryData?.iso ?? 'AGO'}
                 height={20}
                 width={30}
                 className='mr-2'
@@ -95,7 +95,7 @@ export const CurrencyInput = ({
         />
       </div>
       <span className='text-gray-400 text-xs'>
-        {selectedCountryData?.currency ?? 'EUR'}
+        {selectedCountryData?.currency ?? 'BRL'}
       </span>
     </div>
   )

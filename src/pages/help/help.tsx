@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Collapse } from '@/components/Collapse'
-import { SearchIcon } from '@/shared/ui/icons'
+
+import { Collapse, SearchIcon } from '@/shared/ui'
 
 export const HelpPage = () => {
   const [searchQuery, setSearchQuery] = useState('')

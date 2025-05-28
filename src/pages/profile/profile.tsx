@@ -1,9 +1,8 @@
-import { BackButton } from '@/components/BackButton'
+import { BackButton } from '@/shared/ui/layout/BackButton'
 import { useUserStore } from '@/store/userStore'
 import { useState } from 'react'
 
-import http from '@/shared/utils/http'
-import { validatePassport, validateAngolanID } from '@shared/utils/validation'
+import { http, validatePassport, validateAngolanID } from '@shared/utils'
 
 interface EditableUserData {
   id: number

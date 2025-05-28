@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { useUserStore } from '@/store/userStore'
 
-import http from '@/shared/utils/http.ts'
+import { http } from '@shared/utils'
 
 interface LoginResponse {
   id: number

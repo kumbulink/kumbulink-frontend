@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect } from 'react'
-import { useClickOutside } from '@shared/hooks/useClickOutside'
-import { AddIcon } from '@shared/ui/icons'
-import http from '@shared/utils/http'
+
+import { useClickOutside } from '@shared/hooks'
+import { AddIcon } from '@shared/ui'
+import { http } from '@shared/utils'
+
 import { useUserStore } from '@/store/userStore'
 
 interface Bank {
@@ -16,10 +18,12 @@ interface Bank {
 
 export const BankSelector = ({
   addBank,
-  setBank
+  setBank,
+  refreshList
 }: {
   addBank: () => void
   setBank: (bank: string) => void
+  refreshList?: number
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -40,7 +44,7 @@ export const BankSelector = ({
       .then(res => setBanks(res.data as Bank[]))
       .catch(() => setErrorBanks('Erro ao buscar bancos cadastrados.'))
       .finally(() => setLoadingBanks(false))
-  }, [user?.id])
+  }, [user?.id, refreshList])
 
   useClickOutside(dropdownRef, () => setIsBankListOpen(false))
 
