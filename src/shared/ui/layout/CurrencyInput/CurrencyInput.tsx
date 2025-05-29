@@ -1,4 +1,4 @@
-import { lazy, Suspense, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 
 import { useClickOutside } from '@shared/hooks/useClickOutside'
 import { formatCurrency, countries } from '@shared/utils'
@@ -7,18 +7,24 @@ const Flag = lazy(() => import('react-world-flags'))
 
 interface CurrencyInputProps {
   value: string
-  onChange: (value: string) => void
+  onValueChange: (value: string) => void
+  onCountryChange?: (locale: string) => void
 }
 
 export const CurrencyInput = ({
   value = '0',
-  onChange
+  onValueChange,
+  onCountryChange
 }: CurrencyInputProps) => {
   const [selectedCurrency, setSelectedCurrency] = useState<string>('')
   const [isCurrencyListOpen, setIsCurrencyListOpen] = useState(false)
 
   const dropdownRef = useRef<HTMLDivElement>(null)
   const selectedCountryData = countries.find(c => c.name === selectedCurrency)
+
+  useEffect(() => {
+    onCountryChange?.(selectedCountryData?.currency ?? 'AOA')
+  }, [selectedCountryData])
 
   useClickOutside(dropdownRef, () => setIsCurrencyListOpen(false))
 
@@ -29,13 +35,13 @@ export const CurrencyInput = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/\D/g, '')
-    onChange(rawValue || '0')
+    onValueChange(rawValue || '0')
   }
 
   const numericValue = parseInt(value || '0', 10)
   const formattedValue = formatCurrency(
     numericValue,
-    selectedCountryData?.currency ?? 'BRL'
+    selectedCountryData?.currency ?? 'AOA'
   )
 
   return (

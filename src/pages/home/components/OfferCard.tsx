@@ -3,7 +3,8 @@ import { lazy, Suspense } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
-import { countries } from '@shared/utils'
+import { formatCurrency } from '@shared/utils'
+import { useCountryInfo } from '@shared/hooks'
 
 interface OfferCardProps {
   id: number
@@ -30,17 +31,9 @@ export const OfferCard = ({
   bank,
   handleClick
 }: OfferCardProps) => {
-  const getCountryCode = (country: string) => {
-    const countryCode = countries.find(c => c.name === country)
-
-    return countryCode?.iso
-  }
-
-  const getCountryCurrency = (country: string) => {
-    const countryCode = countries.find(c => c.name === country)
-
-    return countryCode?.currency
-  }
+  const { code: recipientCode, currency: recipientCurrency } =
+    useCountryInfo(recipient)
+  const { code: senderCode, currency: senderCurrency } = useCountryInfo(sender)
 
   return (
     <div
@@ -52,20 +45,12 @@ export const OfferCard = ({
           <div className='font-medium mt-1'>
             <p className='text-gray-500 text-sm mb-2'>Eu tenho</p>
             <span className='text-black-900 text-xl'>
-              {getCountryCurrency(sender)}{' '}
-              {parseFloat(sourceAmount).toLocaleString('pt-BR', {
-                minimumFractionDigits: 2
-              })}
+              {formatCurrency(parseFloat(sourceAmount), senderCurrency)}
             </span>
           </div>
           <div className='flex items-center gap-2 mt-1'>
             <Suspense fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}>
-              <Flag
-                code={getCountryCode(sender)}
-                height={10}
-                width={20}
-                className='mr-2'
-              />
+              <Flag code={senderCode} height={10} width={20} className='mr-2' />
             </Suspense>
             <span className='text-xs text-gray-600'>{sender}</span>
           </div>
@@ -78,16 +63,13 @@ export const OfferCard = ({
           <div className='font-medium mt-1'>
             <p className='text-gray-500 text-sm mb-2'>Eu quero</p>
             <span className='text-black-900 text-xl mb-2'>
-              {getCountryCurrency(recipient)}{' '}
-              {parseFloat(targetAmount).toLocaleString('pt-BR', {
-                minimumFractionDigits: 2
-              })}
+              {formatCurrency(parseFloat(targetAmount), recipientCurrency)}
             </span>
           </div>
           <div className='flex items-center gap-2 mt-1'>
             <Suspense fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}>
               <Flag
-                code={getCountryCode(recipient)}
+                code={recipientCode}
                 height={10}
                 width={20}
                 className='mr-2'

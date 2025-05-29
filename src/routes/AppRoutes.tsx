@@ -7,11 +7,13 @@ import {
 
 import { useUserStore } from '@/store/userStore'
 
+import Layout from '../ui/Layout'
+
 import { LoginPage } from '@/pages/login'
 import { RegisterPage } from '@/pages/register'
 import { CreateOfferPage } from '@/pages/create-offer'
+import { MyOffersPage } from '@/pages/my-offers'
 import { HomePage } from '@/pages/home'
-import Layout from '../ui/Layout'
 import { ExchangeOfferPage } from '@/pages/offer'
 import { HelpPage } from '@/pages/help'
 import { BankListPage } from '@/pages/bank-list'
@@ -31,6 +33,7 @@ const AppRoutes = () => {
           />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/create-offer' element={<CreateOfferPage />} />
+          <Route path='/my-offers' element={<MyOffersPage />} />
           <Route path='/offer/:id' element={<ExchangeOfferPage />} />
           <Route path='/banks' element={<BankListPage />} />
           <Route path='/help' element={<HelpPage />} />

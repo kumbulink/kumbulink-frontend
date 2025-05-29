@@ -7,14 +7,20 @@ import {
   PopupWrapper,
   BankForm
 } from '@shared/ui'
+import { formatCurrency, http } from '@/shared/utils'
+import Published from './components/Published'
 
 interface FormState {
   sender: string
   recipient: string
+  senderCurrency: string
+  recipientCurrency: string
   sourceAmount: string
   targetAmount: string
-  senderBank: string
-  recipientBank: string
+  senderBank: number
+  recipientBank: number
+  exchangeRate: string
+  total: string
 }
 
 const toNumeric = (value: string) => {
@@ -25,15 +31,21 @@ const toNumeric = (value: string) => {
 
 export const CreateOfferPage: React.FC = () => {
   const [form, setForm] = useState<FormState>({
-    sender: '',
-    recipient: '',
+    sender: 'Angola',
+    recipient: 'Brasil',
+    senderCurrency: 'AOA',
+    recipientCurrency: 'BRL',
     sourceAmount: '',
     targetAmount: '',
-    senderBank: '',
-    recipientBank: ''
+    senderBank: 0,
+    recipientBank: 0,
+    exchangeRate: '',
+    total: ''
   })
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [bankDestinationTitle, setBankDestinationTitle] = useState('')
+  // const [isLoading, setIsLoading] = useState(false)
+  const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
   const [refreshList, setRefreshList] = useState(0)
 
   useEffect(() => {
@@ -42,32 +54,69 @@ export const CreateOfferPage: React.FC = () => {
       const targetNumber = toNumeric(targetAmount)
       const sourceNumber = toNumeric(sourceAmount)
 
-      const tax = targetNumber ? sourceNumber / targetNumber : 0
+      const exchangeRate = targetNumber ? sourceNumber / targetNumber : 0
+      const total = sourceNumber * 1.03
 
-      return { ...prevForm, tax: tax.toFixed(4) }
+      return {
+        ...prevForm,
+        exchangeRate: exchangeRate.toFixed(6),
+        total: total.toString()
+      }
     })
   }, [form.sourceAmount, form.targetAmount])
 
   const isFormValid =
-    form.sender &&
-    form.recipient &&
+    form.senderCurrency &&
+    form.recipientCurrency &&
     form.sourceAmount &&
     form.targetAmount &&
     form.senderBank &&
     form.recipientBank
 
-  const handleCountryRecipientSelected = (value: string) => {
+  const handleRecipientAmountSelected = (value: string) => {
     setForm(prev => ({
       ...prev,
       targetAmount: value
     }))
   }
 
-  const handleCountrySenderSelected = (value: string) => {
+  const handleSenderAmountSelected = (value: string) => {
     setForm(prev => ({
       ...prev,
       sourceAmount: value
     }))
+  }
+
+  const handleRecipientCountrySelected = (value: string) => {
+    setForm(prev => ({
+      ...prev,
+      recipientCurrency: value,
+      recipient: value === 'AOA' ? 'Angola' : 'Brasil'
+    }))
+  }
+
+  const handleSenderCountrySelected = (value: string) => {
+    setForm(prev => ({
+      ...prev,
+      senderCurrency: value,
+      sender: value === 'AOA' ? 'Angola' : 'Brasil'
+    }))
+  }
+
+  const handleSubmit = async () => {
+    try {
+      await http.post('/wp/v2/classifieds', {
+        title: 'Anúncio de câmbio',
+        status: 'publish',
+        acf: {
+          ...form
+        }
+      })
+      setPopupContent(<Published onClose={() => setIsPopupOpen(false)} />)
+      setIsPopupOpen(true)
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   return (
@@ -83,17 +132,28 @@ export const CreateOfferPage: React.FC = () => {
         </label>
         <CurrencyInput
           value={form.sourceAmount}
-          onChange={handleCountrySenderSelected}
+          onValueChange={handleSenderAmountSelected}
+          onCountryChange={handleSenderCountrySelected}
         />
         <BankSelector
           refreshList={refreshList}
           addBank={() => {
+            setPopupContent(
+              <BankForm
+                title={bankDestinationTitle}
+                onSuccess={() => {
+                  setIsPopupOpen(false)
+                  setRefreshList(prev => prev + 1)
+                }}
+                onCancel={() => setIsPopupOpen(false)}
+              />
+            )
             setIsPopupOpen(true)
             setBankDestinationTitle('Conta de recebimento')
           }}
-          setBank={value => {
+          setBank={bankId => {
             setIsPopupOpen(false)
-            setForm(prev => ({ ...prev, senderBank: value }))
+            setForm(prev => ({ ...prev, senderBank: bankId }))
           }}
         />
         <p className='text-gray-400 text-xs'>
@@ -105,7 +165,8 @@ export const CreateOfferPage: React.FC = () => {
         </label>
         <CurrencyInput
           value={form.targetAmount}
-          onChange={handleCountryRecipientSelected}
+          onValueChange={handleRecipientAmountSelected}
+          onCountryChange={handleRecipientCountrySelected}
         />
         <BankSelector
           refreshList={refreshList}
@@ -113,10 +174,10 @@ export const CreateOfferPage: React.FC = () => {
             setIsPopupOpen(true)
             setBankDestinationTitle('Conta de recebimento')
           }}
-          setBank={value => {
+          setBank={bankId => {
             setIsPopupOpen(false)
             setBankDestinationTitle('')
-            setForm(prev => ({ ...prev, recipientBank: value }))
+            setForm(prev => ({ ...prev, recipientBank: bankId }))
           }}
         />
         <p className='text-gray-400 text-xs'>
@@ -124,22 +185,37 @@ export const CreateOfferPage: React.FC = () => {
         </p>
       </div>
 
-      {isFormValid && (
-        <div className='mt-8 space-y-2'>
-          <div className='flex justify-between text-gray-600'>
-            <span>Câmbio</span>
-            <span>953,50 Kz</span>
-          </div>
-          <div className='flex justify-between text-gray-600'>
-            <span>Taxa de serviço</span>
-            <span>3 Euros (3%)</span>
-          </div>
-          <div className='flex justify-between text-[#C25B11] font-medium'>
-            <span>Total a transferir</span>
-            <span>103 Euros</span>
-          </div>
+      <div className='mt-8 space-y-2'>
+        <div className='flex justify-between text-gray-600'>
+          <span>Câmbio</span>
+          <span>
+            {formatCurrency(
+              (parseFloat(form.sourceAmount) / parseFloat(form.targetAmount)) *
+                100 || 0,
+              form.senderCurrency
+            )}
+          </span>
         </div>
-      )}
+        <div className='flex justify-between text-gray-600'>
+          <span>Taxa de serviço</span>
+          <span>
+            {formatCurrency(
+              parseFloat(form.sourceAmount) * 0.03 || 0,
+              form.senderCurrency
+            )}
+            &nbsp;(3%)
+          </span>
+        </div>
+        <div className='flex justify-between text-[#C25B11] font-medium'>
+          <span>Total a transferir</span>
+          <span>
+            {formatCurrency(
+              parseFloat(form.sourceAmount) * 1.03 || 0,
+              form.senderCurrency
+            )}
+          </span>
+        </div>
+      </div>
 
       <div className='mt-6'>
         <button
@@ -148,6 +224,7 @@ export const CreateOfferPage: React.FC = () => {
               ? 'bg-primary-green text-stone-50'
               : 'bg-gray-100 text-gray-400'
           }`}
+          onClick={handleSubmit}
           disabled={!isFormValid}
         >
           Publicar anúncio
@@ -155,14 +232,7 @@ export const CreateOfferPage: React.FC = () => {
       </div>
 
       <PopupWrapper isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-        <BankForm
-          title={bankDestinationTitle}
-          onSuccess={() => {
-            setIsPopupOpen(false)
-            setRefreshList(prev => prev + 1)
-          }}
-          onCancel={() => setIsPopupOpen(false)}
-        />
+        {popupContent}
       </PopupWrapper>
     </div>
   )

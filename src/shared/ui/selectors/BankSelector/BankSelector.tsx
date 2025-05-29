@@ -22,7 +22,7 @@ export const BankSelector = ({
   refreshList
 }: {
   addBank: () => void
-  setBank: (bank: string) => void
+  setBank: (bankId: number) => void
   refreshList?: number
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -53,9 +53,9 @@ export const BankSelector = ({
     inputRef.current?.focus()
   }
 
-  const handleBankSelect = (bankName: string) => {
+  const handleBankSelect = (bankName: string, bankId: number) => {
     setSelectedBank(bankName)
-    setBank(bankName)
+    setBank(bankId)
     setIsBankListOpen(false)
   }
 
@@ -101,7 +101,8 @@ export const BankSelector = ({
                 key={bank.id}
                 onClick={() =>
                   handleBankSelect(
-                    bank.acf?.bank || bank.title?.rendered || 'Banco'
+                    bank.acf?.bank || bank.title?.rendered || 'Banco',
+                    bank.id
                   )
                 }
                 className='flex w-full items-center p-4 hover:bg-gray-100'

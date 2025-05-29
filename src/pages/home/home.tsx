@@ -86,11 +86,6 @@ export const HomePage = () => {
   }
 
   const handleOfferCardClick = async (id: number) => {
-    // if (!isAuthenticated) {
-    //   setPopupContent(<JoinUsPopup />)
-    //   setIsPopUpOpen(true)
-    //   return
-    // }
     setIsLoading(true)
     try {
       const response = await http.get<WPPostWithACF>(`/wp/v2/classifieds/${id}`)

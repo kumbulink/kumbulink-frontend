@@ -3,8 +3,9 @@ import { useUserStore } from '@/store/userStore'
 
 import type { WPPostWithACF } from '../home'
 
-import { countries, http } from '@/shared/utils'
-import { JoinUsPopup, PopupWrapper } from '@/shared/ui/popup'
+import { http } from '@/shared/utils'
+import { JoinUsPopup, PopupWrapper } from '@/shared/ui'
+import { useCountryInfo } from '@shared/hooks'
 
 const Flag = lazy(() => import('react-world-flags'))
 
@@ -23,21 +24,17 @@ export const OfferDetailsPopup = ({
   const isAuthenticated = useUserStore(state => state.user !== null)
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
 
+  const sender = offer?.acf.sender ?? ''
+  const recipient = offer?.acf.recipient ?? ''
+
+  const { code: senderCode, currency: senderCurrency } = useCountryInfo(sender)
+  const { code: recipientCode, currency: recipientCurrency } =
+    useCountryInfo(recipient)
+
   if (!offer) return null
 
   const { acf, id } = offer
-  const { sender, recipient, sourceAmount, targetAmount, bank, paymentKey } =
-    acf
-
-  const getCountryCode = (country: string) => {
-    const countryCode = countries.find(c => c.name === country)
-    return countryCode?.iso
-  }
-
-  const getCountryCurrency = (country: string) => {
-    const countryCode = countries.find(c => c.name === country)
-    return countryCode?.currency
-  }
+  const { sourceAmount, targetAmount, bank, paymentKey } = acf
 
   const exchangeRate = parseFloat(sourceAmount) / parseFloat(targetAmount)
   const tax = 0.03 // 3%
@@ -100,11 +97,10 @@ export const OfferDetailsPopup = ({
           <p className='text-gray-500 text-sm mb-1'>Eu tenho</p>
           <div className='flex items-center gap-2'>
             <Suspense fallback={<div className='w-6 h-4 bg-gray-200' />}>
-              <Flag code={getCountryCode(sender)} height={16} width={24} />
+              <Flag code={senderCode} height={16} width={24} />
             </Suspense>
             <span className='text-black-900 text-lg font-medium'>
-              {getCountryCurrency(sender)}{' '}
-              {parseFloat(sourceAmount).toLocaleString()}
+              {senderCurrency} {parseFloat(sourceAmount).toLocaleString()}
             </span>
           </div>
           <div className='text-xs text-gray-600 mt-1'>{bank}</div>
@@ -116,11 +112,10 @@ export const OfferDetailsPopup = ({
           <p className='text-gray-500 text-sm mb-1'>Eu quero</p>
           <div className='flex items-center gap-2 justify-end'>
             <Suspense fallback={<div className='w-6 h-4 bg-gray-200' />}>
-              <Flag code={getCountryCode(recipient)} height={16} width={24} />
+              <Flag code={recipientCode} height={16} width={24} />
             </Suspense>
             <span className='text-black-900 text-lg font-medium'>
-              {getCountryCurrency(recipient)}{' '}
-              {parseFloat(targetAmount).toLocaleString()}
+              {recipientCurrency} {parseFloat(targetAmount).toLocaleString()}
             </span>
           </div>
           <div className='text-xs text-gray-600 mt-1'>Banco Bai</div>
@@ -135,15 +130,13 @@ export const OfferDetailsPopup = ({
         <div className='flex justify-between'>
           <span className='text-gray-600'>Eu tenho</span>
           <span className='font-medium'>
-            {getCountryCurrency(sender)}{' '}
-            {parseFloat(sourceAmount).toLocaleString()}
+            {senderCurrency} {parseFloat(sourceAmount).toLocaleString()}
           </span>
         </div>
         <div className='flex justify-between'>
           <span className='text-gray-600'>Eu quero</span>
           <span className='font-medium'>
-            {getCountryCurrency(recipient)}{' '}
-            {parseFloat(targetAmount).toLocaleString()}
+            {recipientCurrency} {parseFloat(targetAmount).toLocaleString()}
           </span>
         </div>
         <div className='flex justify-between'>
@@ -155,7 +148,7 @@ export const OfferDetailsPopup = ({
         <div className='flex justify-between'>
           <span className='text-gray-600'>Taxa de venda</span>
           <span className='font-medium'>
-            {parseFloat(sourceAmount) * 0.03} {getCountryCurrency(sender)} (3%)
+            {parseFloat(sourceAmount) * 0.03} {senderCurrency} (3%)
           </span>
         </div>
       </div>
