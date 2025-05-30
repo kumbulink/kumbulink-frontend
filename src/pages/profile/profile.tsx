@@ -92,7 +92,7 @@ export const ProfilePage = () => {
       setIsLoading(true)
 
       const response = await http.post(`/wp/v2/users/${userData.id}`, {
-        display_name: userData.displayName,
+        name: userData.displayName,
         email: userData.email,
         acf: {
           document_id: userData.documentId,
