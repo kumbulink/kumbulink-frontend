@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState, useRef } from 'react'
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import type { WPPostWithACF } from '../home'
+import type { WPPostWithACF } from '../../../../pages/home/home'
 
 import { http } from '@/shared/utils'
 import { JoinUsPopup, PopupWrapper } from '@/shared/ui'
@@ -9,15 +9,12 @@ import { useCountryInfo } from '@shared/hooks'
 
 const Flag = lazy(() => import('react-world-flags'))
 
-interface OfferDetailsPopupProps {
+interface OfferDetailsProps {
   offer: WPPostWithACF | null
   onClose: () => void
 }
 
-export const OfferDetailsPopup = ({
-  offer,
-  onClose
-}: OfferDetailsPopupProps) => {
+export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
   const [copyFeedback, setCopyFeedback] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)

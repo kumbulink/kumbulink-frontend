@@ -5,9 +5,9 @@ import {
   Navigate
 } from 'react-router-dom'
 
-import { useUserStore } from '@/shared/model/providers/userStore'
+import { useUserStore } from '@/shared/model'
 
-import Layout from '../ui/Layout'
+import { Layout } from '@shared/ui/devices'
 
 import { LoginPage } from '@/pages/login'
 import { RegisterPage } from '@/pages/register'

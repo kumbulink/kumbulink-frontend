@@ -5,10 +5,10 @@ import {
   BackButton,
   BankSelector,
   PopupWrapper,
-  BankForm
+  BankForm,
+  ConfirmedOfferDialog
 } from '@shared/ui'
 import { formatCurrency, http } from '@/shared/utils'
-import Published from './components/Published'
 
 interface FormState {
   sender: string
@@ -112,7 +112,9 @@ export const CreateOfferPage: React.FC = () => {
           ...form
         }
       })
-      setPopupContent(<Published onClose={() => setIsPopupOpen(false)} />)
+      setPopupContent(
+        <ConfirmedOfferDialog onClose={() => setIsPopupOpen(false)} />
+      )
       setIsPopupOpen(true)
     } catch (error) {
       console.log('error', error)

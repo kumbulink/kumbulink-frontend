@@ -3,11 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import type { WP_REST_API_Post } from 'wp-types'
 
-import { useUserStore } from '@/shared/model/providers/userStore'
-
-import { OfferCard } from './components/OfferCard'
-import { SideMenu } from './components/SideMenu'
-import { OfferDetailsPopup } from './components/OfferDetailsPopup'
+import { useUserStore } from '@shared/model/providers'
 
 import { http } from '@shared/utils'
 import {
@@ -15,7 +11,10 @@ import {
   MenuIcon,
   JoinUsPopup,
   PopupWrapper,
-  SearchBar
+  SearchBar,
+  OfferCard,
+  OfferDetails,
+  SideMenu
 } from '@shared/ui'
 
 interface ExchangeOffer {
@@ -95,7 +94,7 @@ export const HomePage = () => {
     try {
       const response = await http.get<WPPostWithACF>(`/wp/v2/classifieds/${id}`)
       setPopupContent(
-        <OfferDetailsPopup
+        <OfferDetails
           offer={response.data}
           onClose={() => setIsPopUpOpen(false)}
         />

@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 
 import type { WP_REST_API_Post } from 'wp-types'
 
-import { OfferCard } from '@/pages/home/components/OfferCard'
-import { OfferDetailsPopup } from '@/pages/home/components/OfferDetailsPopup'
+import { OfferCard, OfferDetails } from '@/shared/ui'
 
 import { BackButton, PopupWrapper, SearchBar, Spinner } from '@shared/ui'
 import { http } from '@shared/utils'
@@ -78,7 +77,7 @@ export const MyOffersPage = () => {
     try {
       const response = await http.get<WPPostWithACF>(`/wp/v2/classifieds/${id}`)
       setPopupContent(
-        <OfferDetailsPopup
+        <OfferDetails
           offer={response.data}
           onClose={() => setIsPopUpOpen(false)}
         />

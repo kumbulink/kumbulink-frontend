@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 
-export const Published = ({ onClose }: { onClose: () => void }) => {
+export const ConfirmedOfferDialog = ({ onClose }: { onClose: () => void }) => {
   const navigate = useNavigate()
 
   return (
@@ -32,4 +32,4 @@ export const Published = ({ onClose }: { onClose: () => void }) => {
   )
 }
 
-export default Published
+export default ConfirmedOfferDialog
