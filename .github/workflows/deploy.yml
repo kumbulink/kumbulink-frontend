@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feat/classified-card
+      - feat/matched-offers
 
 jobs:
   deploy:
