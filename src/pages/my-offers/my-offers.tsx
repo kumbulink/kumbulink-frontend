@@ -8,6 +8,7 @@ import { BackButton, PopupWrapper, SearchBar, Spinner } from '@shared/ui'
 import { http } from '@shared/utils'
 
 import { useUserStore } from '@shared/model'
+import { useSearch } from '@shared/hooks'
 
 interface ExchangeOffer {
   id: number
@@ -31,6 +32,8 @@ export const MyOffersPage = () => {
   const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
   const [isLoading, setIsLoading] = useState(false)
   const user = useUserStore(state => state.user)
+
+  const { filteredItems: filteredOffers, handleSearch } = useSearch(offers)
 
   useEffect(() => {
     const fetchOffers = async () => {
@@ -100,11 +103,11 @@ export const MyOffersPage = () => {
       </div>
 
       <div className='px-4 py-2 bg-white my-4'>
-        <SearchBar />
+        <SearchBar onSearch={handleSearch} />
       </div>
 
       <div className='px-4 pt-4 pb-32'>
-        {offers.length === 0 && (
+        {filteredOffers.length === 0 && (
           <div className='space-y-4 mt-4 pl-5 pr-5'>
             <p className='text-gray-500 text-2xl text-center mt-48'>
               Nenhum anúncio disponível. Sê quem dá o pontapé de saída!
@@ -112,9 +115,9 @@ export const MyOffersPage = () => {
           </div>
         )}
 
-        {offers.length > 0 && (
+        {filteredOffers.length > 0 && (
           <div className='space-y-4 mt-4'>
-            {offers.map((offer, index) => (
+            {filteredOffers.map((offer, index) => (
               <OfferCard
                 key={index}
                 {...offer}

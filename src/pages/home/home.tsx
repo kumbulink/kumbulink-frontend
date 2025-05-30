@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 
 import type { WP_REST_API_Post } from 'wp-types'
 
-import { useUserStore } from '@shared/model/providers'
+import { useUserStore } from '@shared/model'
+import { useSearch } from '@shared/hooks'
 
 import { http } from '@shared/utils'
 import {
@@ -39,7 +40,9 @@ export const HomePage = () => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
   const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
   const [isLoading, setIsLoading] = useState(false)
+
   const isAuthenticated = useUserStore(state => state.user !== null)
+  const { filteredItems: filteredOffers, handleSearch } = useSearch(offers)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -72,7 +75,6 @@ export const HomePage = () => {
         setOffers(parsedOffers || [])
       } catch (err) {
         console.error(err)
-
         return {}
       }
     }
@@ -123,12 +125,12 @@ export const HomePage = () => {
       </header>
 
       <div className='px-4 py-2 bg-primary-green'>
-        <SearchBar />
+        <SearchBar onSearch={handleSearch} />
       </div>
 
       <main className='bg-gray-100 min-h-[calc(100vh-8rem)] relative'>
         <div className='px-4 pt-4 pb-32'>
-          {offers.length === 0 && (
+          {filteredOffers.length === 0 && (
             <div className='space-y-4 mt-4 pl-5 pr-5'>
               <p className='text-gray-500 text-2xl text-center mt-48'>
                 Nenhum anúncio disponível. Sê quem dá o pontapé de saída!
@@ -136,9 +138,9 @@ export const HomePage = () => {
             </div>
           )}
 
-          {offers.length > 0 && (
+          {filteredOffers.length > 0 && (
             <div className='space-y-4 mt-4'>
-              {offers.map((offer, index) => (
+              {filteredOffers.map((offer, index) => (
                 <OfferCard
                   key={index}
                   {...offer}
