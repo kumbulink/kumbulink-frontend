@@ -4,7 +4,7 @@ export const Published = ({ onClose }: { onClose: () => void }) => {
   const navigate = useNavigate()
 
   return (
-    <div className='bg-white rounded-lg p-6 w-full max-w-xs relative'>
+    <div className='bg-white rounded-md p-6 w-full max-w-xs relative'>
       <div className='text-green-700 font-bold mb-2 text-sm'>
         ANÚNCIO PUBLICADO!
       </div>

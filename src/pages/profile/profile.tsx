@@ -143,7 +143,7 @@ export const ProfilePage = () => {
               value={userData.displayName}
               onChange={handleInputChange('displayName')}
               disabled={!isEditing}
-              className='w-full h-14 px-4 rounded-lg border border-[#e0e0e0] text-medium text-neutral-900 disabled:text-neutral-900 focus:outline-none'
+              className='w-full h-14 px-4 rounded-md border border-[#e0e0e0] text-medium text-neutral-900 disabled:text-neutral-900 focus:outline-none'
             />
           </div>
 
@@ -158,7 +158,7 @@ export const ProfilePage = () => {
               value={userData.documentId}
               onChange={handleInputChange('documentId')}
               disabled={!isEditing}
-              className={`w-full h-14 px-4 rounded-lg border ${
+              className={`w-full h-14 px-4 rounded-md border ${
                 errors.documentId ? 'border-red-500' : 'border-[#e0e0e0]'
               } text-medium text-neutral-900 disabled:text-neutral-900 focus:outline-none`}
             />
@@ -176,7 +176,7 @@ export const ProfilePage = () => {
               value={userData.email}
               onChange={handleInputChange('email')}
               disabled={!isEditing}
-              className='w-full h-14 px-4 rounded-lg border border-[#e0e0e0] text-medium text-neutral-900 disabled:text-neutral-900 focus:outline-none'
+              className='w-full h-14 px-4 rounded-md border border-[#e0e0e0] text-medium text-neutral-900 disabled:text-neutral-900 focus:outline-none'
             />
           </div>
 
@@ -184,7 +184,7 @@ export const ProfilePage = () => {
             <button
               onClick={handleEditToggle}
               disabled={isLoading}
-              className={`w-full bg-white border-2 border-primary-orange text-primary-orange py-4 text-xl rounded-lg disabled:opacity-50 ${
+              className={`w-full bg-white border-2 border-primary-orange text-primary-orange py-4 text-xl rounded-md disabled:opacity-50 ${
                 isLoading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             >

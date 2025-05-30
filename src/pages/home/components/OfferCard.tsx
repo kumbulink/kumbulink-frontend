@@ -37,7 +37,7 @@ export const OfferCard = ({
 
   return (
     <div
-      className='bg-white rounded-lg p-4 shadow-sm cursor-pointer'
+      className='bg-white rounded-md p-4 border border-[#e0e0e0] cursor-pointer'
       onClick={() => handleClick(id)}
     >
       <div className='flex items-center justify-between mt-2'>

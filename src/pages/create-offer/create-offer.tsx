@@ -219,7 +219,7 @@ export const CreateOfferPage: React.FC = () => {
 
       <div className='mt-6'>
         <button
-          className={`w-full p-4 rounded-sm font-bold shadow-lg  ${
+          className={`w-full p-4 rounded-md font-bold shadow-lg  ${
             isFormValid
               ? 'bg-primary-green text-stone-50'
               : 'bg-gray-100 text-gray-400'

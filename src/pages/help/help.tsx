@@ -97,7 +97,7 @@ export const HelpPage = () => {
             placeholder='Como podemos te ajudar?'
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className='w-full pl-10 pr-4 py-3 bg-gray-50 rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-200'
+            className='w-full border border-[#e0e0e0] pl-10 pr-4 py-3 bg-gray-50 rounded-md text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-200'
           />
         </div>
       </div>

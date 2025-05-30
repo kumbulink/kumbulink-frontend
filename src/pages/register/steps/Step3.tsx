@@ -52,7 +52,7 @@ export const Step3: React.FC = () => {
 
           {/* Phone Input */}
           <div
-            className={`flex items-center w-full border rounded-lg p-4 ${
+            className={`flex items-center w-full border rounded-md p-4 ${
               !phoneNumber && isPhoneValid(phoneNumber)
                 ? 'border-red-500'
                 : 'border-gray-300'
@@ -83,7 +83,7 @@ export const Step3: React.FC = () => {
       <button
         onClick={nextStep}
         disabled={!isPhoneValid(phoneNumber) || !phoneNumber}
-        className={`mt-20 w-full rounded-lg py-4 text-white ${
+        className={`mt-20 w-full rounded-md py-4 text-white ${
           !isPhoneValid(phoneNumber) || !phoneNumber
             ? 'bg-gray-300 cursor-not-allowed'
             : 'bg-primary-green text-white'

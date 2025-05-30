@@ -88,7 +88,7 @@ export const Step4: React.FC = () => {
           onClick={() => {
             nextStep()
           }}
-          className='w-full bg-primary-green text-white py-4 rounded-lg mb-6'
+          className='w-full bg-primary-green text-white py-4 rounded-md mb-6'
         >
           Validar
         </button>

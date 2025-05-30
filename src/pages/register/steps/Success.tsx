@@ -35,7 +35,7 @@ export const Success: React.FC = () => {
           <button
             onClick={handleEnter}
             type='submit'
-            className='w-full rounded-lg py-4 text-white bg-primary-orange'
+            className='w-full rounded-md py-4 text-white bg-primary-orange'
           >
             Entrar
           </button>

@@ -40,8 +40,8 @@ export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
 
   const menuItems = [
     { icon: ProfileIcon, label: 'Minha conta', href: '/profile' },
-    { icon: AdsIcon, label: 'Meus anúncios', href: '/my-ads' },
-    { icon: BusinessIcon, label: 'Anúncios aceites', href: '/accepted-ads' },
+    { icon: AdsIcon, label: 'Meus anúncios', href: '/my-offers' },
+    { icon: BusinessIcon, label: 'Anúncios aceites', href: '/accepted-offers' },
     { icon: BankIcon, label: 'Bancos cadastrados', href: '/banks' },
     { icon: HelpIcon, label: 'Ajuda', href: '/help' }
   ]
@@ -85,7 +85,7 @@ export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
               <Link
                 key={index}
                 to={item.href}
-                className='flex items-center gap-3 pt-6 w-full p-2 hover:bg-gray-100 rounded-lg'
+                className='flex items-center gap-3 pt-6 w-full p-2 hover:bg-gray-100 rounded-md'
               >
                 <item.icon />
                 <span className='text-gray-700'>{item.label}</span>
@@ -97,7 +97,7 @@ export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
               <Link
                 key={index}
                 to={item.href}
-                className='flex items-center gap-3 pt-6 w-full p-2 hover:bg-gray-100 rounded-lg'
+                className='flex items-center gap-3 pt-6 w-full p-2 hover:bg-gray-100 rounded-md'
               >
                 <item.icon />
                 <span className='text-gray-700'>{item.label}</span>
@@ -127,7 +127,7 @@ export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
           <div className='p-4'>
             <button
               onClick={logout}
-              className='flex items-center gap-3 w-full p-2 rounded-lg text-gray-700 cursor-pointer'
+              className='flex items-center gap-3 w-full p-2 rounded-md text-gray-700 cursor-pointer'
             >
               <LogoutIcon />
               <span>Sair</span>

@@ -28,7 +28,7 @@ const customTheme: CustomFlowbiteTheme['datepicker'] = {
   root: {
     base: 'relative',
     input: {
-      base: 'w-full rounded-lg border border-gray-300 p-2 text-gray-600 placeholder:text-gray-400 !bg-white',
+      base: 'w-full rounded-md border border-gray-300 p-2 text-gray-600 placeholder:text-gray-400 !bg-white',
       field: {
         base: 'block w-full p-0 text-gray-600 !bg-white',
         input: {
@@ -183,7 +183,7 @@ export const Step2: React.FC = () => {
             placeholder='Nome completo'
             value={fullName}
             onChange={e => setFullName(e.target.value)}
-            className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
           />
         </div>
 
@@ -207,7 +207,7 @@ export const Step2: React.FC = () => {
             <select
               value={selectedDocument}
               onChange={handleDocumentChange}
-              className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 appearance-none bg-white'
+              className='w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white'
             >
               <option value='' disabled>
                 Selecione o tipo de documento
@@ -241,7 +241,7 @@ export const Step2: React.FC = () => {
                   ? 'Número do bilhete de identidade'
                   : 'Número do passaporte'
               }
-              className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+              className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
               onChange={handleDocumentNumberChange}
             />
             {documentNumber && !isDocumentValid && (
@@ -283,14 +283,14 @@ export const Step2: React.FC = () => {
         </label>
 
         {error && (
-          <div className='p-4 mb-4 text-red-700 bg-red-100 rounded-lg'>
+          <div className='p-4 mb-4 text-red-700 bg-red-100 rounded-md'>
             {error}
           </div>
         )}
 
         <button
           type='submit'
-          className={`mt-20 w-full rounded-lg py-4 text-white ${
+          className={`mt-20 w-full rounded-md py-4 text-white ${
             isFormValid() && !isLoading
               ? 'bg-primary-green'
               : 'bg-gray-400 cursor-not-allowed'

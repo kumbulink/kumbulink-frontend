@@ -7,7 +7,7 @@ export const DeleteConfirmation = ({
 }) => {
   return (
     <div className='flex items-center justify-center min-h-screen z-0'>
-      <div className='bg-white rounded-lg p-6 w-full max-w-xs'>
+      <div className='bg-white rounded-md p-6 w-full max-w-xs'>
         <h3 className='text-red-600 font-bold mb-2'>ATENÇÃO!</h3>
         <p className='mb-6 text-black text-base'>
           Tem certeza que deseja excluir o banco cadastrado?

@@ -163,7 +163,7 @@ export const HomePage = () => {
         <div className='fixed bottom-8 left-4 right-4 z-50'>
           <button
             onClick={handleCreateAdClick}
-            className='w-full bg-primary-orange text-white py-4 text-xl rounded-lg'
+            className='w-full bg-primary-orange text-white py-4 text-xl rounded-md'
           >
             Anunciar
           </button>

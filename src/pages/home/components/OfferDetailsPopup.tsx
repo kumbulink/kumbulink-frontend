@@ -89,7 +89,7 @@ export const OfferDetailsPopup = ({
   }
 
   return (
-    <div className='p-4 bg-white rounded-lg w-full max-w-md'>
+    <div className='p-4 bg-white rounded-md w-full max-w-md'>
       <h2 className='text-xl font-medium mb-4'>Anúncio #{id}</h2>
 
       <div className='flex items-center justify-between mb-4'>
@@ -122,7 +122,7 @@ export const OfferDetailsPopup = ({
         </div>
       </div>
 
-      <div className='border border-gray-200 rounded-lg p-4 space-y-3 mt-4'>
+      <div className='border border-gray-200 rounded-md p-4 space-y-3 mt-4'>
         <div className='flex justify-between'>
           <span className='text-gray-600'>Destino</span>
           <span className='font-medium'>{recipient}</span>
@@ -153,7 +153,7 @@ export const OfferDetailsPopup = ({
         </div>
       </div>
 
-      <div className='border border-dashed border-primary-orange rounded-lg p-4 mt-4'>
+      <div className='border border-dashed border-primary-orange rounded-md p-4 mt-4'>
         <div className='text-center'>
           <span className='text-primary-orange font-semibold'>
             Total a transferir = {totalToTransfer.toLocaleString()} EUR
@@ -165,7 +165,7 @@ export const OfferDetailsPopup = ({
         <p className='text-sm text-gray-600 mb-2'>
           Transfere à Kumbulink · MBWAY
         </p>
-        <div className='flex justify-between items-center bg-gray-50 p-3 rounded-lg'>
+        <div className='flex justify-between items-center bg-gray-50 p-3 rounded-md'>
           <span className='font-medium'>{paymentKey}</span>
           <button
             onClick={handleCopy}
@@ -188,7 +188,7 @@ export const OfferDetailsPopup = ({
           />
           <div
             onClick={handleFileClick}
-            className='flex justify-between items-center p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50'
+            className='flex justify-between items-center p-4 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-50'
           >
             <span className='text-gray-400 text-sm'>
               Ficheiros jpg, png ou pdf
@@ -201,13 +201,13 @@ export const OfferDetailsPopup = ({
       <div className='flex gap-4 mt-6'>
         <button
           onClick={onClose}
-          className='flex-1 cursor-pointer py-3 border border-primary-orange text-primary-orange font-medium rounded-lg'
+          className='flex-1 cursor-pointer py-3 border border-primary-orange text-primary-orange font-medium rounded-md'
         >
           Voltar
         </button>
         <button
           onClick={handleUpload}
-          className='flex-1 cursor-pointer py-3 bg-primary-orange text-white font-medium rounded-lg'
+          className='flex-1 cursor-pointer py-3 bg-primary-orange text-white font-medium rounded-md'
         >
           OK
         </button>
