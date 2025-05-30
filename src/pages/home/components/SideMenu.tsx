@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useRef, useEffect } from 'react'
 
-import { useUserStore } from '@/store/userStore'
+import { useUserStore } from '@/shared/model/providers/userStore'
 import {
   ProfileIcon,
   AdsIcon,

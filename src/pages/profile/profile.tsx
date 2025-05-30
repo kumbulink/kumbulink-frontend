@@ -1,5 +1,5 @@
 import { BackButton } from '@/shared/ui/layout/BackButton'
-import { useUserStore } from '@/store/userStore'
+import { useUserStore } from '@/shared/model/providers/userStore'
 import { useState } from 'react'
 
 import { http, validatePassport, validateAngolanID } from '@shared/utils'

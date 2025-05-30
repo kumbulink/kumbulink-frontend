@@ -46,7 +46,7 @@ export const CurrencyInput = ({
 
   return (
     <div>
-      <div className='flex items-center w-full rounded-lg border border-gray-300 p-1 text-gray-600 appearance-none bg-white cursor-pointer pl-4'>
+      <div className='flex items-center w-full rounded-md border border-gray-300 p-1 text-gray-600 appearance-none bg-white cursor-pointer pl-4'>
         <div className='relative flex items-center w-20' ref={dropdownRef}>
           <button
             type='button'

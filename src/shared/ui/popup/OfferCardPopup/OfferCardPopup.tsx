@@ -34,7 +34,7 @@ export const OfferCardPopup = ({
   onAccept
 }: OfferCardPopupProps) => {
   return (
-    <div className='bg-white rounded-lg w-full max-w-md p-6'>
+    <div className='bg-white rounded-md w-full max-w-md p-6'>
       {/* Header */}
       <div className='flex justify-between items-center mb-8'>
         <h2 className='text-gray-700 text-lg'>Anúncio #{id}</h2>
@@ -84,7 +84,7 @@ export const OfferCardPopup = ({
       </div>
 
       {/* Details Box */}
-      <div className='border border-dashed border-gray-300 rounded-lg p-4 space-y-3 mb-6'>
+      <div className='border border-dashed border-gray-300 rounded-md p-4 space-y-3 mb-6'>
         <div className='flex justify-between'>
           <span className='text-gray-600'>Destino</span>
           <span className='text-gray-700'>{targetCountry}</span>
@@ -112,7 +112,7 @@ export const OfferCardPopup = ({
       </div>
 
       {/* Total */}
-      <div className='border border-primary-orange rounded-lg p-3 mb-8'>
+      <div className='border border-primary-orange rounded-md p-3 mb-8'>
         <div className='flex justify-between text-primary-orange'>
           <span>Total a transferir</span>
           <span>= {totalAmount} Kz</span>
@@ -121,12 +121,12 @@ export const OfferCardPopup = ({
 
       {/* Action Buttons */}
       <div className='flex gap-4'>
-        <button className='flex-1 py-3 border border-primary-orange text-primary-orange rounded-lg font-medium'>
+        <button className='flex-1 py-3 border border-primary-orange text-primary-orange rounded-md font-medium'>
           Cancelar
         </button>
         <button
           onClick={onAccept}
-          className='flex-1 py-3 bg-primary-orange text-white rounded-lg font-medium'
+          className='flex-1 py-3 bg-primary-orange text-white rounded-md font-medium'
         >
           Aceitar
         </button>

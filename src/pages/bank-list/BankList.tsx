@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AxiosError } from 'axios'
 
-import { useUserStore } from '@/store/userStore'
+import { useUserStore } from '@/shared/model/providers/userStore'
 
 import { DeleteConfirmation } from './components/DeleteConfirmation'
 

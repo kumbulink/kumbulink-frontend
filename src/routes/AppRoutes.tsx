@@ -5,7 +5,7 @@ import {
   Navigate
 } from 'react-router-dom'
 
-import { useUserStore } from '@/store/userStore'
+import { useUserStore } from '@/shared/model/providers/userStore'
 
 import Layout from '../ui/Layout'
 

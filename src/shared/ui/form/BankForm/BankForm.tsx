@@ -140,7 +140,7 @@ export const BankForm = ({
   }
 
   return (
-    <div className='bg-white rounded-sm p-6 w-full max-w-full relative'>
+    <div className='bg-white rounded-md p-6 w-full max-w-full relative'>
       <h2 className='text-title font-small mt-6 mb-6'>{title}</h2>
       <form
         className='space-y-3'
@@ -158,7 +158,7 @@ export const BankForm = ({
               setBankForm(f => ({ ...f, accountName: e.target.value }))
             }
             placeholder='Nome da conta. Ex: Conta principal, conta da mãe, minha conta da familia...'
-            className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
           />
         </div>
         <div>
@@ -180,7 +180,7 @@ export const BankForm = ({
             onClick={handleBankInputClick}
             readOnly
             placeholder='Selecione o banco'
-            className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer pl-4'
+            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer pl-4'
           />
           <span className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
             ▼
@@ -189,7 +189,7 @@ export const BankForm = ({
           {isBankListOpen && (
             <div
               ref={dropdownRef}
-              className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-lg border border-gray-300 bg-white shadow-lg'
+              className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-md border border-gray-300 bg-white shadow-lg'
             >
               {banks
                 .filter(bank => bank.country === BankForm.country)
@@ -221,7 +221,7 @@ export const BankForm = ({
           <label className='sr-only'>Nome completo do destinatário</label>
           <input
             type='text'
-            className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
             placeholder='Nome completo do destinatário'
             value={BankForm.recipientName}
             onChange={e =>
@@ -234,7 +234,7 @@ export const BankForm = ({
             <label className='sr-only'>Agência</label>
             <input
               type='text'
-              className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+              className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
               placeholder='Agência'
               value={BankForm.branch}
               onChange={e =>
@@ -247,7 +247,7 @@ export const BankForm = ({
             <label className='sr-only'>Conta</label>
             <input
               type='text'
-              className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+              className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
               placeholder='Conta'
               value={BankForm.account}
               onChange={e =>
@@ -261,7 +261,7 @@ export const BankForm = ({
           <label className='sr-only'>Digite o {paymentMethod ?? 'PIX'}</label>
           <input
             type='text'
-            className='w-full rounded-sm border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
             placeholder={`Digite o ${
               paymentMethod?.toUpperCase() ?? 'código de pagamento'
             }`}
@@ -274,7 +274,7 @@ export const BankForm = ({
         <div className='flex justify-between mt-6'>
           <button
             type='button'
-            className='px-8 py-2 border border-primary-orange text-primary-orange rounded-sm font-medium'
+            className='px-8 py-2 border border-primary-orange text-primary-orange rounded-md font-medium'
             onClick={() => onCancel?.()}
             disabled={loading}
           >
@@ -282,7 +282,7 @@ export const BankForm = ({
           </button>
           <button
             type='submit'
-            className={`px-8 py-2 rounded-sm font-medium text-white ${
+            className={`px-8 py-2 rounded-md font-medium text-white ${
               isBankFormValid && !loading
                 ? 'bg-primary-orange'
                 : 'bg-gray-200 text-gray-400'

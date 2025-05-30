@@ -4,7 +4,7 @@ import { useClickOutside } from '@shared/hooks'
 import { AddIcon } from '@shared/ui'
 import { http } from '@shared/utils'
 
-import { useUserStore } from '@/store/userStore'
+import { useUserStore } from '@/shared/model/providers/userStore'
 
 interface Bank {
   id: number
@@ -68,7 +68,7 @@ export const BankSelector = ({
         onClick={handleBankInputClick}
         readOnly
         placeholder='Selecione uma conta cadastrada'
-        className={`w-full rounded-lg border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer ${
+        className={`w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer ${
           selectedBank ? 'pl-16' : 'pl-4'
         }`}
       />
@@ -79,7 +79,7 @@ export const BankSelector = ({
       {isBankListOpen && (
         <div
           ref={dropdownRef}
-          className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-lg border border-gray-300 bg-white shadow-lg'
+          className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-md border border-gray-300 bg-white shadow-lg'
         >
           {loadingBanks && (
             <div className='p-4 text-center text-gray-400'>

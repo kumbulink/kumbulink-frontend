@@ -66,7 +66,7 @@ export const CountrySelector = ({
         onClick={handleCountryInputClick}
         readOnly
         placeholder='Selecione o país'
-        className={`w-full rounded-lg border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer ${
+        className={`w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer ${
           selectedCountry ? 'pl-16' : 'pl-4'
         }`}
       />
@@ -77,7 +77,7 @@ export const CountrySelector = ({
       {isCountryListOpen && (
         <div
           ref={dropdownRef}
-          className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-lg border border-gray-300 bg-white shadow-lg'
+          className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-md border border-gray-300 bg-white shadow-lg'
         >
           {countries.map(country => (
             <button

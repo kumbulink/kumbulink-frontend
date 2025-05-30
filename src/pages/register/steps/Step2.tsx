@@ -10,11 +10,14 @@ import {
   countries
 } from '@shared/utils'
 
-import { PopupWrapper, MembershipTerms, PrivacyPolicy } from '@shared/ui'
+import {
+  PopupWrapper,
+  MembershipTerms,
+  PrivacyPolicy,
+  CountrySelector
+} from '@shared/ui'
 
-import { CountrySelector } from '@/shared/ui/selectors/CountrySelector'
-
-import { useRegisterStore } from '../../../contexts/RegisterStore'
+import { useRegisterStore } from '@shared/model'
 
 import CalendarIcon from '/icons/calendar.svg'
 

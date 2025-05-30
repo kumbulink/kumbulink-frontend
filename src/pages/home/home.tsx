@@ -3,15 +3,20 @@ import { useNavigate } from 'react-router-dom'
 
 import type { WP_REST_API_Post } from 'wp-types'
 
-import { useUserStore } from '@/store/userStore'
+import { useUserStore } from '@/shared/model/providers/userStore'
 
-import { SearchBar } from './components/SearchBar'
 import { OfferCard } from './components/OfferCard'
 import { SideMenu } from './components/SideMenu'
 import { OfferDetailsPopup } from './components/OfferDetailsPopup'
 
 import { http } from '@shared/utils'
-import { Spinner, MenuIcon, JoinUsPopup, PopupWrapper } from '@shared/ui'
+import {
+  Spinner,
+  MenuIcon,
+  JoinUsPopup,
+  PopupWrapper,
+  SearchBar
+} from '@shared/ui'
 
 interface ExchangeOffer {
   id: number

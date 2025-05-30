@@ -1,12 +1,12 @@
 import { useState } from 'react'
+import { useRegisterStore } from '@shared/model'
+
 import PhoneInput, {
   type Value,
   isValidPhoneNumber
 } from 'react-phone-number-input'
 
 import 'react-phone-number-input/style.css'
-
-import { useRegisterStore } from '../../../contexts/RegisterStore'
 
 export const Step3: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState<Value>('' as Value)

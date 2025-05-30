@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useRef } from 'react'
-import { useUserStore } from '@/store/userStore'
+import { useUserStore } from '@/shared/model/providers/userStore'
 
 import type { WPPostWithACF } from '../home'
 
