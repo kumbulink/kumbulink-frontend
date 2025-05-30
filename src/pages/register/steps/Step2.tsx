@@ -3,28 +3,32 @@ import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
 
 import type { WP_User } from 'wp-types'
 
-import http from '@shared/utils/http.ts'
-import validator from 'validator'
+import {
+  http,
+  validatePassport,
+  validateAngolanID,
+  countries
+} from '@shared/utils'
 
-import countries from '@shared/utils/countries.json'
+import {
+  PopupWrapper,
+  MembershipTerms,
+  PrivacyPolicy,
+  CountrySelector
+} from '@shared/ui'
 
-import { Popup } from '@components/Popup'
-import { CountrySelector } from '@components/CountrySelector'
-
-import { useRegisterStore } from '../../../contexts/RegisterStore'
+import { useRegisterStore } from '@shared/model'
 
 import CalendarIcon from '/icons/calendar.svg'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
 
-import { MembershipTerms, PrivacyPolicy } from '@shared/ui/terms'
-
 const customTheme: CustomFlowbiteTheme['datepicker'] = {
   root: {
     base: 'relative',
     input: {
-      base: 'w-full rounded-lg border border-gray-300 p-2 text-gray-600 placeholder:text-gray-400 !bg-white',
+      base: 'w-full rounded-md border border-gray-300 p-2 text-gray-600 placeholder:text-gray-400 !bg-white',
       field: {
         base: 'block w-full p-0 text-gray-600 !bg-white',
         input: {
@@ -42,20 +46,6 @@ const customTheme: CustomFlowbiteTheme['datepicker'] = {
     }
   }
 }
-
-const validatePassport = (passport: string, country: string) => {
-  const countryCode = countries.find(c => c.name === country)?.passportLocale
-  if (!countryCode) return false
-  return validator.isPassportNumber(passport, countryCode)
-}
-
-const validateAngolanID = (id: string) => {
-  // Angolan ID format: 9 digits
-  return /^\d{9}$/.test(id)
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-// const JWT_TOKEN = import.meta.env.VITE_WP_JWT_TOKEN
 
 export const Step2: React.FC = () => {
   const { currentStep, prevStep, nextStep, formData, setFormData } =
@@ -113,15 +103,12 @@ export const Step2: React.FC = () => {
 
       const username = formData.step2.fullName.split(' ').join('').toLowerCase()
 
-      const response = await http.post<WP_User>(
-        'https://api.kumbulink.com/wp-json/custom/v1/create-user',
-        {
-          username: username,
-          ...formData.step1,
-          ...formData.step2,
-          name: formData.step2.fullName
-        }
-      )
+      const response = await http.post<WP_User>('/custom/v1/create-user', {
+        username: username,
+        ...formData.step1,
+        ...formData.step2,
+        name: formData.step2.fullName
+      })
 
       if (response.status !== 201) {
         throw new Error('Erro ao criar usuário')
@@ -167,7 +154,7 @@ export const Step2: React.FC = () => {
   ])
 
   return (
-    <div className='flex min-h-screen flex-col bg-white px-6'>
+    <div className='flex min-h-screen flex-col bg-white px-4'>
       <div className='flex items-center pt-4'>
         {currentStep > 1 && (
           <>
@@ -182,12 +169,12 @@ export const Step2: React.FC = () => {
                 />
               </svg>
             </button>
-            <span className='text-lg'>Cadastro</span>
+            <span className='text-title'>Cadastro</span>
           </>
         )}
       </div>
 
-      <h1 className='text-2xl font-light mt-20 mb-8'>Insira seus dados</h1>
+      <h1 className='text-title font-light mt-20 mb-8'>Insira seus dados</h1>
 
       <div className='space-y-4'>
         <div>
@@ -196,7 +183,7 @@ export const Step2: React.FC = () => {
             placeholder='Nome completo'
             value={fullName}
             onChange={e => setFullName(e.target.value)}
-            className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
           />
         </div>
 
@@ -220,7 +207,7 @@ export const Step2: React.FC = () => {
             <select
               value={selectedDocument}
               onChange={handleDocumentChange}
-              className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 appearance-none bg-white'
+              className='w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white'
             >
               <option value='' disabled>
                 Selecione o tipo de documento
@@ -254,13 +241,13 @@ export const Step2: React.FC = () => {
                   ? 'Número do bilhete de identidade'
                   : 'Número do passaporte'
               }
-              className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+              className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
               onChange={handleDocumentNumberChange}
             />
             {documentNumber && !isDocumentValid && (
               <p className='text-sm text-red-500 mt-1'>
                 {selectedDocument === 'Bilhete de Identidade'
-                  ? 'Bilhete de identidade inválido. Use 9 dígitos.'
+                  ? 'Bilhete de identidade inválido. Use 9 dígitos, 2 letras e 3 dígitos.'
                   : 'Passaporte inválido.'}
               </p>
             )}
@@ -296,14 +283,14 @@ export const Step2: React.FC = () => {
         </label>
 
         {error && (
-          <div className='p-4 mb-4 text-red-700 bg-red-100 rounded-lg'>
+          <div className='p-4 mb-4 text-red-700 bg-red-100 rounded-md'>
             {error}
           </div>
         )}
 
         <button
           type='submit'
-          className={`mt-20 w-full rounded-lg py-4 text-white ${
+          className={`mt-20 w-full rounded-md py-4 text-white ${
             isFormValid() && !isLoading
               ? 'bg-primary-green'
               : 'bg-gray-400 cursor-not-allowed'
@@ -318,9 +305,9 @@ export const Step2: React.FC = () => {
       {/* Progress bar */}
       <div className='mt-6 h-1 w-1/3 bg-primary-orange' />
 
-      <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
         {popUpContent}
-      </Popup>
+      </PopupWrapper>
     </div>
   )
 }

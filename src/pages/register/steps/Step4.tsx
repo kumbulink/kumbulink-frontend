@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useRegisterStore } from '../../../contexts/RegisterStore'
+import { useRegisterStore } from '@shared/model'
 
 export const Step4: React.FC = () => {
   const [code, setCode] = useState(['', '', '', ''])
@@ -28,7 +28,7 @@ export const Step4: React.FC = () => {
   }
 
   return (
-    <div className='flex min-h-screen flex-col bg-white px-6'>
+    <div className='flex min-h-screen flex-col bg-white px-4'>
       <div className='flex items-center pt-4'>
         {currentStep > 1 && (
           <>
@@ -88,7 +88,7 @@ export const Step4: React.FC = () => {
           onClick={() => {
             nextStep()
           }}
-          className='w-full bg-primary-green text-white py-4 rounded-lg mb-6'
+          className='w-full bg-primary-green text-white py-4 rounded-md mb-6'
         >
           Validar
         </button>

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Collapse } from '@/components/Collapse'
-import { SearchIcon } from '@/shared/ui/icons'
+
+import { Collapse, SearchIcon } from '@/shared/ui'
 
 export const HelpPage = () => {
   const [searchQuery, setSearchQuery] = useState('')
@@ -71,7 +71,7 @@ export const HelpPage = () => {
   }, [searchQuery])
 
   return (
-    <div className='min-h-screen bg-white'>
+    <div className='min-h-screen bg-white p-4'>
       {/* Header */}
       <header className='px-4 py-3 flex items-center gap-4 border-b border-gray-200'>
         <Link to='/' className='text-gray-700'>
@@ -85,7 +85,7 @@ export const HelpPage = () => {
             />
           </svg>
         </Link>
-        <h1 className='text-xl text-gray-900'>Ajuda</h1>
+        <h1 className='text-title text-gray-900'>Ajuda</h1>
       </header>
 
       {/* Search Bar com feedback visual */}
@@ -97,7 +97,7 @@ export const HelpPage = () => {
             placeholder='Como podemos te ajudar?'
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className='w-full pl-10 pr-4 py-3 bg-gray-50 rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-200'
+            className='w-full border border-[#e0e0e0] pl-10 pr-4 py-3 bg-gray-50 rounded-md text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-gray-200'
           />
         </div>
       </div>

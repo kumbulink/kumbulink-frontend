@@ -2,15 +2,17 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import axios from 'axios'
 
-import { useUserStore } from '@/store/userStore'
+import { useUserStore } from '@/shared/model/providers/userStore'
 
-import http from '@/shared/utils/http.ts'
+import { http } from '@shared/utils'
 
 interface LoginResponse {
-  token: string
+  id: number
   user_email: string
   user_nicename: string
   user_display_name: string
+  document_id: string
+  document_type: string
 }
 
 interface WordPressError {
@@ -36,7 +38,7 @@ export function LoginPage() {
 
     try {
       const { data } = await http.post<LoginResponse>(
-        'https://api.kumbulink.com/wp-json/jwt-auth/v1/token',
+        '/jwt-auth/v1/token',
         {
           username: email,
           password: password
@@ -48,15 +50,15 @@ export function LoginPage() {
         }
       )
 
-      console.log(data, 'data')
       setUser({
-        token: data.token,
+        id: data.id,
         email: data.user_email,
         nicename: data.user_nicename,
-        displayName: data.user_display_name
+        displayName: data.user_display_name,
+        documentId: data.document_id,
+        documentType: data.document_type
       })
 
-      localStorage.setItem('jwt_token', data.token)
       void navigate('/')
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.data) {
@@ -156,7 +158,7 @@ export function LoginPage() {
         {/* Link para criar conta */}
         <p className='text-center text-gray-700'>
           Não possui uma conta?{' '}
-          <Link to={{ pathname: '/registrar' }} className='text-primary-orange'>
+          <Link to={{ pathname: '/register' }} className='text-primary-orange'>
             Crie aqui.
           </Link>
         </p>

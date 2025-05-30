@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
-import { useRegisterStore } from '../../../contexts/RegisterStore'
+import { useRegisterStore } from '@shared/model'
 
 import validator from 'validator'
 
@@ -58,7 +58,7 @@ export const Step1: React.FC = () => {
   const isFormValid = isPasswordValid && validations.isEmailValid
 
   return (
-    <div className='flex min-h-screen flex-col bg-white px-6'>
+    <div className='flex min-h-screen flex-col bg-white px-4'>
       <div>
         <Link to={{ pathname: '/' }} className='flex items-center pt-4'>
           <button className='mr-4'>
@@ -72,12 +72,12 @@ export const Step1: React.FC = () => {
               />
             </svg>
           </button>
-          <span className='text-lg'>Cadastro</span>
+          <span className='text-title'>Cadastro</span>
         </Link>
       </div>
 
       <h1
-        className='text-2xl font-light mt-20 mb-8'
+        className='text-title font-light mt-20 mb-8'
         role='heading'
         aria-level={1}
       >
@@ -96,7 +96,7 @@ export const Step1: React.FC = () => {
             placeholder='Digite seu melhor email'
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
             aria-label='Digite seu email para cadastro'
             aria-required='true'
             aria-invalid={!validations.isEmailValid && email.length > 0}
@@ -124,7 +124,7 @@ export const Step1: React.FC = () => {
             placeholder='Crie uma senha'
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className='w-full rounded-lg border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
             aria-label='Digite sua senha para cadastro'
             aria-required='true'
             aria-invalid={!isPasswordValid && password.length > 0}
@@ -173,7 +173,7 @@ export const Step1: React.FC = () => {
         {/* Password requirements section */}
         {password.length > 0 && (
           <div
-            className='rounded-lg bg-gray-100 p-4'
+            className='rounded-md bg-gray-100 p-4'
             id='password-requirements'
             role='region'
             aria-label='Requisitos da senha'
@@ -231,7 +231,7 @@ export const Step1: React.FC = () => {
         )}
         {currentStep < 4 && (
           <button
-            className={`mt-20 w-full rounded-lg py-4 text-white ${
+            className={`mt-20 w-full rounded-md py-4 text-white ${
               isFormValid
                 ? 'bg-primary-green'
                 : 'bg-gray-400 cursor-not-allowed'

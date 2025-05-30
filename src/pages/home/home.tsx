@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import axios from 'axios'
 import type { WP_REST_API_Post } from 'wp-types'
 
-import { SearchBar } from './components/SearchBar'
-import { OfferCard } from './components/OfferCard'
-import { SideMenu } from './components/SideMenu'
+import { useUserStore } from '@shared/model/providers'
 
-import { MenuIcon } from '@shared/ui/icons'
-import { JoinUsPopup } from '@components/JoinUsPopup'
-import { Popup } from '@components/Popup'
+import { http } from '@shared/utils'
+import {
+  Spinner,
+  MenuIcon,
+  JoinUsPopup,
+  PopupWrapper,
+  SearchBar,
+  OfferCard,
+  OfferDetails,
+  SideMenu
+} from '@shared/ui'
 
 interface ExchangeOffer {
   id: number
@@ -24,7 +29,7 @@ interface ExchangeOffer {
   paymentKey: string
 }
 
-interface WPPostWithACF extends WP_REST_API_Post {
+export interface WPPostWithACF extends WP_REST_API_Post {
   acf: ExchangeOffer
 }
 
@@ -32,15 +37,15 @@ export const HomePage = () => {
   const [offers, setOffers] = useState<ExchangeOffer[]>([])
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
-  const isAuthenticated = localStorage.getItem('jwt_token')
+  const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const isAuthenticated = useUserStore(state => state.user !== null)
   const navigate = useNavigate()
 
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const offers = await axios.get<WPPostWithACF[]>(
-          'https://api.kumbulink.com/wp-json/wp/v2/classifieds'
-        )
+        const offers = await http.get<WPPostWithACF[]>('/wp/v2/classifieds')
 
         const parsedOffers = offers?.data.map(ad => {
           const {
@@ -75,16 +80,37 @@ export const HomePage = () => {
     void fetchOffers()
   }, [])
 
-  const handleAnunciarClick = () => {
+  const handleCreateAdClick = () => {
     if (!isAuthenticated) {
+      setPopupContent(<JoinUsPopup />)
       setIsPopUpOpen(true)
     } else {
-      void navigate('/criar-anuncio')
+      void navigate('/create-offer')
+    }
+  }
+
+  const handleOfferCardClick = async (id: number) => {
+    setIsLoading(true)
+    try {
+      const response = await http.get<WPPostWithACF>(`/wp/v2/classifieds/${id}`)
+      setPopupContent(
+        <OfferDetails
+          offer={response.data}
+          onClose={() => setIsPopUpOpen(false)}
+        />
+      )
+      setIsLoading(false)
+      setIsPopUpOpen(true)
+    } catch (err) {
+      setIsLoading(false)
+      console.error(err)
     }
   }
 
   return (
     <div className='min-h-screen bg-primary-green'>
+      {isLoading && <Spinner />}
+
       <header className='px-4 py-2 flex items-center justify-between bg-primary-green'>
         <button
           onClick={() => setIsSideMenuOpen(true)}
@@ -113,7 +139,11 @@ export const HomePage = () => {
           {offers.length > 0 && (
             <div className='space-y-4 mt-4'>
               {offers.map((offer, index) => (
-                <OfferCard key={index} {...offer} />
+                <OfferCard
+                  key={index}
+                  {...offer}
+                  handleClick={handleOfferCardClick}
+                />
               ))}
             </div>
           )}
@@ -131,8 +161,8 @@ export const HomePage = () => {
 
         <div className='fixed bottom-8 left-4 right-4 z-50'>
           <button
-            onClick={handleAnunciarClick}
-            className='w-full bg-primary-orange text-white py-4 font-medium rounded-lg'
+            onClick={handleCreateAdClick}
+            className='w-full bg-primary-orange text-white py-4 text-xl rounded-md'
           >
             Anunciar
           </button>
@@ -144,9 +174,9 @@ export const HomePage = () => {
         onClose={() => setIsSideMenuOpen(false)}
       />
 
-      <Popup isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
-        <JoinUsPopup />
-      </Popup>
+      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+        {popupContent}
+      </PopupWrapper>
     </div>
   )
 }

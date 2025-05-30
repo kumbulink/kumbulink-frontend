@@ -1,0 +1,72 @@
+[
+  {
+    "code": "341",
+    "name": "Itaú Unibanco S.A.",
+    "site": "http://www.itau.com.br",
+    "country": "Brasil",
+    "payment_method": "pix"
+  },
+  {
+    "code": "237",
+    "name": "Banco Bradesco S.A.",
+    "site": "http://www.bradesco.com.br",
+    "country": "Brasil",
+    "payment_method": "pix"
+  },
+  {
+    "code": "033",
+    "name": "Banco Santander S.A.",
+    "site": "http://www.santander.com.br",
+    "country": "Brasil",
+    "payment_method": "pix"
+  },
+  {
+    "code": "260",
+    "name": "Banco Nubank",
+    "site": "http://www.santander.com.br",
+    "country": "Brasil",
+    "payment_method": "pix"
+  },
+  {
+    "code": "",
+    "name": "Banco Bai",
+    "site": "https://www.bancobai.ao",
+    "country": "Angola",
+    "payment_method": "iban"
+  },
+  {
+    "code": "",
+    "name": "Banco BFA",
+    "site": "https://www.bfa.ao",
+    "country": "Angola",
+    "payment_method": "iban"
+  },
+  {
+    "code": "",
+    "name": "Banco BPI",
+    "site": "https://www.bancobpi.pt/particulares",
+    "country": "Portugal",
+    "payment_method": "mbway"
+  },
+  {
+    "code": "",
+    "name": "ActivoBank",
+    "site": "https://www.activobank.pt/pt",
+    "country": "Portugal",
+    "payment_method": "mbway"
+  },
+  {
+    "code": "",
+    "name": "Banco Santander Totta",
+    "site": "https://www.santander.pt/pt/particulares",
+    "country": "Portugal",
+    "payment_method": "mbway"
+  },
+  {
+    "code": "",
+    "name": "Millennium BCP",
+    "site": "https://www.millenniumbcp.pt",
+    "country": "Portugal",
+    "payment_method": "mbway"
+  }
+]
