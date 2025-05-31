@@ -39,7 +39,7 @@ export default defineConfig(({ mode }) => {
       VitePWA({
         registerType: 'autoUpdate',
         devOptions: {
-          enabled: true
+          enabled: isDev
         },
         manifest: {
           name: 'Kumbulink',
