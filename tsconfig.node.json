@@ -6,13 +6,9 @@
     "lib": ["ES2023"],
     "module": "ESNext",
     "skipLibCheck": true,
-
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
-      "@/*": ["src/*"],
-      "@components/*": ["src/components/*"],
-      "@assets/*": ["src/assets/*"],
-      "@shared/*": ["src/shared/*"]
+      "@/*": ["./*"]
     },
 
     /* Bundler mode */
