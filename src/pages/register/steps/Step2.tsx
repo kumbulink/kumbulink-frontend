@@ -8,16 +8,16 @@ import {
   validatePassport,
   validateAngolanID,
   countries
-} from '@shared/utils'
+} from '@/shared/utils'
 
 import {
   PopupWrapper,
   MembershipTerms,
   PrivacyPolicy,
   CountrySelector
-} from '@shared/ui'
+} from '@/shared/ui'
 
-import { useRegisterStore } from '@shared/model'
+import { useRegisterStore } from '@/shared/model'
 
 import CalendarIcon from '/icons/calendar.svg'
 

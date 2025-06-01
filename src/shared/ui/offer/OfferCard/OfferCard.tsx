@@ -3,8 +3,8 @@ import { lazy, Suspense } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
-import { formatCurrency } from '@shared/utils'
-import { useCountryInfo } from '@shared/hooks'
+import { formatCurrency } from '@/shared/utils'
+import { useCountryInfo } from '@/shared/hooks'
 
 interface OfferCardProps {
   id: number

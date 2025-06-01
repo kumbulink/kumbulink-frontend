@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
-import { useRegisterStore } from '@shared/model'
+import { useRegisterStore } from '@/shared/model'
 
 import SuccessIcon from '/icons/success.svg'
 

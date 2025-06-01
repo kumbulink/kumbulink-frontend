@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
-import { useRegisterStore } from '@shared/model'
+import { useRegisterStore } from '@/shared/model'
 
 import validator from 'validator'
 

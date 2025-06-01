@@ -7,7 +7,7 @@ import {
 
 import { useUserStore } from '@/shared/model'
 
-import { Layout } from '@shared/ui/devices'
+import { Layout } from '@/shared/ui/devices'
 
 import { LoginPage } from '@/pages/login'
 import { RegisterPage } from '@/pages/register'

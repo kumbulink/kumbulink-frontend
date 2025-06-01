@@ -1,8 +1,8 @@
 import { useRef, useState, useEffect } from 'react'
 
-import { useClickOutside } from '@shared/hooks'
-import { AddIcon } from '@shared/ui'
-import { http } from '@shared/utils'
+import { useClickOutside } from '@/shared/hooks'
+import { AddIcon } from '@/shared/ui'
+import { http } from '@/shared/utils'
 
 import { useUserStore } from '@/shared/model/providers/userStore'
 
