@@ -7,7 +7,7 @@ import {
   PopupWrapper,
   BankForm,
   ConfirmedOfferDialog
-} from '@shared/ui'
+} from '@/shared/ui'
 import { formatCurrency, http } from '@/shared/utils'
 
 interface FormState {

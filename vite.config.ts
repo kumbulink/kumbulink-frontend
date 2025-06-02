@@ -10,14 +10,9 @@ export default defineConfig(({ mode }) => {
   const isDev = mode === 'development'
 
   return {
-    base: '/',
-    resolve: {
+    base: '/',    resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'src'),
-        '@assets': path.resolve(__dirname, 'src/assets'),
-        '@components': path.resolve(__dirname, 'src/components'),
-        '@icons': path.resolve(__dirname, 'public/icons'),
-        '@shared': path.resolve(__dirname, 'src/shared')
+        '@': path.resolve(__dirname, 'src')
       }
     },
     server: isDev
@@ -39,7 +34,7 @@ export default defineConfig(({ mode }) => {
       VitePWA({
         registerType: 'autoUpdate',
         devOptions: {
-          enabled: true
+          enabled: isDev
         },
         manifest: {
           name: 'Kumbulink',

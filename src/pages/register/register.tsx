@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { useRegisterStore } from '@shared/model'
+import { useRegisterStore } from '@/shared/model'
 
 const Step1 = lazy(() => import('./steps/Step1'))
 const Step2 = lazy(() => import('./steps/Step2'))

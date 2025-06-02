@@ -4,10 +4,10 @@ import type { WP_REST_API_Post } from 'wp-types'
 
 import { OfferCard, OfferDetails } from '@/shared/ui'
 
-import { BackButton, PopupWrapper, SearchBar, Spinner } from '@shared/ui'
-import { http } from '@shared/utils'
+import { BackButton, PopupWrapper, SearchBar, Spinner } from '@/shared/ui'
+import { http } from '@/shared/utils'
 
-import { useUserStore } from '@shared/model'
+import { useUserStore } from '@/shared/model'
 
 interface ExchangeOffer {
   id: number

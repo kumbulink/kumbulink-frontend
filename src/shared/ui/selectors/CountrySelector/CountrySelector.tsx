@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState, useRef } from 'react'
 
-import { useClickOutside } from '@shared/hooks'
-import { countries } from '@shared/utils'
+import { useClickOutside } from '@/shared/hooks'
+import { countries } from '@/shared/utils'
 
 const Flag = lazy(() => import('react-world-flags'))
 

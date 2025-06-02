@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useRegisterStore } from '@shared/model'
+import { useRegisterStore } from '@/shared/model'
 
 export const Step4: React.FC = () => {
   const [code, setCode] = useState(['', '', '', ''])

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useRegisterStore } from '@shared/model'
+import { useRegisterStore } from '@/shared/model'
 
 import PhoneInput, {
   type Value,

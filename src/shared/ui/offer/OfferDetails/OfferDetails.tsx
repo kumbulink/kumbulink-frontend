@@ -5,7 +5,7 @@ import type { WPPostWithACF } from '../../../../pages/home/home'
 
 import { http } from '@/shared/utils'
 import { JoinUsPopup, PopupWrapper } from '@/shared/ui'
-import { useCountryInfo } from '@shared/hooks'
+import { useCountryInfo } from '@/shared/hooks'
 
 const Flag = lazy(() => import('react-world-flags'))
 

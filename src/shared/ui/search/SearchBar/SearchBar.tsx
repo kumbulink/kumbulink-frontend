@@ -1,4 +1,4 @@
-import { SearchIcon, FilterIcon } from '@shared/ui'
+import { SearchIcon, FilterIcon } from '@/shared/ui'
 
 export const SearchBar = () => (
   <div className='relative'>

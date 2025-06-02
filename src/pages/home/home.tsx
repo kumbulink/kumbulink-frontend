@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom'
 
 import type { WP_REST_API_Post } from 'wp-types'
 
-import { useUserStore } from '@shared/model/providers'
+import { useUserStore } from '@/shared/model/providers'
 
-import { http } from '@shared/utils'
+import { http } from '@/shared/utils'
 import {
   Spinner,
   MenuIcon,
@@ -15,7 +15,7 @@ import {
   OfferCard,
   OfferDetails,
   SideMenu
-} from '@shared/ui'
+} from '@/shared/ui'
 
 interface ExchangeOffer {
   id: number
