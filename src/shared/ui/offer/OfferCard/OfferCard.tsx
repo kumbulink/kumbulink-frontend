@@ -6,9 +6,12 @@ import { ptBR } from 'date-fns/locale'
 import { formatCurrency } from '@/shared/utils'
 import { useCountryInfo } from '@/shared/hooks'
 
+import { Status } from '@shared/ui'
+
 interface OfferCardProps {
-  id: number
   date: string
+  id: number
+  status: 'created' | 'matched' | 'pending' | 'done'
   sender: string
   recipient: string
   sourceAmount: string
@@ -17,18 +20,21 @@ interface OfferCardProps {
   bank: string
   paymentKey?: string
   handleClick: (id: number) => void
+  displayStatus?: boolean
 }
 
 const Flag = lazy(() => import('react-world-flags'))
 
 export const OfferCard = ({
-  id,
   date,
+  id,
   sender,
   recipient,
   sourceAmount,
   targetAmount,
   bank,
+  status,
+  displayStatus = false,
   handleClick
 }: OfferCardProps) => {
   const { code: recipientCode, currency: recipientCurrency } =
@@ -82,13 +88,16 @@ export const OfferCard = ({
       </div>
 
       <div className='flex justify-between items-center mt-3'>
-        <span className='text-xs text-gray-400'>
-          Oferta realizada{' '}
-          {formatDistanceToNow(new Date(date), {
-            locale: ptBR,
-            addSuffix: true
-          })}
-        </span>
+        {displayStatus && <Status status={status} label='Disponível' />}
+        {!displayStatus && (
+          <span className='text-xs text-gray-400'>
+            Oferta realizada{' '}
+            {formatDistanceToNow(new Date(date), {
+              locale: ptBR,
+              addSuffix: true
+            })}
+          </span>
+        )}
         <button className='text-primary-orange font-medium'>Ver anúncio</button>
       </div>
     </div>

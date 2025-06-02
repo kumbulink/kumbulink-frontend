@@ -20,6 +20,7 @@ interface ExchangeOffer {
   tax?: string
   bank: string
   paymentKey: string
+  status: 'created' | 'matched' | 'pending' | 'done'
 }
 
 export interface WPPostWithACF extends WP_REST_API_Post {
@@ -49,7 +50,8 @@ export const MyOffersPage = () => {
             sourceAmount,
             targetAmount,
             bank,
-            paymentKey
+            paymentKey,
+            status
           } = ad.acf
           const { id, date } = ad
 
@@ -61,7 +63,8 @@ export const MyOffersPage = () => {
             sourceAmount,
             targetAmount,
             bank,
-            paymentKey
+            paymentKey,
+            status
           }
         })
         setOffers(parsedOffers || [])
@@ -122,6 +125,7 @@ export const MyOffersPage = () => {
                 key={index}
                 {...offer}
                 handleClick={handleOfferCardClick}
+                displayStatus={true}
               />
             ))}
           </div>
