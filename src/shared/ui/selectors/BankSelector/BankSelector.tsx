@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 
 import { useClickOutside } from '@/shared/hooks'
 import { AddIcon } from '@/shared/ui'
-import { http } from '@/shared/utils'
+import { http } from '@/shared/lib'
 
 import { useUserStore } from '@/shared/model/providers/userStore'
 

@@ -3,10 +3,10 @@ import { lazy, Suspense } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
-import { formatCurrency } from '@/shared/utils'
+import { formatCurrency } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
 
-import { Status } from '@shared/ui'
+import { Status } from '@/shared/ui'
 
 interface OfferCardProps {
   date: string
@@ -88,7 +88,7 @@ export const OfferCard = ({
       </div>
 
       <div className='flex justify-between items-center mt-3'>
-        {displayStatus && <Status status={status} label='Disponível' />}
+        {displayStatus && <Status status={status} label='Sem matches' />}
         {!displayStatus && (
           <span className='text-xs text-gray-400'>
             Oferta realizada{' '}

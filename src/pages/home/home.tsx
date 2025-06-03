@@ -6,7 +6,7 @@ import type { WP_REST_API_Post } from 'wp-types'
 import { useUserStore } from '@/shared/model'
 import { useSearch } from '@/shared/hooks'
 
-import { http } from '@/shared/utils'
+import { http } from '@/shared/lib'
 import {
   Spinner,
   MenuIcon,

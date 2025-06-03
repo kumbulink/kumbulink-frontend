@@ -8,7 +8,7 @@ import {
   validatePassport,
   validateAngolanID,
   countries
-} from '@/shared/utils'
+} from '@/shared/lib'
 
 import {
   PopupWrapper,

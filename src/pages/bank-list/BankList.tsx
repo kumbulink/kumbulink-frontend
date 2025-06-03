@@ -12,7 +12,7 @@ import {
   BankForm,
   BackButton
 } from '@/shared/ui'
-import { http } from '@/shared/utils'
+import { http } from '@/shared/lib'
 
 interface Bank {
   id: number

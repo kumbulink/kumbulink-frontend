@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 
 import { CountrySelector } from '@/shared/ui'
 import { useClickOutside } from '@/shared/hooks'
-import { http, banks } from '@/shared/utils'
+import { http, banks } from '@/shared/lib'
 
 interface BankResponse {
   id: number

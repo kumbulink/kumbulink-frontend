@@ -8,7 +8,7 @@ import {
   BankForm,
   ConfirmedOfferDialog
 } from '@/shared/ui'
-import { formatCurrency, http } from '@/shared/utils'
+import { formatCurrency, http } from '@/shared/lib'
 
 interface FormState {
   sender: string

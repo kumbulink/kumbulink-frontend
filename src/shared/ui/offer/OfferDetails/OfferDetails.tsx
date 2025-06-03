@@ -3,7 +3,7 @@ import { useUserStore } from '@/shared/model/providers/userStore'
 
 import type { WPPostWithACF } from '../../../../pages/home/home'
 
-import { http } from '@/shared/utils'
+import { http } from '@/shared/lib'
 import { JoinUsPopup, PopupWrapper } from '@/shared/ui'
 import { useCountryInfo } from '@/shared/hooks'
 

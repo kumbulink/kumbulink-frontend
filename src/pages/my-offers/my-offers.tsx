@@ -5,7 +5,7 @@ import type { WP_REST_API_Post } from 'wp-types'
 import { OfferCard, OfferDetails } from '@/shared/ui'
 
 import { BackButton, PopupWrapper, SearchBar, Spinner } from '@/shared/ui'
-import { http } from '@/shared/utils'
+import { http } from '@/shared/lib'
 
 import { useUserStore } from '@/shared/model'
 import { useSearch } from '@/shared/hooks'
