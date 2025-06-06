@@ -59,7 +59,7 @@ export const Step2: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [documentNumber, setDocumentNumber] = useState<string>('')
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false)
+  const [isPopUpOpen, setIsPopupOpen] = useState(false)
   const [popUpContent, setPopUpContent] = useState<React.ReactNode>(null)
   const handleCountrySelect = (countryName: string) => {
     setSelectedCountry(countryName)
@@ -123,7 +123,7 @@ export const Step2: React.FC = () => {
   }
 
   const handleTerms = (type: 'membership' | 'privacy') => {
-    setIsPopUpOpen(true)
+    setIsPopupOpen(true)
 
     switch (type) {
       case 'membership':
@@ -305,7 +305,7 @@ export const Step2: React.FC = () => {
       {/* Progress bar */}
       <div className='mt-6 h-1 w-1/3 bg-primary-orange' />
 
-      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopupOpen(false)}>
         {popUpContent}
       </PopupWrapper>
     </div>

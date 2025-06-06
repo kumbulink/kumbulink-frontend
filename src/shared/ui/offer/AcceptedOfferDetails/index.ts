@@ -1,0 +1,1 @@
+export { AcceptedOfferDetails } from './AcceptedOfferDetails'

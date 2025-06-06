@@ -17,14 +17,22 @@ export const useSearch = <T extends SearchableItem>(items: T[]) => {
 
     const searchTermLower = searchTerm.toLowerCase()
     const filtered = items.filter(item => {
-      const { sender, recipient, sourceAmount, targetAmount, bank } = item
+      const {
+        sender,
+        recipient,
+        sourceAmount,
+        targetAmount,
+        senderBank,
+        recipientBank
+      } = item
 
       return (
         sender?.toLowerCase().includes(searchTermLower) ||
         recipient?.toLowerCase().includes(searchTermLower) ||
         sourceAmount?.includes(searchTerm) ||
         targetAmount?.includes(searchTerm) ||
-        bank?.toLowerCase().includes(searchTermLower)
+        senderBank?.toLowerCase().includes(searchTermLower) ||
+        recipientBank?.toLowerCase().includes(searchTermLower)
       )
     })
 

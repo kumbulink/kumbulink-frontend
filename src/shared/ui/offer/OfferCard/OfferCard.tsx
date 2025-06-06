@@ -23,7 +23,8 @@ export const OfferCard = ({
   recipient,
   sourceAmount,
   targetAmount,
-  bank,
+  senderBank,
+  recipientBank,
   status,
   displayStatus = false,
   handleClick
@@ -51,7 +52,7 @@ export const OfferCard = ({
             </Suspense>
             <span className='text-xs text-gray-600'>{sender}</span>
           </div>
-          <div className='text-xs text-gray-600'>{bank}</div>
+          <div className='text-xs text-gray-600'>{senderBank}</div>
         </div>
 
         <div className='text-green-600'>→</div>
@@ -74,12 +75,12 @@ export const OfferCard = ({
             </Suspense>
             <span className='text-xs text-gray-600'>{recipient}</span>
           </div>
-          <div className='text-xs text-gray-600'>&nbsp;</div>
+          <div className='text-xs text-gray-600'>{recipientBank}</div>
         </div>
       </div>
 
       <div className='flex justify-between items-center mt-3'>
-        {displayStatus && <Status status={status} label='Sem matches' />}
+        {displayStatus && <Status status={status} />}
         {!displayStatus && (
           <span className='text-xs text-gray-400'>
             Oferta realizada{' '}

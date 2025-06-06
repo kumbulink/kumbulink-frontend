@@ -30,7 +30,9 @@ export const HomePage = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const offers = await http.get<WPPostWithACF[]>('/wp/v2/classifieds')
+        const offers = await http.get<WPPostWithACF[]>(
+          '/wp/v2/classifieds?offer_status=created'
+        )
 
         const parsedOffers = offers?.data.map(ad => {
           const {
@@ -38,8 +40,8 @@ export const HomePage = () => {
             recipient,
             sourceAmount,
             targetAmount,
-            bank,
-            paymentKey,
+            senderBank,
+            recipientBank,
             status
           } = ad.acf
           const { id, date } = ad
@@ -51,8 +53,8 @@ export const HomePage = () => {
             recipient,
             sourceAmount,
             targetAmount,
-            bank,
-            paymentKey,
+            senderBank,
+            recipientBank,
             status
           }
         })
@@ -70,7 +72,7 @@ export const HomePage = () => {
   const handleCreateAdClick = () => {
     if (!isAuthenticated) {
       setPopupContent(<JoinUsPopup />)
-      setIsPopUpOpen(true)
+      setIsPopupOpen(true)
     } else {
       void navigate('/create-offer')
     }
@@ -83,11 +85,11 @@ export const HomePage = () => {
       setPopupContent(
         <OfferDetails
           offer={response.data}
-          onClose={() => setIsPopUpOpen(false)}
+          onClose={() => setIsPopupOpen(false)}
         />
       )
       setIsLoading(false)
-      setIsPopUpOpen(true)
+      setIsPopupOpen(true)
     } catch (err) {
       setIsLoading(false)
       console.error(err)
@@ -162,7 +164,7 @@ export const HomePage = () => {
         onClose={() => setIsSideMenuOpen(false)}
       />
 
-      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopupOpen(false)}>
         {popupContent}
       </PopupWrapper>
     </div>
