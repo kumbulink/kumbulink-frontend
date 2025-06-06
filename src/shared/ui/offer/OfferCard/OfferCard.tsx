@@ -7,18 +7,9 @@ import { formatCurrency } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
 
 import { Status } from '@/shared/ui'
+import type { Offer } from '@/shared/types'
 
-interface OfferCardProps {
-  date: string
-  id: number
-  status: 'created' | 'matched' | 'pending' | 'done'
-  sender: string
-  recipient: string
-  sourceAmount: string
-  targetAmount: string
-  tax?: string
-  bank: string
-  paymentKey?: string
+interface OfferCardProps extends Offer {
   handleClick: (id: number) => void
   displayStatus?: boolean
 }

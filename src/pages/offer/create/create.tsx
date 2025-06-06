@@ -104,12 +104,14 @@ export const CreateOfferPage: React.FC = () => {
   }
 
   const handleSubmit = async () => {
+    console.log('form', form)
     try {
       await http.post('/wp/v2/classifieds', {
         title: 'Anúncio de câmbio',
         status: 'publish',
         acf: {
-          ...form
+          ...form,
+          status: 'created'
         }
       })
       setPopupContent(

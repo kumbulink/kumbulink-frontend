@@ -9,12 +9,14 @@ import { useUserStore } from '@/shared/model'
 
 import { Layout } from '@/shared/ui/devices'
 
+import {
+  CreateOfferPage,
+  MyOffersPage,
+  AcceptedOffersPage
+} from '@/pages/offer'
 import { LoginPage } from '@/pages/login'
 import { RegisterPage } from '@/pages/register'
-import { CreateOfferPage } from '@/pages/create-offer'
-import { MyOffersPage } from '@/pages/my-offers'
 import { HomePage } from '@/pages/home'
-import { ExchangeOfferPage } from '@/pages/offer'
 import { HelpPage } from '@/pages/help'
 import { BankListPage } from '@/pages/bank-list'
 import { ProfilePage } from '@/pages/profile'

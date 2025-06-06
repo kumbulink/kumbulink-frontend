@@ -1,11 +1,12 @@
-import { lazy, Suspense, useState, useRef } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import type { WPPostWithACF } from '../../../../pages/home/home'
-
-import { http } from '@/shared/lib'
-import { JoinUsPopup, PopupWrapper } from '@/shared/ui'
+import type { WPPostWithACF } from '@/shared/types'
+import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
+import { BankSelector, PopupWrapper } from '@/shared/ui'
+
+import { OfferMatchedDialog } from '../OfferMatchedDialog'
 
 const Flag = lazy(() => import('react-world-flags'))
 

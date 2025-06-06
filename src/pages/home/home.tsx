@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import type { WP_REST_API_Post } from 'wp-types'
-
+import type { Offer, WPPostWithACF } from '@/shared/types'
 import { useUserStore } from '@/shared/model'
 import { useSearch } from '@/shared/hooks'
-
 import { http } from '@/shared/lib'
 import {
   Spinner,
@@ -18,25 +16,8 @@ import {
   SideMenu
 } from '@/shared/ui'
 
-interface ExchangeOffer {
-  id: number
-  date: string
-  sender: string
-  recipient: string
-  sourceAmount: string
-  targetAmount: string
-  tax?: string
-  bank: string
-  paymentKey: string
-  status: 'created' | 'matched' | 'pending' | 'done'
-}
-
-export interface WPPostWithACF extends WP_REST_API_Post {
-  acf: ExchangeOffer
-}
-
 export const HomePage = () => {
-  const [offers, setOffers] = useState<ExchangeOffer[]>([])
+  const [offers, setOffers] = useState<Offer[]>([])
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
   const [isPopUpOpen, setIsPopUpOpen] = useState(false)
   const [popupContent, setPopupContent] = useState<React.ReactNode>(null)

@@ -10,26 +10,15 @@ import { http } from '@/shared/lib'
 import { useUserStore } from '@/shared/model'
 import { useSearch } from '@/shared/hooks'
 
-interface ExchangeOffer {
-  id: number
-  date: string
-  sender: string
-  recipient: string
-  sourceAmount: string
-  targetAmount: string
-  tax?: string
-  bank: string
-  paymentKey: string
-  status: 'created' | 'matched' | 'pending' | 'done'
-}
+import type { Offer } from '@/shared/types'
 
 export interface WPPostWithACF extends WP_REST_API_Post {
-  acf: ExchangeOffer
+  acf: Offer
 }
 
 export const MyOffersPage = () => {
-  const [offers, setOffers] = useState<ExchangeOffer[]>([])
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false)
+  const [offers, setOffers] = useState<Offer[]>([])
+  const [isPopUpOpen, setIsPopupOpen] = useState(false)
   const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
   const [isLoading, setIsLoading] = useState(false)
   const user = useUserStore(state => state.user)
@@ -49,8 +38,8 @@ export const MyOffersPage = () => {
             recipient,
             sourceAmount,
             targetAmount,
-            bank,
-            paymentKey,
+            senderBank,
+            recipientBank,
             status
           } = ad.acf
           const { id, date } = ad
@@ -62,8 +51,8 @@ export const MyOffersPage = () => {
             recipient,
             sourceAmount,
             targetAmount,
-            bank,
-            paymentKey,
+            senderBank,
+            recipientBank,
             status
           }
         })
@@ -85,11 +74,11 @@ export const MyOffersPage = () => {
       setPopupContent(
         <OfferDetails
           offer={response.data}
-          onClose={() => setIsPopUpOpen(false)}
+          onClose={() => setIsPopupOpen(false)}
         />
       )
       setIsLoading(false)
-      setIsPopUpOpen(true)
+      setIsPopupOpen(true)
     } catch (err) {
       setIsLoading(false)
       console.error(err)
@@ -142,7 +131,7 @@ export const MyOffersPage = () => {
         }}
       />
 
-      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopupOpen(false)}>
         {popupContent}
       </PopupWrapper>
     </div>

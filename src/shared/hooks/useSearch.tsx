@@ -1,16 +1,6 @@
 import { useState, useEffect } from 'react'
 
-interface SearchableItem {
-  id: number
-  date: string
-  sender: string
-  recipient: string
-  sourceAmount: string
-  targetAmount: string
-  tax?: string
-  bank: string
-  paymentKey: string
-}
+import type { Offer as SearchableItem } from '@/shared/types'
 
 export const useSearch = <T extends SearchableItem>(items: T[]) => {
   const [filteredItems, setFilteredItems] = useState<T[]>(items)
