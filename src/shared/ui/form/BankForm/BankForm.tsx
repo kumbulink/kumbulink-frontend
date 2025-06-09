@@ -69,7 +69,7 @@ export const BankForm = ({
               }
             }
           } = await http.get<BankResponse>(`/wp/v2/banks/${bankId}`)
-          console.log('countryName', country)
+
           setBankForm({
             id: bankId,
             accountName,

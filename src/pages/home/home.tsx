@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import type { Offer, WPPostWithACF } from '@/shared/types'
+import type { Offer, OfferWPPostWithACF } from '@/shared/types'
 import { useUserStore } from '@/shared/model'
 import { useSearch } from '@/shared/hooks'
 import { http } from '@/shared/lib'
@@ -19,7 +19,7 @@ import {
 export const HomePage = () => {
   const [offers, setOffers] = useState<Offer[]>([])
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false)
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false)
+  const [isPopUpOpen, setIsPopupOpen] = useState(false)
   const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
   const [isLoading, setIsLoading] = useState(false)
   const isAuthenticated = useUserStore(state => state.user !== null)
@@ -30,31 +30,31 @@ export const HomePage = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const offers = await http.get<WPPostWithACF[]>(
+        const offers = await http.get<OfferWPPostWithACF[]>(
           '/wp/v2/classifieds?offer_status=created'
         )
 
-        const parsedOffers = offers?.data.map(ad => {
+        const parsedOffers = offers?.data.map(offer => {
           const {
-            sender,
-            recipient,
+            sellerFromCountry,
+            sellerToCountry,
             sourceAmount,
             targetAmount,
-            senderBank,
-            recipientBank,
+            sellerFrom,
+            sellerTo,
             status
-          } = ad.acf
-          const { id, date } = ad
+          } = offer.acf
+          const { id, date } = offer
 
           return {
             id,
             date,
-            sender,
-            recipient,
+            sellerFromCountry,
+            sellerToCountry,
             sourceAmount,
             targetAmount,
-            senderBank,
-            recipientBank,
+            sellerFrom,
+            sellerTo,
             status
           }
         })
@@ -81,7 +81,9 @@ export const HomePage = () => {
   const handleOfferCardClick = async (id: number) => {
     setIsLoading(true)
     try {
-      const response = await http.get<WPPostWithACF>(`/wp/v2/classifieds/${id}`)
+      const response = await http.get<OfferWPPostWithACF>(
+        `/wp/v2/classifieds/${id}`
+      )
       setPopupContent(
         <OfferDetails
           offer={response.data}
@@ -139,7 +141,8 @@ export const HomePage = () => {
           )}
         </div>
 
-        <div
+        {/* TODO: Add gradient to the bottom of the page*/}
+        {/* <div
           className='fixed bottom-0 left-0 right-0 h-48 pointer-events-none'
           style={{
             background:
@@ -147,7 +150,7 @@ export const HomePage = () => {
             backdropFilter: 'blur(1.5px)',
             WebkitBackdropFilter: 'blur(1.5px)'
           }}
-        />
+        /> */}
 
         <div className='fixed bottom-8 left-4 right-4 z-50'>
           <button

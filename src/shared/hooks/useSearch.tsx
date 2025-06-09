@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 
-import type { Offer as SearchableItem } from '@/shared/types'
+import type { Offer, AcceptedOffer } from '@/shared/types'
 
-export const useSearch = <T extends SearchableItem>(items: T[]) => {
+type Searchable = Offer | AcceptedOffer
+
+export const useSearch = <T extends Searchable>(items: T[]) => {
   const [filteredItems, setFilteredItems] = useState<T[]>(items)
 
   useEffect(() => {
@@ -17,22 +19,20 @@ export const useSearch = <T extends SearchableItem>(items: T[]) => {
 
     const searchTermLower = searchTerm.toLowerCase()
     const filtered = items.filter(item => {
-      const {
-        sender,
-        recipient,
-        sourceAmount,
-        targetAmount,
-        senderBank,
-        recipientBank
-      } = item
+      const sellerFromCountry = (item as Offer).sellerFromCountry
+      const sellerToCountry = (item as Offer).sellerToCountry
+      const sourceAmount = (item as Offer).sourceAmount
+      const targetAmount = (item as Offer).targetAmount
+      const sellerFrom = (item as Offer).sellerFrom
+      const sellerTo = (item as Offer).sellerTo
 
       return (
-        sender?.toLowerCase().includes(searchTermLower) ||
-        recipient?.toLowerCase().includes(searchTermLower) ||
+        sellerFromCountry?.toLowerCase().includes(searchTermLower) ||
+        sellerToCountry?.toLowerCase().includes(searchTermLower) ||
         sourceAmount?.includes(searchTerm) ||
         targetAmount?.includes(searchTerm) ||
-        senderBank?.toLowerCase().includes(searchTermLower) ||
-        recipientBank?.toLowerCase().includes(searchTermLower)
+        sellerFrom?.bank?.toLowerCase().includes(searchTermLower) ||
+        sellerTo?.bank?.toLowerCase().includes(searchTermLower)
       )
     })
 

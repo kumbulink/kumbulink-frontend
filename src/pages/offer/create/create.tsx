@@ -11,14 +11,14 @@ import {
 import { formatCurrency, http } from '@/shared/lib'
 
 interface FormState {
-  sender: string
-  recipient: string
-  senderCurrency: string
-  recipientCurrency: string
+  sellerFromCountry: string
+  sellerToCountry: string
+  sellerFromCurrency: string
+  sellerToCurrency: string
   sourceAmount: string
   targetAmount: string
-  senderBank: number
-  recipientBank: number
+  sellerFrom: number | null
+  sellerTo: number | null
   exchangeRate: string
   total: string
 }
@@ -31,14 +31,14 @@ const toNumeric = (value: string) => {
 
 export const CreateOfferPage: React.FC = () => {
   const [form, setForm] = useState<FormState>({
-    sender: 'Angola',
-    recipient: 'Brasil',
-    senderCurrency: 'AOA',
-    recipientCurrency: 'BRL',
+    sellerFromCountry: 'Angola',
+    sellerToCountry: 'Brasil',
+    sellerFromCurrency: 'AOA',
+    sellerToCurrency: 'BRL',
     sourceAmount: '',
     targetAmount: '',
-    senderBank: 0,
-    recipientBank: 0,
+    sellerFrom: null,
+    sellerTo: null,
     exchangeRate: '',
     total: ''
   })
@@ -66,45 +66,44 @@ export const CreateOfferPage: React.FC = () => {
   }, [form.sourceAmount, form.targetAmount])
 
   const isFormValid =
-    form.senderCurrency &&
-    form.recipientCurrency &&
+    form.sellerFromCurrency &&
+    form.sellerToCurrency &&
     form.sourceAmount &&
     form.targetAmount &&
-    form.senderBank &&
-    form.recipientBank
+    form.sellerFrom &&
+    form.sellerTo
 
-  const handleRecipientAmountSelected = (value: string) => {
+  const handleTargetAmountSelected = (value: string) => {
     setForm(prev => ({
       ...prev,
       targetAmount: value
     }))
   }
 
-  const handleSenderAmountSelected = (value: string) => {
+  const handleSourceAmountSelected = (value: string) => {
     setForm(prev => ({
       ...prev,
       sourceAmount: value
     }))
   }
 
-  const handleRecipientCountrySelected = (value: string) => {
+  const handleSellerToCountrySelected = (value: string) => {
     setForm(prev => ({
       ...prev,
-      recipientCurrency: value,
-      recipient: value === 'AOA' ? 'Angola' : 'Brasil'
+      sellerToCurrency: value,
+      sellerToCountry: value === 'AOA' ? 'Angola' : 'Brasil'
     }))
   }
 
-  const handleSenderCountrySelected = (value: string) => {
+  const handleSellerFromCountrySelected = (value: string) => {
     setForm(prev => ({
       ...prev,
-      senderCurrency: value,
-      sender: value === 'AOA' ? 'Angola' : 'Brasil'
+      sellerFromCurrency: value,
+      sellerFromCountry: value === 'AOA' ? 'Angola' : 'Brasil'
     }))
   }
 
   const handleSubmit = async () => {
-    console.log('form', form)
     try {
       await http.post('/wp/v2/classifieds', {
         title: 'Anúncio de câmbio',
@@ -136,8 +135,8 @@ export const CreateOfferPage: React.FC = () => {
         </label>
         <CurrencyInput
           value={form.sourceAmount}
-          onValueChange={handleSenderAmountSelected}
-          onCountryChange={handleSenderCountrySelected}
+          onValueChange={handleSourceAmountSelected}
+          onCountryChange={handleSellerFromCountrySelected}
         />
         <BankSelector
           refreshList={refreshList}
@@ -157,7 +156,7 @@ export const CreateOfferPage: React.FC = () => {
           }}
           setBank={bankId => {
             setIsPopupOpen(false)
-            setForm(prev => ({ ...prev, senderBank: bankId }))
+            setForm(prev => ({ ...prev, sellerFrom: bankId }))
           }}
         />
         <p className='text-gray-400 text-xs'>
@@ -169,8 +168,8 @@ export const CreateOfferPage: React.FC = () => {
         </label>
         <CurrencyInput
           value={form.targetAmount}
-          onValueChange={handleRecipientAmountSelected}
-          onCountryChange={handleRecipientCountrySelected}
+          onValueChange={handleTargetAmountSelected}
+          onCountryChange={handleSellerToCountrySelected}
         />
         <BankSelector
           refreshList={refreshList}
@@ -181,7 +180,7 @@ export const CreateOfferPage: React.FC = () => {
           setBank={bankId => {
             setIsPopupOpen(false)
             setBankDestinationTitle('')
-            setForm(prev => ({ ...prev, recipientBank: bankId }))
+            setForm(prev => ({ ...prev, sellerTo: bankId }))
           }}
         />
         <p className='text-gray-400 text-xs'>
@@ -196,7 +195,7 @@ export const CreateOfferPage: React.FC = () => {
             {formatCurrency(
               (parseFloat(form.sourceAmount) / parseFloat(form.targetAmount)) *
                 100 || 0,
-              form.senderCurrency
+              form.sellerFromCurrency
             )}
           </span>
         </div>
@@ -205,7 +204,7 @@ export const CreateOfferPage: React.FC = () => {
           <span>
             {formatCurrency(
               parseFloat(form.sourceAmount) * 0.03 || 0,
-              form.senderCurrency
+              form.sellerFromCurrency
             )}
             &nbsp;(3%)
           </span>
@@ -215,7 +214,7 @@ export const CreateOfferPage: React.FC = () => {
           <span>
             {formatCurrency(
               parseFloat(form.sourceAmount) * 1.03 || 0,
-              form.senderCurrency
+              form.sellerFromCurrency
             )}
           </span>
         </div>

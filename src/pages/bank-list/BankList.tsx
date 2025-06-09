@@ -57,7 +57,7 @@ export const BankListPage = () => {
     option: 'delete' | 'edit' | 'add'
   ) => {
     const bankId = e?.currentTarget?.dataset?.bankId ?? null
-    console.log(bankId)
+
     if (option === 'delete') {
       setPopupContent(
         <DeleteConfirmation

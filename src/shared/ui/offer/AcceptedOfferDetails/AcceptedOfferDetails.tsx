@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState, useRef } from 'react'
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import type { WPPostWithACF } from '@/shared/types'
+import type { AcceptedOfferWPPostWithACF } from '@/shared/types'
 import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
 import { JoinUsPopup, PopupWrapper } from '@/shared/ui'
@@ -10,15 +10,17 @@ import { PaymentKeys } from '@/shared/constants'
 
 const Flag = lazy(() => import('react-world-flags'))
 
-interface AcceptedOfferDetailsProps {
-  offer: WPPostWithACF | null
+interface AcceptedOfferDetailsProps extends AcceptedOfferWPPostWithACF {
   onClose: () => void
 }
 
 export const AcceptedOfferDetails = ({
   offer,
+  // acf,
+  // id: matchId,
   onClose
 }: AcceptedOfferDetailsProps) => {
+  console.log('offerX', offer)
   const user = useUserStore(state => state.user)
   const isAuthenticated = !!user?.id
 
@@ -27,17 +29,18 @@ export const AcceptedOfferDetails = ({
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isPopUpOpen, setIsPopupOpen] = useState(false)
 
-  const sender = offer?.acf.sender ?? ''
-  const recipient = offer?.acf.recipient ?? ''
+  const sellerFromCountry = offer?.fields.sellerFromCountry ?? ''
+  const sellerToCountry = offer?.fields.sellerToCountry ?? ''
 
-  const { code: senderCode, currency: senderCurrency } = useCountryInfo(sender)
+  const { code: senderCode, currency: senderCurrency } =
+    useCountryInfo(sellerFromCountry)
   const { code: recipientCode, currency: recipientCurrency } =
-    useCountryInfo(recipient)
+    useCountryInfo(sellerToCountry)
 
   if (!offer) return null
 
-  const { acf, id: offerId } = offer
-  const { sourceAmount, targetAmount, recipientBank, senderBank } = acf
+  // const { acf, id: offerId } = offer
+  const { sourceAmount, targetAmount } = offer.fields ?? {}
 
   const exchangeRate = parseFloat(sourceAmount) / parseFloat(targetAmount)
   const tax = 0.03 // 3%
@@ -91,30 +94,9 @@ export const AcceptedOfferDetails = ({
     }
   }
 
-  // const handleSubmit = async () => {
-  //   try {
-  //     // const response = await http.post('/wp/v2/matches', {
-  //     //   title: 'teste',
-  //     //   acf: {
-  //     //     related_offer: offerId,
-  //     //     matcher_user: user?.id,
-  //     //     recipient_bank: 'xpto',
-  //     //     seller_bank: 'xpto'
-  //     //   },
-  //     //   status: 'publish'
-  //     // })
-
-  //     console.log(response)
-  //     // setStatus('Comprovante enviado com sucesso!')
-  //   } catch (err) {
-  //     console.error(err)
-  //     // setStatus('Erro ao enviar comprovante.')
-  //   }
-  // }
-
   return (
     <div className='p-4 bg-white rounded-md w-full max-w-md'>
-      <h2 className='text-xl font-medium mb-4'>Anúncio #{offerId}</h2>
+      <h2 className='text-xl font-medium mb-4'>Anúncio #{offer.id}</h2>
 
       <div className='flex items-center justify-between mb-4'>
         <div>
@@ -127,7 +109,7 @@ export const AcceptedOfferDetails = ({
               {formatCurrency(parseFloat(sourceAmount), senderCurrency)}
             </span>
           </div>
-          <div className='text-xs text-gray-600 mt-1'>{senderBank}</div>
+          <div className='text-xs text-gray-600 mt-1'>{sellerFromCountry}</div>
         </div>
 
         <div className='text-green-600'>→</div>
@@ -142,14 +124,14 @@ export const AcceptedOfferDetails = ({
               {formatCurrency(parseFloat(targetAmount), recipientCurrency)}
             </span>
           </div>
-          <div className='text-xs text-gray-600 mt-1'>{recipientBank}</div>
+          <div className='text-xs text-gray-600 mt-1'>{sellerToCountry}</div>
         </div>
       </div>
 
       <div className='border border-gray-200 rounded-md p-4 space-y-3 mt-4'>
         <div className='flex justify-between'>
           <span className='text-gray-600'>Destino</span>
-          <span className='font-medium'>{recipient}</span>
+          <span className='font-medium'>{sellerToCountry}</span>
         </div>
         <div className='flex justify-between'>
           <span className='text-gray-600'>Eu tenho</span>

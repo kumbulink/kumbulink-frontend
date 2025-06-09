@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import type { WP_REST_API_Post } from 'wp-types'
-
-import { OfferCard, AcceptedOfferDetails } from '@/shared/ui'
+import { AcceptedOfferCard, AcceptedOfferDetails } from '@/shared/ui'
 
 import { BackButton, PopupWrapper, SearchBar, Spinner } from '@/shared/ui'
 import { http } from '@/shared/lib'
@@ -10,53 +8,58 @@ import { http } from '@/shared/lib'
 import { useUserStore } from '@/shared/model'
 import { useSearch } from '@/shared/hooks'
 
-import type { Offer } from '@/shared/types'
-
-export interface WPPostWithACF extends WP_REST_API_Post {
-  acf: Offer
-}
+import type { AcceptedOffer, AcceptedOfferWPPostWithACF } from '@/shared/types'
 
 export const AcceptedOffersPage = () => {
-  const [offers, setOffers] = useState<Offer[]>([])
+  const [acceptedOffersList, setAcceptedOffersList] = useState<AcceptedOffer[]>(
+    []
+  )
   const [isPopUpOpen, setIsPopupOpen] = useState(false)
   const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
   const [isLoading, setIsLoading] = useState(false)
   const user = useUserStore(state => state.user)
 
-  const { filteredItems: filteredOffers, handleSearch } = useSearch(offers)
+  const { filteredItems: filteredAcceptedOffers, handleSearch } =
+    useSearch(acceptedOffersList)
 
   useEffect(() => {
-    const fetchOffers = async () => {
+    const fetchAcceptedOffers = async () => {
       try {
-        const offers = await http.get<WPPostWithACF[]>(
+        const offers = await http.get<AcceptedOfferWPPostWithACF[]>(
           `/wp/v2/matches?author=${user?.id}`
         )
 
-        const parsedOffers = offers?.data.map(ad => {
+        const parsedOffers = offers?.data.map(offerItem => {
           const {
-            sender,
-            recipient,
-            sourceAmount,
-            targetAmount,
-            senderBank,
-            recipientBank,
-            status
-          } = ad.acf
-          const { id, date } = ad
+            status,
+            buyerFromCountry,
+            buyerFrom,
+            buyerToCountry,
+            buyerTo,
+            totalToBuyer,
+            totalToSeller,
+            sellerPaymentProof,
+            buyerPaymentProof
+          } = offerItem.acf
+          const { id, date, offer } = offerItem
 
           return {
             id,
             date,
-            sender,
-            recipient,
-            sourceAmount,
-            targetAmount,
-            senderBank,
-            recipientBank,
-            status
+            offer,
+            status,
+            buyerFromCountry,
+            buyerFrom,
+            buyerToCountry,
+            buyerTo,
+            totalToBuyer,
+            totalToSeller,
+            sellerPaymentProof,
+            buyerPaymentProof
           }
         })
-        setOffers(parsedOffers || [])
+
+        setAcceptedOffersList(parsedOffers || [])
       } catch (err) {
         console.error(err)
 
@@ -64,16 +67,21 @@ export const AcceptedOffersPage = () => {
       }
     }
 
-    void fetchOffers()
+    void fetchAcceptedOffers()
   }, [])
 
   const handleOfferCardClick = async (id: number) => {
     setIsLoading(true)
     try {
-      const response = await http.get<WPPostWithACF>(`/wp/v2/matches/${id}`)
+      const response = await http.get<AcceptedOfferWPPostWithACF>(
+        `/wp/v2/matches/${id}`
+      )
+
+      console.log('response', response.data)
+
       setPopupContent(
         <AcceptedOfferDetails
-          offer={response.data}
+          {...response.data}
           onClose={() => setIsPopupOpen(false)}
         />
       )
@@ -99,7 +107,7 @@ export const AcceptedOffersPage = () => {
       </div>
 
       <div className='px-4 pt-4 pb-32'>
-        {filteredOffers.length === 0 && (
+        {filteredAcceptedOffers.length === 0 && (
           <div className='space-y-4 mt-4 pl-5 pr-5'>
             <p className='text-gray-500 text-2xl text-center mt-48'>
               Nenhum anúncio disponível. Sê quem dá o pontapé de saída!
@@ -107,16 +115,17 @@ export const AcceptedOffersPage = () => {
           </div>
         )}
 
-        {filteredOffers.length > 0 && (
+        {filteredAcceptedOffers.length > 0 && (
           <div className='space-y-4 mt-4'>
-            {filteredOffers.map((offer, index) => (
-              <OfferCard
-                key={index}
-                {...offer}
-                handleClick={handleOfferCardClick}
-                displayStatus={true}
-              />
-            ))}
+            {filteredAcceptedOffers.map((offer, index) => {
+              return (
+                <AcceptedOfferCard
+                  key={index}
+                  {...offer}
+                  handleClick={handleOfferCardClick}
+                />
+              )
+            })}
           </div>
         )}
       </div>

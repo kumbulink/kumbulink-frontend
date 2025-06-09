@@ -12,7 +12,7 @@ import { useSearch } from '@/shared/hooks'
 
 import type { Offer } from '@/shared/types'
 
-export interface WPPostWithACF extends WP_REST_API_Post {
+export interface OfferWPPostWithACF extends WP_REST_API_Post {
   acf: Offer
 }
 
@@ -28,18 +28,18 @@ export const MyOffersPage = () => {
   useEffect(() => {
     const fetchOffers = async () => {
       try {
-        const offers = await http.get<WPPostWithACF[]>(
+        const offers = await http.get<OfferWPPostWithACF[]>(
           `/wp/v2/classifieds?author=${user?.id}`
         )
 
         const parsedOffers = offers?.data.map(ad => {
           const {
-            sender,
-            recipient,
+            sellerFromCountry,
+            sellerToCountry,
             sourceAmount,
             targetAmount,
-            senderBank,
-            recipientBank,
+            sellerFrom,
+            sellerTo,
             status
           } = ad.acf
           const { id, date } = ad
@@ -47,12 +47,12 @@ export const MyOffersPage = () => {
           return {
             id,
             date,
-            sender,
-            recipient,
+            sellerFromCountry,
+            sellerToCountry,
             sourceAmount,
             targetAmount,
-            senderBank,
-            recipientBank,
+            sellerFrom,
+            sellerTo,
             status
           }
         })
@@ -70,7 +70,9 @@ export const MyOffersPage = () => {
   const handleOfferCardClick = async (id: number) => {
     setIsLoading(true)
     try {
-      const response = await http.get<WPPostWithACF>(`/wp/v2/classifieds/${id}`)
+      const response = await http.get<OfferWPPostWithACF>(
+        `/wp/v2/classifieds/${id}`
+      )
       setPopupContent(
         <OfferDetails
           offer={response.data}

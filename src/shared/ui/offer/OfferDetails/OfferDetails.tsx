@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState } from 'react'
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import type { WPPostWithACF } from '@/shared/types'
+import type { OfferWPPostWithACF } from '@/shared/types'
 import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
 import { BankSelector, PopupWrapper } from '@/shared/ui'
@@ -11,7 +11,7 @@ import { OfferMatchedDialog } from '../OfferMatchedDialog'
 const Flag = lazy(() => import('react-world-flags'))
 
 interface OfferDetailsProps {
-  offer: WPPostWithACF | null
+  offer: OfferWPPostWithACF | null
   onClose: () => void
 }
 
@@ -21,19 +21,20 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
   const isOfferAuthor = user?.id === offer?.author
 
   const [isPopUpOpen, setIsPopupOpen] = useState(false)
-  const [matcherBank, setMatcherBank] = useState<number | null>(null)
+  const [buyerBank, setBuyerBank] = useState<number | null>(null)
 
-  const sender = offer?.acf.sender ?? ''
-  const recipient = offer?.acf.recipient ?? ''
+  const sellerFromCountry = offer?.acf.sellerFromCountry ?? ''
+  const sellerToCountry = offer?.acf.sellerToCountry ?? ''
 
-  const { code: senderCode, currency: senderCurrency } = useCountryInfo(sender)
+  const { code: senderCode, currency: senderCurrency } =
+    useCountryInfo(sellerFromCountry)
   const { code: recipientCode, currency: recipientCurrency } =
-    useCountryInfo(recipient)
+    useCountryInfo(sellerToCountry)
 
   if (!offer) return null
 
   const { acf, id: offerId } = offer
-  const { sourceAmount, targetAmount, recipientBank, senderBank } = acf
+  const { sourceAmount, targetAmount, sellerTo, sellerFrom } = acf
 
   const exchangeRate = parseFloat(sourceAmount) / parseFloat(targetAmount)
   const tax = 0.03 // 3%
@@ -43,17 +44,20 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
   const handleSubmit = async () => {
     try {
       const response = await http.post('/wp/v2/matches', {
-        title: `Match para oferta #${offerId} - ${recipient} - ${matcherBank}`,
+        title: `Match para oferta #${offerId} - ${sellerFrom.bank} - ${buyerBank}`,
         acf: {
           relatedOffer: offerId,
-          matcherUser: user?.id,
-          recipientBank,
-          senderBank,
-          totalToTransfer: totalToTransfer.toString(),
-          targetAmount,
-          sourceAmount,
+          buyer: user?.id,
+          seller: offer?.author,
+          sellerFrom: Number(sellerFrom.id),
+          sellerTo: Number(sellerTo.id),
+          // buyerFrom: buyerFrom, // TODO: add buyerFrom to acf
+          buyerTo: buyerBank,
+          totalToSeller: sourceAmount,
+          totalToBuyer: targetAmount,
           exchangeRate: exchangeRate.toString(),
-          tax: tax.toString()
+          tax: tax.toString(),
+          status: 'pending'
         },
         status: 'publish'
       })
@@ -61,13 +65,6 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
 
       if (response.status === 201) {
         setIsPopupOpen(true)
-        try {
-          await http.post(`/custom/v1/update-offer-status/${offerId}`, {
-            status: 'pending'
-          })
-        } catch (err) {
-          console.error(err)
-        }
       }
     } catch (err) {
       console.error(err)
@@ -95,7 +92,7 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
               {formatCurrency(parseFloat(sourceAmount), senderCurrency)}
             </span>
           </div>
-          <div className='text-xs text-gray-600 mt-1'>{recipientBank}</div>
+          <div className='text-xs text-gray-600 mt-1'>{sellerFrom.bank}</div>
         </div>
 
         <div className='text-green-600'>→</div>
@@ -110,14 +107,18 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
               {recipientCurrency} {parseFloat(targetAmount).toLocaleString()}
             </span>
           </div>
-          <div className='text-xs text-gray-600 mt-1'>{senderBank}</div>
+          <div className='text-xs text-gray-600 mt-1'>
+            {sellerTo.bank || 'Banco não informado'}
+          </div>
         </div>
       </div>
 
       <div className='border border-gray-200 rounded-md p-4 space-y-3 mt-4'>
         <div className='flex justify-between'>
           <span className='text-gray-600'>Destino</span>
-          <span className='font-medium'>{recipient}</span>
+          <span className='font-medium'>
+            {sellerTo.bank || 'Banco não informado'}
+          </span>
         </div>
         <div className='flex justify-between'>
           <span className='text-gray-600'>Eu tenho</span>
@@ -160,7 +161,7 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
           <h2 className='text-lg mb-4 text-gray-600'>Onde deseja receber</h2>
           <BankSelector
             addBank={() => setIsPopupOpen(true)}
-            setBank={bankId => setMatcherBank(bankId)}
+            setBank={bankId => setBuyerBank(bankId)}
           />
         </div>
       )}
@@ -175,9 +176,9 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
         {!isOfferAuthor && (
           <button
             onClick={handleSubmit}
-            disabled={!matcherBank || !isAuthenticated}
+            disabled={!buyerBank || !isAuthenticated}
             className={`flex-1 cursor-pointer py-3 bg-primary-orange text-white font-medium rounded-md ${
-              !matcherBank || !isAuthenticated
+              !buyerBank || !isAuthenticated
                 ? 'opacity-50 cursor-not-allowed'
                 : ''
             }`}
