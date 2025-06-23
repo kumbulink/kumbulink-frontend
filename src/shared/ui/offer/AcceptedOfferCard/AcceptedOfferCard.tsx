@@ -40,13 +40,8 @@ export const AcceptedOfferCard = ({
             </span>
           </div>
           <div className='flex items-center gap-2 mt-1'>
-            <Suspense fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}>
-              <Flag
-                code={sellerFromCode}
-                height={10}
-                width={20}
-                className='mr-2'
-              />
+            <Suspense fallback={<div className='w-6 h-4 bg-gray-200' />}>
+              <Flag code={sellerFromCode} height={10} width={20} />
             </Suspense>
             <span className='text-xs text-gray-600'>{sellerFromCountry}</span>
           </div>
@@ -65,13 +60,8 @@ export const AcceptedOfferCard = ({
             </span>
           </div>
           <div className='flex items-center gap-2 mt-1'>
-            <Suspense fallback={<div className='w-6 h-4 mr-2 bg-gray-200' />}>
-              <Flag
-                code={sellerToCode}
-                height={10}
-                width={20}
-                className='mr-2'
-              />
+            <Suspense fallback={<div className='w-6 h-4 bg-gray-200' />}>
+              <Flag code={sellerToCode} height={10} width={20} />
             </Suspense>
             <span className='text-xs text-gray-600'>{sellerToCountry}</span>
           </div>
