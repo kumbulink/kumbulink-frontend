@@ -142,15 +142,15 @@ export const HomePage = () => {
         </div>
 
         {/* TODO: Add gradient to the bottom of the page*/}
-        {/* <div
-          className='fixed bottom-0 left-0 right-0 h-48 pointer-events-none'
+        <div
+          className='fixed bottom-0 left-0 right-0 h-32 pointer-events-none'
           style={{
             background:
               'linear-gradient(to top, rgb(243 244 246) 15%, rgba(243, 244, 246, 0.9) 30%, rgba(243, 244, 246, 0.7) 50%, rgba(243, 244, 246, 0.3) 70%, rgba(243, 244, 246, 0) 85%)',
             backdropFilter: 'blur(1.5px)',
             WebkitBackdropFilter: 'blur(1.5px)'
           }}
-        /> */}
+        />
 
         <div className='fixed bottom-8 left-4 right-4 z-50'>
           <button
