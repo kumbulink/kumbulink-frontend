@@ -28,6 +28,14 @@ interface Bank {
   }
 }
 
+interface ClassifiedPost {
+  id: number
+  title: {
+    rendered: string
+  }
+  status: string
+}
+
 export const BankListPage = () => {
   const user = useUserStore(state => state.user)
   const [banks, setBanks] = useState<Bank[] | null>(null)
@@ -87,18 +95,26 @@ export const BankListPage = () => {
     void fetchBanks()
   }
 
-  const handleConfirmDelete = (idToDelete: number) => {
-    http
-      .delete(`/wp/v2/banks/${idToDelete}`)
-      .then(() => {
-        setBanks(banks?.filter(bank => bank.id !== idToDelete) ?? null)
-      })
-      .catch(err => {
-        setError((err as AxiosError).message)
-      })
-      .finally(() => {
+  const handleConfirmDelete = async (idToDelete: number) => {
+    try {
+      // First, check if the bank is associated with any active classified posts
+      const response = await http.get<ClassifiedPost[]>(`/wp/v2/classifieds?meta_key=bank&meta_value=${idToDelete}&status=publish`)
+      const classifiedPosts = response.data
+      
+      if (classifiedPosts && classifiedPosts.length > 0) {
+        setError('Este banco não pode ser deletado pois está associado a anúncios ativos.')
         setIsPopupOpen(false)
-      })
+        return
+      }
+
+      // If no active classified posts found, proceed with deletion
+      await http.delete(`/wp/v2/banks/${idToDelete}`)
+      setBanks(banks?.filter(bank => bank.id !== idToDelete) ?? null)
+    } catch (err) {
+      setError((err as AxiosError).message)
+    } finally {
+      setIsPopupOpen(false)
+    }
   }
 
   const handleCancelDelete = () => {
@@ -113,7 +129,7 @@ export const BankListPage = () => {
       </div>
       <div className='flex-1 flex flex-col justify-start mt-8 pt-4 px-4'>
         {loading && <div className='px-4'>Carregando...</div>}
-        {error && <div className='px-4 text-red-500'>Error: {error}</div>}
+        {error && <div className='text-red-500 mb-4'>{error}</div>}
         <div className='divide-y divide-gray-200'>
           {banks?.map(bank => (
             <div key={bank.id} className='pb-4 mb-4'>

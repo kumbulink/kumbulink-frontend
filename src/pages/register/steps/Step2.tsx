@@ -44,6 +44,15 @@ const customTheme: CustomFlowbiteTheme['datepicker'] = {
         clear: 'hidden'
       }
     }
+  },
+  views: {
+    days: {
+      items: {
+        item: {
+          selected: 'bg-primary-green text-white hover:bg-primary-green'
+        }
+      }
+    }
   }
 }
 
@@ -183,7 +192,7 @@ export const Step2: React.FC = () => {
             placeholder='Nome completo'
             value={fullName}
             onChange={e => setFullName(e.target.value)}
-            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className='w-full focus:outline-primary-green rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
           />
         </div>
 
@@ -207,7 +216,7 @@ export const Step2: React.FC = () => {
             <select
               value={selectedDocument}
               onChange={handleDocumentChange}
-              className='w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white'
+              className='w-full focus:outline-primary-green rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white'
             >
               <option value='' disabled>
                 Selecione o tipo de documento
@@ -241,7 +250,7 @@ export const Step2: React.FC = () => {
                   ? 'Número do bilhete de identidade'
                   : 'Número do passaporte'
               }
-              className={`w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400 ${
+              className={`w-full focus:outline-primary-green rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400 ${
                 documentNumber && !isDocumentValid && 'border-red-500'
               }`}
               onChange={handleDocumentNumberChange}

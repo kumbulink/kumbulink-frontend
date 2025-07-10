@@ -73,7 +73,7 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
 
   return (
     <div className='p-4 bg-white rounded-md w-full max-w-md'>
-      <h2 className='text-xl font-medium mb-4'>Anúncio #{offerId}</h2>
+      <h2 className='text-xl mb-6 mt-4'>Anúncio #{offerId}</h2>
 
       {isOfferAuthor && (
         <p className='text-xs text-gray-400 mt-4 mb-4'>
@@ -83,75 +83,75 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
 
       <div className='flex items-center justify-between mb-4'>
         <div>
-          <p className='text-gray-500 text-sm mb-1'>Eu tenho</p>
-          <div className='flex items-center gap-2'>
-            <Suspense fallback={<div className='w-6 h-4 bg-gray-200' />}>
-              <Flag code={senderCode} height={16} width={24} />
-            </Suspense>
+          <p className='text-gray-500 text-xs mb-1'>Eu tenho</p>
+          <div>
             <span className='text-black-900 text-lg font-medium'>
               {formatCurrency(parseFloat(sourceAmount), senderCurrency)}
             </span>
           </div>
-          <div className='text-xs text-gray-600 mt-1'>{sellerFrom.bank}</div>
+          <div className='text-[10px] text-gray-600 mt-1 flex items-center gap-2'>
+            <Suspense fallback={<div className='w-6 h-4 bg-gray-200' />}>
+              <Flag code={senderCode} height={4.5} width={14} />
+            </Suspense>
+            <span className='text-gray-600 text-[10px]'>{sellerFromCountry}</span>
+          </div>
         </div>
 
         <div className='text-green-600'>→</div>
 
-        <div className='text-right'>
-          <p className='text-gray-500 text-sm mb-1'>Eu quero</p>
-          <div className='flex items-center gap-2 justify-end'>
-            <Suspense fallback={<div className='w-6 h-4 bg-gray-200' />}>
-              <Flag code={recipientCode} height={16} width={24} />
-            </Suspense>
+        <div>
+          <p className='text-gray-500 text-xs mb-1'>Eu quero</p>
+          <div>
             <span className='text-black-900 text-lg font-medium'>
-              {recipientCurrency} {parseFloat(targetAmount).toLocaleString()}
+              {formatCurrency(parseFloat(targetAmount), recipientCurrency)}
             </span>
           </div>
-          <div className='text-xs text-gray-600 mt-1'>
-            {sellerTo.bank || 'Banco não informado'}
+          <div className='text-[10px] text-gray-600 mt-1 flex items-center gap-2'>
+            <Suspense fallback={<div className='w-6 h-4 bg-gray-200' />}>
+              <Flag code={recipientCode} height={4.5} width={14}/>
+            </Suspense>
+            <span className='text-gray-600 text-[10px]'>{sellerToCountry}</span>
           </div>
         </div>
       </div>
 
-      <div className='border border-gray-200 rounded-md p-4 space-y-3 mt-4'>
-        <div className='flex justify-between'>
-          <span className='text-gray-600'>Destino</span>
-          <span className='font-medium'>
-            {sellerTo.bank || 'Banco não informado'}
-          </span>
+      <div className='border border-dashed border-gray-400 rounded-md p-4 space-y-3 mt-4'>
+        <div className='flex justify-between border-b border-gray-200'>
+          <span className='text-xs text-gray-600'>Destino</span>
+          <span className='text-xs'>{sellerToCountry}</span>
         </div>
-        <div className='flex justify-between'>
-          <span className='text-gray-600'>Eu tenho</span>
-          <span className='font-medium'>
+        <div className='flex justify-between border-b border-gray-200'>
+          <span className='text-gray-600 text-xs'>Eu tenho</span>
+          <span className='text-xs'>
             {formatCurrency(parseFloat(sourceAmount), senderCurrency)}
           </span>
         </div>
-        <div className='flex justify-between'>
-          <span className='text-gray-600'>Eu quero</span>
-          <span className='font-medium'>
+        <div className='flex justify-between border-b border-gray-200'>
+          <span className='text-gray-600 text-xs'>Eu quero</span>
+          <span className='text-xs'>
             {formatCurrency(parseFloat(targetAmount), recipientCurrency)}
           </span>
         </div>
-        <div className='flex justify-between'>
-          <span className='text-gray-600'>Câmbio</span>
-          <span className='font-medium'>
+        <div className='flex justify-between border-b border-gray-200'>
+          <span className='text-gray-600 text-xs'>Câmbio</span>
+          <span className='text-xs'>
             {formatCurrency(exchangeRate * 100, senderCurrency)}
           </span>
         </div>
-        <div className='flex justify-between'>
-          <span className='text-gray-600'>Taxa de serviço</span>
-          <span className='font-medium'>
+        <div className='flex justify-between border-b border-gray-200'>
+          <span className='text-gray-600 text-xs'>Taxa de serviço</span>
+          <span className='text-xs'>
             {formatCurrency(parseFloat(sourceAmount) * 0.03, senderCurrency)}{' '}
             (3%)
           </span>
         </div>
       </div>
 
-      <div className='border border-dashed border-primary-orange rounded-md p-4 mt-4'>
-        <div className='text-center'>
-          <span className='text-primary-orange font-semibold'>
+      <div className='border border-dashed border-primary-orange rounded-md p-1 mt-4 mb-4'>
+        <div className='text-center text-center min-w-xs'>
+          <span className='text-primary-orange'>
             Total a transferir ={' '}
-            {formatCurrency(totalToTransfer, senderCurrency)}
+            <span className='font-semibold'>{formatCurrency(totalToTransfer, senderCurrency)}</span>
           </span>
         </div>
       </div>
@@ -166,26 +166,28 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
         </div>
       )}
 
-      <div className='flex gap-4 mt-6'>
-        <button
-          onClick={onClose}
-          className='flex-1 cursor-pointer py-3 border border-primary-orange text-primary-orange font-medium rounded-md'
-        >
-          Voltar
-        </button>
-        {!isOfferAuthor && (
+      <div className='flex gap-4 mt-6 justify-end'>
+        <div className='flex gap-4 w-2/3'>
           <button
-            onClick={handleSubmit}
-            disabled={!buyerBank || !isAuthenticated}
-            className={`flex-1 cursor-pointer py-3 bg-primary-orange text-white font-medium rounded-md ${
-              !buyerBank || !isAuthenticated
-                ? 'opacity-50 cursor-not-allowed'
-                : ''
-            }`}
+            onClick={onClose}
+            className='flex-1 cursor-pointer py-2 border border-primary-orange text-primary-orange font-medium rounded-md'
           >
-            OK
+            Voltar
           </button>
-        )}
+          {!isOfferAuthor && (
+            <button
+              onClick={handleSubmit}
+              disabled={!buyerBank || !isAuthenticated}
+              className={`flex-1 cursor-pointer py-2 bg-primary-orange text-white font-medium rounded-md ${
+                !buyerBank || !isAuthenticated
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ''
+              }`}
+            >
+              Aceitar
+            </button>
+          )}
+        </div>
       </div>
 
       {!isAuthenticated && (

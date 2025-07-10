@@ -66,7 +66,7 @@ export const CountrySelector = ({
         onClick={handleCountryInputClick}
         readOnly
         placeholder='Selecione o país'
-        className={`w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer ${
+        className={`w-full focus:outline-primary-green rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer ${
           selectedCountry ? 'pl-16' : 'pl-4'
         }`}
       />
