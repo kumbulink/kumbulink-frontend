@@ -139,7 +139,7 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
           </span>
         </div>
         <div className='flex justify-between'>
-          <span className='text-gray-600'>Taxa de venda</span>
+          <span className='text-gray-600'>Taxa de serviço</span>
           <span className='font-medium'>
             {formatCurrency(parseFloat(sourceAmount) * 0.03, senderCurrency)}{' '}
             (3%)
