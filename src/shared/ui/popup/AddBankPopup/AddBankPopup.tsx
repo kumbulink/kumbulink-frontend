@@ -3,7 +3,7 @@ import { CountrySelector } from '@/shared/ui/selectors/CountrySelector'
 
 import { useClickOutside } from '@/shared/hooks'
 
-import { http, banks } from '@/shared/utils'
+import { http, banks } from '@/shared/lib'
 
 export const AddBankPopup = ({
   onClose,

@@ -2,7 +2,7 @@ import { BackButton } from '@/shared/ui/layout/BackButton'
 import { useUserStore } from '@/shared/model/providers/userStore'
 import { useState } from 'react'
 
-import { http, validatePassport, validateAngolanID } from '@/shared/utils'
+import { http, validatePassport, validateAngolanID } from '@/shared/lib'
 
 interface EditableUserData {
   id: number
@@ -92,7 +92,7 @@ export const ProfilePage = () => {
       setIsLoading(true)
 
       const response = await http.post(`/wp/v2/users/${userData.id}`, {
-        display_name: userData.displayName,
+        name: userData.displayName,
         email: userData.email,
         acf: {
           document_id: userData.documentId,

@@ -8,7 +8,7 @@ import {
   validatePassport,
   validateAngolanID,
   countries
-} from '@/shared/utils'
+} from '@/shared/lib'
 
 import {
   PopupWrapper,
@@ -44,6 +44,15 @@ const customTheme: CustomFlowbiteTheme['datepicker'] = {
         clear: 'hidden'
       }
     }
+  },
+  views: {
+    days: {
+      items: {
+        item: {
+          selected: 'bg-primary-green text-white hover:bg-primary-green'
+        }
+      }
+    }
   }
 }
 
@@ -59,7 +68,7 @@ export const Step2: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [documentNumber, setDocumentNumber] = useState<string>('')
-  const [isPopUpOpen, setIsPopUpOpen] = useState(false)
+  const [isPopUpOpen, setIsPopupOpen] = useState(false)
   const [popUpContent, setPopUpContent] = useState<React.ReactNode>(null)
   const handleCountrySelect = (countryName: string) => {
     setSelectedCountry(countryName)
@@ -123,7 +132,7 @@ export const Step2: React.FC = () => {
   }
 
   const handleTerms = (type: 'membership' | 'privacy') => {
-    setIsPopUpOpen(true)
+    setIsPopupOpen(true)
 
     switch (type) {
       case 'membership':
@@ -183,7 +192,7 @@ export const Step2: React.FC = () => {
             placeholder='Nome completo'
             value={fullName}
             onChange={e => setFullName(e.target.value)}
-            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className='w-full focus:outline-primary-green rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
           />
         </div>
 
@@ -207,7 +216,7 @@ export const Step2: React.FC = () => {
             <select
               value={selectedDocument}
               onChange={handleDocumentChange}
-              className='w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white'
+              className='w-full focus:outline-primary-green rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white'
             >
               <option value='' disabled>
                 Selecione o tipo de documento
@@ -241,7 +250,9 @@ export const Step2: React.FC = () => {
                   ? 'Número do bilhete de identidade'
                   : 'Número do passaporte'
               }
-              className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+              className={`w-full focus:outline-primary-green rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400 ${
+                documentNumber && !isDocumentValid && 'border-red-500'
+              }`}
               onChange={handleDocumentNumberChange}
             />
             {documentNumber && !isDocumentValid && (
@@ -305,7 +316,7 @@ export const Step2: React.FC = () => {
       {/* Progress bar */}
       <div className='mt-6 h-1 w-1/3 bg-primary-orange' />
 
-      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopUpOpen(false)}>
+      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopupOpen(false)}>
         {popUpContent}
       </PopupWrapper>
     </div>

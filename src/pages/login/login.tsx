@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import { http } from '@/shared/utils'
+import { http } from '@/shared/lib'
 
 interface LoginResponse {
   id: number
@@ -26,6 +26,7 @@ interface WordPressError {
 export function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState<boolean>(false)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const setUser = useUserStore(state => state.setUser)
@@ -99,20 +100,58 @@ export function LoginPage() {
             />
           </div>
 
-          <div>
+          <div className='relative'>
             <label htmlFor='password' className='sr-only'>
               Senha
             </label>
             <input
               id='password'
               name='password'
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               placeholder='Senha'
               required
               value={password}
               onChange={e => setPassword(e.target.value)}
               className='w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-primary-green'
             />
+            <button
+            type='button'
+            onClick={() => setShowPassword(!showPassword)}
+            className='absolute right-4 top-1/2 -translate-y-1/2'
+          >
+            <svg
+              width='24'
+              height='24'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              className='text-gray-400'
+            >
+              {showPassword ? (
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M3 3l18 18M10.5 10.677a2 2 0 002.823 2.823M7.362 7.561C5.68 8.74 4.279 10.42 3 12c1.889 2.991 5.282 6 9 6 1.55 0 3.043-.523 4.395-1.35M12 6c4.008 0 6.701 3.158 9 6-1.007 1.797-2.956 3.992-4.5 5.5'
+                />
+              ) : (
+                <>
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'
+                  />
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'
+                  />
+                </>
+              )}
+            </svg>
+          </button>
           </div>
 
           {error && (

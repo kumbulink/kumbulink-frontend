@@ -96,7 +96,10 @@ export const Step1: React.FC = () => {
             placeholder='Digite seu melhor email'
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className={`w-full rounded-md border focus:outline-primary-green border-gray-300 p-4 text-gray-600 placeholder:text-gray-400 ${
+              !validations.isEmailValid && email.length > 0
+                && 'focus:outline-red-400 border-red-400'
+            }`}
             aria-label='Digite seu email para cadastro'
             aria-required='true'
             aria-invalid={!validations.isEmailValid && email.length > 0}
@@ -124,7 +127,9 @@ export const Step1: React.FC = () => {
             placeholder='Crie uma senha'
             value={password}
             onChange={e => setPassword(e.target.value)}
-            className='w-full rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400'
+            className={`w-full rounded-md border focus:outline-primary-green border-gray-300 p-4 text-gray-600 placeholder:text-gray-400 ${
+              !isPasswordValid && password.length > 0 && 'focus:outline-red-400 border-red-400'
+            }`}
             aria-label='Digite sua senha para cadastro'
             aria-required='true'
             aria-invalid={!isPasswordValid && password.length > 0}

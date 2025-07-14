@@ -5,6 +5,7 @@ import addIcon from '/icons/add.svg'
 import configIcon from '/icons/config.svg'
 import profileIcon from '/icons/profile.svg'
 import businessIcon from '/icons/business.svg'
+import bankIcon from '/icons/bank.svg'
 import closeIcon from '/icons/close.svg'
 import helpIcon from '/icons/help.svg'
 import filterIcon from '/icons/filter.svg'
@@ -55,7 +56,7 @@ export const BusinessIcon: FC = () => (
 )
 
 export const BankIcon: FC = () => (
-  <img src={businessIcon} className='w-5 h-5 text-gray-600' alt='' />
+  <img src={bankIcon} className='w-5 h-5 text-gray-600' alt='' />
 )
 
 export const LogoutIcon: FC = () => (

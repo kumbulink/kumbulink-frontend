@@ -1,34 +1,26 @@
 import { lazy, Suspense } from 'react'
 
-import { formatDistanceToNow } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
-
 import { formatCurrency } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
 
 import { Status } from '@/shared/ui'
-import type { Offer } from '@/shared/types'
+import type { AcceptedOffer } from '@/shared/types'
 
-interface OfferCardProps extends Offer {
+interface AcceptOfferCardProps extends AcceptedOffer {
   handleClick: (id: number) => void
-  displayStatus?: boolean
 }
 
 const Flag = lazy(() => import('react-world-flags'))
 
-export const OfferCard = ({
-  date,
-  id,
-  sellerFromCountry,
-  sellerToCountry,
-  sourceAmount,
-  targetAmount,
-  sellerFrom,
-  sellerTo,
+export const AcceptedOfferCard = ({
+  offer: { fields },
+  id: matchId,
   status,
-  displayStatus = false,
+  totalToBuyer,
+  totalToSeller,
   handleClick
-}: OfferCardProps) => {
+}: AcceptOfferCardProps) => {
+  const { sellerFrom, sellerTo, sellerFromCountry, sellerToCountry } = fields
   const { code: sellerToCode, currency: sellerToCurrency } =
     useCountryInfo(sellerToCountry)
   const { code: sellerFromCode, currency: sellerFromCurrency } =
@@ -37,14 +29,14 @@ export const OfferCard = ({
   return (
     <div
       className='bg-white rounded-md p-4 border border-[#e0e0e0] cursor-pointer'
-      onClick={() => handleClick(id)}
+      onClick={() => handleClick(matchId)}
     >
       <div className='flex items-center justify-between mt-2'>
         <div>
           <div className='font-medium mt-1'>
             <p className='text-gray-500 text-sm mb-2'>Eu tenho</p>
             <span className='text-black-900 text-xl'>
-              {formatCurrency(parseFloat(sourceAmount), sellerFromCurrency)}
+              {formatCurrency(parseFloat(totalToSeller), sellerFromCurrency)}
             </span>
           </div>
           <div className='flex items-center gap-2 mt-1'>
@@ -64,7 +56,7 @@ export const OfferCard = ({
           <div className='font-medium mt-1'>
             <p className='text-gray-500 text-sm mb-2'>Eu quero</p>
             <span className='text-black-900 text-xl mb-2'>
-              {formatCurrency(parseFloat(targetAmount), sellerToCurrency)}
+              {formatCurrency(parseFloat(totalToBuyer), sellerToCurrency)}
             </span>
           </div>
           <div className='flex items-center gap-2 mt-1'>
@@ -80,16 +72,7 @@ export const OfferCard = ({
       </div>
 
       <div className='flex justify-between items-center mt-3'>
-        {displayStatus && <Status status={status} />}
-        {!displayStatus && (
-          <span className='text-xs text-gray-400'>
-            Oferta realizada{' '}
-            {formatDistanceToNow(new Date(date), {
-              locale: ptBR,
-              addSuffix: true
-            })}
-          </span>
-        )}
+        <Status status={status} />
         <button className='text-primary-orange font-medium'>Ver anúncio</button>
       </div>
     </div>

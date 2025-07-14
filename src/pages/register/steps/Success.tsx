@@ -27,20 +27,20 @@ export const Success: React.FC = () => {
         </h1>
 
         <p className='text-center text-gray-600 text-base leading-relaxed'>
-          Agora você faz parte da rede Kumbulink, você poderá enviar e receber
-          dinheiro de onde estiver.
+        Agora fazes parte da rede Kumbulink. Encontre pessoas para receber e enviar dinheiro com segurança, transparência e a partir de qualquer lugar.
         </p>
 
-        <div className='space-y-4 w-full mt-16'>
+        <div className='space-y-4 w-full mt-16 text-center'>
           <button
             onClick={handleEnter}
             type='submit'
-            className='w-full rounded-md py-4 text-white bg-primary-orange'
+            className='w-[345px] h-[56px] rounded-md py-4 text-white bg-primary-green text-lg font-bold'
           >
             Entrar
           </button>
         </div>
       </div>
+      <div className='mt-6 h-1 w-4/4 bg-primary-orange' role='presentation' />
     </div>
   )
 }

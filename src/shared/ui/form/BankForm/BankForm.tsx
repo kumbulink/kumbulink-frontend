@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react'
 
 import { CountrySelector } from '@/shared/ui'
 import { useClickOutside } from '@/shared/hooks'
-import { http, banks } from '@/shared/utils'
+import { http, banks } from '@/shared/lib'
 
 interface BankResponse {
   id: number
@@ -69,7 +69,7 @@ export const BankForm = ({
               }
             }
           } = await http.get<BankResponse>(`/wp/v2/banks/${bankId}`)
-          console.log('countryName', country)
+
           setBankForm({
             id: bankId,
             accountName,

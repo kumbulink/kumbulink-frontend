@@ -1,4 +1,4 @@
-import { http } from '@/shared/utils'
+import { http } from '@/shared/lib'
 import { create } from 'zustand'
 import { devtools, persist, createJSONStorage } from 'zustand/middleware'
 

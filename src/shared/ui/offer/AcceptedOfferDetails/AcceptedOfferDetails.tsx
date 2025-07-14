@@ -1,30 +1,36 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useState, useRef } from 'react'
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import type { OfferWPPostWithACF } from '@/shared/types'
+import type { AcceptedOfferWPPostWithACF } from '@/shared/types'
 import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
-import { BankSelector, PopupWrapper } from '@/shared/ui'
+import { JoinUsPopup, PopupWrapper } from '@/shared/ui'
 
-import { OfferMatchedDialog } from '../OfferMatchedDialog'
+import { PaymentKeys } from '@/shared/constants'
 
 const Flag = lazy(() => import('react-world-flags'))
 
-interface OfferDetailsProps {
-  offer: OfferWPPostWithACF | null
+interface AcceptedOfferDetailsProps extends AcceptedOfferWPPostWithACF {
   onClose: () => void
 }
 
-export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
+export const AcceptedOfferDetails = ({
+  offer,
+  // acf,
+  // id: matchId,
+  onClose
+}: AcceptedOfferDetailsProps) => {
+  console.log('offerX', offer)
   const user = useUserStore(state => state.user)
   const isAuthenticated = !!user?.id
-  const isOfferAuthor = user?.id === offer?.author
 
+  const [copyFeedback, setCopyFeedback] = useState(false)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [isPopUpOpen, setIsPopupOpen] = useState(false)
-  const [buyerBank, setBuyerBank] = useState<number | null>(null)
 
-  const sellerFromCountry = offer?.acf.sellerFromCountry ?? ''
-  const sellerToCountry = offer?.acf.sellerToCountry ?? ''
+  const sellerFromCountry = offer?.fields.sellerFromCountry ?? ''
+  const sellerToCountry = offer?.fields.sellerToCountry ?? ''
 
   const { code: senderCode, currency: senderCurrency } =
     useCountryInfo(sellerFromCountry)
@@ -33,53 +39,64 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
 
   if (!offer) return null
 
-  const { acf, id: offerId } = offer
-  const { sourceAmount, targetAmount, sellerTo, sellerFrom } = acf
+  // const { acf, id: offerId } = offer
+  const { sourceAmount, targetAmount } = offer.fields ?? {}
 
   const exchangeRate = parseFloat(sourceAmount) / parseFloat(targetAmount)
   const tax = 0.03 // 3%
   const totalToTransfer =
     parseFloat(sourceAmount) + parseFloat(sourceAmount) * tax
 
-  const handleSubmit = async () => {
+  const handleCopy = async () => {
     try {
-      const response = await http.post('/wp/v2/matches', {
-        title: `Match para oferta #${offerId} - ${sellerFrom.bank} - ${buyerBank}`,
-        acf: {
-          relatedOffer: offerId,
-          buyer: user?.id,
-          seller: offer?.author,
-          sellerFrom: Number(sellerFrom.id),
-          sellerTo: Number(sellerTo.id),
-          // buyerFrom: buyerFrom, // TODO: add buyerFrom to acf
-          buyerTo: buyerBank,
-          totalToSeller: sourceAmount,
-          totalToBuyer: targetAmount,
-          exchangeRate: exchangeRate.toString(),
-          tax: tax.toString(),
-          status: 'pending'
-        },
-        status: 'publish'
-      })
-      setIsPopupOpen(true)
+      await navigator.clipboard.writeText(PaymentKeys.IBAN)
+      setCopyFeedback(true)
+      setTimeout(() => setCopyFeedback(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+    }
+  }
 
-      if (response.status === 201) {
-        setIsPopupOpen(true)
-      }
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) setSelectedFile(file)
+  }
+
+  const handleFileClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleUpload = async () => {
+    if (!isAuthenticated) {
+      setIsPopupOpen(true)
+    }
+
+    if (!selectedFile) return
+
+    const formData = new FormData()
+    formData.append('file', selectedFile)
+    formData.append('post_id', String(51))
+    formData.append('type', 'seller')
+
+    try {
+      const response = await http.post('/custom/v1/payment-proof', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+
+      console.log(response)
+
+      // setStatus('Comprovante enviado com sucesso!')
     } catch (err) {
       console.error(err)
+      // setStatus('Erro ao enviar comprovante.')
     }
   }
 
   return (
     <div className='p-4 bg-white rounded-md w-full max-w-md'>
-      <h2 className='text-xl mb-6 mt-4'>Anúncio #{offerId}</h2>
-
-      {isOfferAuthor && (
-        <p className='text-xs text-gray-400 mt-4 mb-4'>
-          Você é o autor desta oferta. 🙂
-        </p>
-      )}
+      <h2 className='text-xl mb-6 mt-4'>Anúncio #{offer.id}</h2>
 
       <div className='flex items-center justify-between mb-4'>
         <div>
@@ -148,7 +165,7 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
       </div>
 
       <div className='border border-dashed border-primary-orange rounded-md p-1 mt-4 mb-4'>
-        <div className='text-center text-center min-w-xs'>
+        <div className='text-center min-w-xs'>
           <span className='text-primary-orange'>
             Total a transferir ={' '}
             <span className='font-semibold'>{formatCurrency(totalToTransfer, senderCurrency)}</span>
@@ -156,15 +173,46 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
         </div>
       </div>
 
-      {!isOfferAuthor && (
-        <div className='mt-10'>
-          <h2 className='text-lg mb-4 text-gray-600'>Onde deseja receber</h2>
-          <BankSelector
-            addBank={() => setIsPopupOpen(true)}
-            setBank={bankId => setBuyerBank(bankId)}
-          />
+      <div className='mt-4'>
+        <p className='text-xs text-gray-600 mb-2'>
+          Transfere à Kumbulink · MBWAY
+        </p>
+        <div className='flex justify-between items-center bg-gray-50 p-3 rounded-md gap-x-1'>
+          <span className='text-xs text-gray-600 max-w-[230px] block overflow-x-auto whitespace-nowrap'>
+            {PaymentKeys.IBAN}
+          </span>
+          <button
+            onClick={handleCopy}
+            className='text-primary-green text-xs cursor-pointer hover:opacity-80 transition-opacity'
+          >
+            {copyFeedback ? 'Copiado!' : 'Copiar'}
+          </button>
         </div>
-      )}
+      </div>
+
+      <div className='mt-4'>
+        <h3 className='text-gray-500 text-xs mb-2'>Anexar comprovativo</h3>
+        <div className='relative'>
+          <input
+            ref={fileInputRef}
+            type='file'
+            accept='.jpg,.jpeg,.png,.pdf'
+            className='hidden'
+            onChange={handleFileChange}
+          />
+          <div
+            onClick={handleFileClick}
+            className='flex justify-between items-center p-2 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-50'
+          >
+            <span className={`text-xs ${selectedFile ? 'text-gray-900' : 'text-gray-400'}`}>
+              {selectedFile ? selectedFile.name : 'Ficheiros jpg, png ou pdf'}
+            </span>
+            <button className='text-primary-green text-xs'>
+              {selectedFile ? 'Alterar' : 'Anexar'}
+            </button>
+          </div>
+        </div>
+      </div>
 
       <div className='flex gap-4 mt-6 justify-end'>
         <div className='flex gap-4 w-2/3'>
@@ -174,19 +222,15 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
           >
             Voltar
           </button>
-          {!isOfferAuthor && (
-            <button
-              onClick={handleSubmit}
-              disabled={!buyerBank || !isAuthenticated}
-              className={`flex-1 cursor-pointer py-2 bg-primary-orange text-white font-medium rounded-md ${
-                !buyerBank || !isAuthenticated
-                  ? 'opacity-50 cursor-not-allowed'
-                  : ''
-              }`}
-            >
-              Aceitar
-            </button>
-          )}
+          <button
+            onClick={handleUpload}
+            disabled={!isAuthenticated}
+            className={`flex-1 cursor-pointer py-2 bg-primary-orange text-white font-medium rounded-md ${
+              !isAuthenticated ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            OK
+          </button>
         </div>
       </div>
 
@@ -197,7 +241,7 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
       )}
 
       <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopupOpen(false)}>
-        <OfferMatchedDialog onClose={() => setIsPopupOpen(false)} />
+        <JoinUsPopup />
       </PopupWrapper>
     </div>
   )

@@ -1,4 +1,4 @@
-export * from './http'
+export * from '../api/http'
 export * from './currency'
 export * from './upload'
 export * from './validation'
