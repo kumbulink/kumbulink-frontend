@@ -25,7 +25,6 @@ export const AcceptedOfferDetails = ({
   const [copyFeedback, setCopyFeedback] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  // const [isPopUpOpen, setIsPopupOpen] = useState(false)
 
   const sellerFromCountry = offer?.fields.sellerFromCountry ?? ''
   const sellerToCountry = offer?.fields.sellerToCountry ?? ''
@@ -37,7 +36,6 @@ export const AcceptedOfferDetails = ({
 
   if (!offer) return null
 
-  // const { acf, id: offerId } = offer
   const { sourceAmount, targetAmount } = offer.fields ?? {}
 
   const exchangeRate = parseFloat(sourceAmount) / parseFloat(targetAmount)

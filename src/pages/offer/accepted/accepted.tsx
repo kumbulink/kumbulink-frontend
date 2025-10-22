@@ -141,7 +141,7 @@ export const AcceptedOffersPage = () => {
       </div>
 
       <div
-        className='fixed bottom-0 left-0 right-0 h-48 pointer-events-none'
+        className='fixed bottom-0 left-0 right-0 h-20 pointer-events-none'
         style={{
           background:
             'linear-gradient(to top, rgb(243 244 246) 15%, rgba(243, 244, 246, 0.9) 30%, rgba(243, 244, 246, 0.7) 50%, rgba(243, 244, 246, 0.3) 70%, rgba(243, 244, 246, 0) 85%)',
