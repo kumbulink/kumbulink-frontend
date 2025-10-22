@@ -79,6 +79,12 @@ export const HomePage = () => {
   }
 
   const handleOfferCardClick = async (id: number) => {
+    if (!isAuthenticated) {
+      setPopupContent(<JoinUsPopup />)
+      setIsPopupOpen(true)
+      return
+    }
+    
     setIsLoading(true)
     try {
       const response = await http.get<OfferWPPostWithACF>(

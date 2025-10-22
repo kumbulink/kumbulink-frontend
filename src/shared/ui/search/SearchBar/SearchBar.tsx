@@ -1,4 +1,4 @@
-import { SearchIcon, FilterIcon } from '@/shared/ui'
+import { SearchIcon } from '@/shared/ui'
 
 interface SearchBarProps {
   onSearch: (value: string) => void
@@ -13,6 +13,6 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => (
       onChange={e => onSearch(e.target.value)}
     />
     <SearchIcon className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400' />
-    <FilterIcon className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400' />
+    {/* <FilterIcon className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400' /> */}
   </div>
 )

@@ -250,8 +250,8 @@ export const Step2: React.FC = () => {
                   ? 'Número do bilhete de identidade'
                   : 'Número do passaporte'
               }
-              className={`w-full focus:outline-primary-green rounded-md border border-gray-300 p-4 text-gray-600 placeholder:text-gray-400 ${
-                documentNumber && !isDocumentValid && 'border-red-500'
+              className={`w-full focus:outline-primary-green rounded-md border p-4 text-gray-600 placeholder:text-gray-400 ${
+                documentNumber && !isDocumentValid && 'border-red-500 focus:outline-red-500'
               }`}
               onChange={handleDocumentNumberChange}
             />
