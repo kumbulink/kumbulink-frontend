@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { AcceptedOfferCard, AcceptedOfferDetails } from '@/shared/ui'
+import { AcceptedOfferCard, AcceptedOfferDetails, PaymentProofPopup } from '@/shared/ui'
 
 import { BackButton, PopupWrapper, SearchBar, Spinner } from '@/shared/ui'
 import { http } from '@/shared/lib'
@@ -70,6 +70,17 @@ export const AcceptedOffersPage = () => {
     void fetchAcceptedOffers()
   }, [])
 
+  const handlePaymentProofSubmit = () => {
+    setIsPopupOpen(false)
+    setPopupContent(
+      <PaymentProofPopup
+        onClose={() => setIsPopupOpen(false)}
+      />
+    )
+    setIsLoading(false)
+    setIsPopupOpen(true)
+  }
+
   const handleOfferCardClick = async (id: number) => {
     setIsLoading(true)
     try {
@@ -77,12 +88,11 @@ export const AcceptedOffersPage = () => {
         `/wp/v2/matches/${id}`
       )
 
-      console.log('response', response.data)
-
       setPopupContent(
         <AcceptedOfferDetails
           {...response.data}
           onClose={() => setIsPopupOpen(false)}
+          handlePaymentProofSubmit={handlePaymentProofSubmit}
         />
       )
       setIsLoading(false)
