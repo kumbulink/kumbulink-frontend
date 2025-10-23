@@ -44,7 +44,6 @@ export const CreateOfferPage: React.FC = () => {
   })
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [bankDestinationTitle, setBankDestinationTitle] = useState('')
-  // const [isLoading, setIsLoading] = useState(false)
   const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
   const [refreshList, setRefreshList] = useState(0)
 

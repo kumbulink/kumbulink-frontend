@@ -90,7 +90,7 @@ export const OfferCard = ({
             })}
           </span>
         )}
-        <button className='text-primary-orange font-medium'>Ver anúncio</button>
+        <button className='text-primary-orange font-medium cursor-pointer'>Ver anúncio</button>
       </div>
     </div>
   )

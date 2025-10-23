@@ -4,30 +4,27 @@ import { useUserStore } from '@/shared/model/providers/userStore'
 import type { AcceptedOfferWPPostWithACF } from '@/shared/types'
 import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
-import { JoinUsPopup, PopupWrapper } from '@/shared/ui'
 
 import { PaymentKeys } from '@/shared/constants'
 
 const Flag = lazy(() => import('react-world-flags'))
 
 interface AcceptedOfferDetailsProps extends AcceptedOfferWPPostWithACF {
-  onClose: () => void
+  onClose: () => void,
+  handlePaymentProofSubmit: () => void
 }
 
 export const AcceptedOfferDetails = ({
   offer,
-  // acf,
-  // id: matchId,
-  onClose
+  onClose,
+  handlePaymentProofSubmit
 }: AcceptedOfferDetailsProps) => {
-  console.log('offerX', offer)
   const user = useUserStore(state => state.user)
   const isAuthenticated = !!user?.id
 
   const [copyFeedback, setCopyFeedback] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [isPopUpOpen, setIsPopupOpen] = useState(false)
 
   const sellerFromCountry = offer?.fields.sellerFromCountry ?? ''
   const sellerToCountry = offer?.fields.sellerToCountry ?? ''
@@ -39,7 +36,6 @@ export const AcceptedOfferDetails = ({
 
   if (!offer) return null
 
-  // const { acf, id: offerId } = offer
   const { sourceAmount, targetAmount } = offer.fields ?? {}
 
   const exchangeRate = parseFloat(sourceAmount) / parseFloat(targetAmount)
@@ -67,10 +63,6 @@ export const AcceptedOfferDetails = ({
   }
 
   const handleUpload = async () => {
-    if (!isAuthenticated) {
-      setIsPopupOpen(true)
-    }
-
     if (!selectedFile) return
 
     const formData = new FormData()
@@ -79,18 +71,15 @@ export const AcceptedOfferDetails = ({
     formData.append('type', 'seller')
 
     try {
-      const response = await http.post('/custom/v1/payment-proof', formData, {
+      await http.post('/custom/v1/payment-proof', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
 
-      console.log(response)
-
-      // setStatus('Comprovante enviado com sucesso!')
+      handlePaymentProofSubmit()
     } catch (err) {
       console.error(err)
-      // setStatus('Erro ao enviar comprovante.')
     }
   }
 
@@ -239,10 +228,6 @@ export const AcceptedOfferDetails = ({
           Você precisa estar autenticado para enviar uma oferta.
         </p>
       )}
-
-      <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopupOpen(false)}>
-        <JoinUsPopup />
-      </PopupWrapper>
     </div>
   )
 }

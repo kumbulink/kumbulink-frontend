@@ -68,9 +68,7 @@ export const BankSelector = ({
         onClick={handleBankInputClick}
         readOnly
         placeholder='Selecione uma conta cadastrada'
-        className={`w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer ${
-          selectedBank ? 'pl-16' : 'pl-4'
-        }`}
+        className={`w-full rounded-md border border-gray-300 p-4 text-gray-600 appearance-none bg-white cursor-pointer pl-4`}
       />
       <span className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
         ▼
