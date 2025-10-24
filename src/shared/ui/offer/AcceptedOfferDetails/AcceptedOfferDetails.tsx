@@ -9,12 +9,20 @@ import { PaymentKeys } from '@/shared/constants'
 
 const Flag = lazy(() => import('react-world-flags'))
 
+interface PaymentProofUpload {
+    field: string,
+    key: string,
+    sucess: boolean,
+    temporary_url: string
+}
+
 interface AcceptedOfferDetailsProps extends AcceptedOfferWPPostWithACF {
   onClose: () => void,
   handlePaymentProofSubmit: () => void
 }
 
 export const AcceptedOfferDetails = ({
+  id: matchId,
   offer,
   onClose,
   handlePaymentProofSubmit
@@ -68,14 +76,23 @@ export const AcceptedOfferDetails = ({
     const formData = new FormData()
     formData.append('file', selectedFile)
     formData.append('post_id', String(51))
-    formData.append('type', 'seller')
+    formData.append('type', 'buyer')
 
     try {
-      await http.post('/custom/v1/payment-proof', formData, {
+      const response = await http.post<PaymentProofUpload>('/custom/v1/payment-proof', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
+      
+      const { temporary_url } = response.data
+
+      await http.post(`/wp/v2/matches/${matchId}`, {
+        acf: {
+          buyerPaymentProof: temporary_url
+        }
+      })
+      
 
       handlePaymentProofSubmit()
     } catch (err) {
