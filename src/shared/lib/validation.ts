@@ -9,11 +9,14 @@ const customValidators = {
       return /^[A-Z]{1}\d{7}$/.test(passport.toUpperCase())
     }
     return validator.isPassportNumber(passport, countryCode)
+  },
+  isBrazilianIdNumber: (registry: string) => {
+    return /(^\d{1,2}).?(\d{3}).?(\d{3})-?(\d{1}|X|x$)/.test(registry)
   }
 }
 
 /**
- * Document Validation
+ * Passaport Validation
  */
 export const validatePassport = (
   passport: string,
@@ -28,6 +31,13 @@ export const validatePassport = (
 export const validateAngolanID = (biNumber: string): boolean => {
   // Angolan ID format: 9 digits, 2 letters, 3 digits
   return /\d{9}[A-Za-z]{2}\d{3}$/.test(biNumber.toUpperCase())
+}
+
+/**
+ * Brazilian ID Validation
+ */
+export const validateBrazilianID = (id: string): boolean => {
+  return customValidators.isBrazilianIdNumber(id)
 }
 
 /**
