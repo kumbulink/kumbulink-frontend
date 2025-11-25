@@ -2,7 +2,7 @@ import { BackButton } from '@/shared/ui/layout/BackButton'
 import { useUserStore } from '@/shared/model/providers/userStore'
 import { useState } from 'react'
 
-import { http, validatePassport, validateAngolanID } from '@/shared/lib'
+import { http, validatePassport, validateAngolanID, validateBrazilianID} from '@/shared/lib'
 
 interface EditableUserData {
   id: number
@@ -16,6 +16,12 @@ interface EditableUserData {
 interface ValidationErrors {
   documentId?: string
 }
+
+const documentLabels: Record<string, string> = {
+  'Bilhete de Identidade': 'Bilhete de Identidade',
+  'Passaporte': 'Passaporte',
+  'RG': 'RG'
+};
 
 export const ProfilePage = () => {
   const user = useUserStore(state => state.user)
@@ -43,13 +49,22 @@ export const ProfilePage = () => {
     // Validate document based on type
     let isDocumentValid = false
 
+    if (userData.documentType === 'RG') {
+      isDocumentValid = validateBrazilianID(userData.documentId)
+      if (!isDocumentValid) {
+        newErrors.documentId = 'RG inválido.'
+      }
+    }
+
     if (userData.documentType === 'Bilhete de Identidade') {
       isDocumentValid = validateAngolanID(userData.documentId)
       if (!isDocumentValid) {
         newErrors.documentId =
           'Bilhete de identidade inválido. Use 9 dígitos, 2 letras e 3 dígitos.'
       }
-    } else {
+    }
+    
+    if (userData.documentType === 'Passaporte') {
       // Default to Brazilian passport validation
       isDocumentValid = validatePassport(userData.documentId, 'Brasil')
       if (!isDocumentValid) {
@@ -149,9 +164,7 @@ export const ProfilePage = () => {
 
           <div className='mb-4'>
             <label className='text-xs text-[#757575] mb-1 block'>
-              {userData.documentType === 'Bilhete de Identidade'
-                ? 'Bilhete de Identidade'
-                : 'Passaporte'}
+              {documentLabels[userData.documentType] || 'Passaporte'}
             </label>
             <input
               type='text'

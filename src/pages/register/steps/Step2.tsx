@@ -7,6 +7,7 @@ import {
   http,
   validatePassport,
   validateAngolanID,
+  validateBrazilianID,
   countries
 } from '@/shared/lib'
 
@@ -23,6 +24,18 @@ import CalendarIcon from '/icons/calendar.svg'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
+
+const documentPlaceholder: Record<string, string> = {
+  'Bilhete de Identidade': 'Número do bilhete de identidade',
+  'Passaporte': 'Número do Passaporte',
+  'RG': 'Número do RG'
+};
+
+const documentWarnings: Record<string, string> = {
+  'Bilhete de Identidade': 'Bilhete de identidade inválido. Use 9 dígitos, 2 letras e 3 dígitos.',
+  'Passaporte': 'Passaporte inválido.',
+  'RG': 'RG inválido.'
+};
 
 const customTheme: CustomFlowbiteTheme['datepicker'] = {
   root: {
@@ -87,14 +100,17 @@ export const Step2: React.FC = () => {
     const value = event.target.value
     setDocumentNumber(value)
 
-    if (selectedCountry === 'Angola') {
-      if (selectedDocument === 'Passaporte') {
-        setIsDocumentValid(validatePassport(value, selectedCountry))
-      } else if (selectedDocument === 'Bilhete de Identidade') {
+    if (selectedCountry === 'Angola' && selectedDocument === 'Bilhete de Identidade') {
         setIsDocumentValid(validateAngolanID(value))
-      }
-    } else {
+    }
+
+    if (selectedDocument === 'Passaporte') {
       setIsDocumentValid(validatePassport(value, selectedCountry))
+    } 
+    
+    if (selectedDocument === 'RG') {
+      setIsDocumentValid(validateBrazilianID(value))
+
     }
   }
 
@@ -246,9 +262,7 @@ export const Step2: React.FC = () => {
             <input
               type='text'
               placeholder={
-                selectedDocument === 'Bilhete de Identidade'
-                  ? 'Número do bilhete de identidade'
-                  : 'Número do passaporte'
+                documentPlaceholder[selectedDocument]
               }
               className={`w-full focus:outline-primary-green rounded-md border p-4 text-gray-600 placeholder:text-gray-400 ${
                 documentNumber && !isDocumentValid && 'border-red-500 focus:outline-red-500'
@@ -257,9 +271,7 @@ export const Step2: React.FC = () => {
             />
             {documentNumber && !isDocumentValid && (
               <p className='text-sm text-red-500 mt-1'>
-                {selectedDocument === 'Bilhete de Identidade'
-                  ? 'Bilhete de identidade inválido. Use 9 dígitos, 2 letras e 3 dígitos.'
-                  : 'Passaporte inválido.'}
+                {documentWarnings[selectedDocument]}
               </p>
             )}
           </div>

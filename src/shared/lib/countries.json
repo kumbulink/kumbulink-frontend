@@ -8,7 +8,7 @@
   },
   {
     "currency": "BRL",
-    "documents": ["Passaporte"],
+    "documents": ["Passaporte", "RG"],
     "iso": "BRA",
     "name": "Brasil",
     "passportLocale": "BR"
