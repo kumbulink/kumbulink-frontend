@@ -11,7 +11,9 @@ const customValidators = {
     return validator.isPassportNumber(passport, countryCode)
   },
   isBrazilianIdNumber: (registry: string) => {
-    return /(^\d{1,2}).?(\d{3}).?(\d{3})-?(\d{1}|X|x$)/.test(registry)
+    const test = /^(\d{1,2})\.?(\d{3})\.?(\d{3})-?([\dXx])$/.test(registry)
+
+    return test
   }
 }
 
