@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Datepicker, type CustomFlowbiteTheme } from 'flowbite-react'
-
 import type { WP_User } from 'wp-types'
 
 import {
@@ -15,12 +13,11 @@ import {
   PopupWrapper,
   MembershipTerms,
   PrivacyPolicy,
-  CountrySelector
+  CountrySelector,
+  Datepicker
 } from '@/shared/ui'
 
 import { useRegisterStore } from '@/shared/model'
-
-import CalendarIcon from '/icons/calendar.svg'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
@@ -36,38 +33,6 @@ const documentWarnings: Record<string, string> = {
   'Passaporte': 'Passaporte inválido.',
   'RG': 'RG inválido.'
 };
-
-const customTheme: CustomFlowbiteTheme['datepicker'] = {
-  root: {
-    base: 'relative',
-    input: {
-      base: 'w-full rounded-md border border-gray-300 p-2 text-gray-600 placeholder:text-gray-400 !bg-white',
-      field: {
-        base: 'block w-full p-0 text-gray-600 !bg-white',
-        input: {
-          base: 'w-full border-0 p-0 focus:outline-none focus:ring-0 !bg-white !text-base !pl-2'
-        }
-      }
-    }
-  },
-  popup: {
-    footer: {
-      button: {
-        today: 'hidden',
-        clear: 'hidden'
-      }
-    }
-  },
-  views: {
-    days: {
-      items: {
-        item: {
-          selected: 'bg-primary-green text-white hover:bg-primary-green'
-        }
-      }
-    }
-  }
-}
 
 export const Step2: React.FC = () => {
   const { currentStep, prevStep, nextStep, formData, setFormData } =
@@ -213,17 +178,7 @@ export const Step2: React.FC = () => {
         </div>
 
         <div className='relative'>
-          <Datepicker
-            value={selectedDate}
-            onChange={date => setSelectedDate(date)}
-            icon={() => false}
-            rightIcon={() => (
-              <img src={CalendarIcon} alt='Calendar' className='w-6 h-6' />
-            )}
-            theme={customTheme}
-            placeholder='Data de nascimento'
-            language='pt-BR'
-          />
+          <Datepicker setSelectedDate={setSelectedDate}/>          
         </div>
 
         <CountrySelector handleSelect={handleCountrySelect} />
