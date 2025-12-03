@@ -4,7 +4,7 @@ import { useUserStore } from '@/shared/model/providers/userStore'
 import type { OfferWPPostWithACF } from '@/shared/types'
 import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
-import { BankSelector, PopupWrapper } from '@/shared/ui'
+import { BankSelector, PopupWrapper, BankForm } from '@/shared/ui'
 
 import { OfferMatchedDialog } from '../OfferMatchedDialog'
 
@@ -22,6 +22,9 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
 
   const [isPopUpOpen, setIsPopupOpen] = useState(false)
   const [buyerBank, setBuyerBank] = useState<number | null>(null)
+
+  const [popupContent, setPopupContent] = useState<React.ReactNode | null>(null)
+  const [refreshList, setRefreshList] = useState(0)
 
   const sellerFromCountry = offer?.acf.sellerFromCountry ?? ''
   const sellerToCountry = offer?.acf.sellerToCountry ?? ''
@@ -61,6 +64,7 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
         },
         status: 'publish'
       })
+      setPopupContent(<OfferMatchedDialog onClose={() => setIsPopupOpen(false)} />)
       setIsPopupOpen(true)
 
       if (response.status === 201) {
@@ -69,6 +73,11 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
     } catch (err) {
       console.error(err)
     }
+  }
+
+  const handleBankFormSuccess = () => {
+    setIsPopupOpen(false)
+    setRefreshList(prev => prev + 1)
   }
 
   return (
@@ -160,7 +169,16 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
         <div className='mt-10'>
           <h2 className='text-lg mb-4 text-gray-600'>Onde deseja receber</h2>
           <BankSelector
-            addBank={() => setIsPopupOpen(true)}
+            refreshList={refreshList}
+            addBank={() => {
+              setPopupContent(
+                <BankForm
+                  onCancel={() => setIsPopupOpen(false)}
+                  onSuccess={handleBankFormSuccess}
+                />
+              )
+              setIsPopupOpen(true)
+            }}
             setBank={bankId => setBuyerBank(bankId)}
           />
         </div>
@@ -197,7 +215,7 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
       )}
 
       <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopupOpen(false)}>
-        <OfferMatchedDialog onClose={() => setIsPopupOpen(false)} />
+        {popupContent}
       </PopupWrapper>
     </div>
   )

@@ -41,7 +41,11 @@ export const BankSelector = ({
     setErrorBanks(null)
     http
       .get(`/wp/v2/banks?author=${user.id}`)
-      .then(res => setBanks(res.data as Bank[]))
+      .then(res => {
+        const banks = res.data as Bank[]
+        setBanks(banks)
+        setSelectedBank(banks[0].acf?.bank || banks[0].title?.rendered)
+      })
       .catch(() => setErrorBanks('Erro ao buscar bancos cadastrados.'))
       .finally(() => setLoadingBanks(false))
   }, [user?.id, refreshList])
