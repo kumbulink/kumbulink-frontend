@@ -1,10 +1,19 @@
-import { useRef, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import { useClickOutside } from '@/shared/hooks'
 import { AddIcon } from '@/shared/ui'
 import { http } from '@/shared/lib'
 
 import { useUserStore } from '@/shared/model/providers/userStore'
+
+// Floating UI
+import {
+  useFloating,
+  offset,
+  flip,
+  shift,
+  autoUpdate
+} from '@floating-ui/react'
 
 interface Bank {
   id: number
@@ -25,8 +34,6 @@ export const BankSelector = ({
   setBank: (bankId: number) => void
   refreshList?: number
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null)
-  const dropdownRef = useRef<HTMLDivElement>(null)
   const user = useUserStore(state => state.user)
 
   const [selectedBank, setSelectedBank] = useState<string>('')
@@ -35,26 +42,43 @@ export const BankSelector = ({
   const [loadingBanks, setLoadingBanks] = useState(false)
   const [errorBanks, setErrorBanks] = useState<string | null>(null)
 
+  // FLOATING UI
+  const { refs, floatingStyles } = useFloating({
+    placement: 'bottom-start',
+    middleware: [
+      offset(8), // distância do input
+      flip(),    // abre pra cima se não couber
+      shift({ padding: 8 }) // respiro das bordas
+    ],
+    whileElementsMounted: autoUpdate
+  })
+
+  useClickOutside(refs.floating, () => setIsBankListOpen(false))
+
   useEffect(() => {
     if (!user?.id) return
+
     setLoadingBanks(true)
     setErrorBanks(null)
+
     http
       .get(`/wp/v2/banks?author=${user.id}`)
       .then(res => {
         const banks = res.data as Bank[]
         setBanks(banks)
-        setSelectedBank(banks[0].acf?.bank || banks[0].title?.rendered)
+        
+        if(banks.length > 0) {
+          setSelectedBank(banks[0].acf?.bank || banks[0].title?.rendered)
+          setBank(banks[0].id)
+        }
       })
       .catch(() => setErrorBanks('Erro ao buscar bancos cadastrados.'))
       .finally(() => setLoadingBanks(false))
   }, [user?.id, refreshList])
 
-  useClickOutside(dropdownRef, () => setIsBankListOpen(false))
-
   const handleBankInputClick = () => {
     setIsBankListOpen(true)
-    inputRef.current?.focus()
+    // inputRef.current?.focus()
   }
 
   const handleBankSelect = (bankName: string, bankId: number) => {
@@ -66,7 +90,7 @@ export const BankSelector = ({
   return (
     <div className='relative flex items-center'>
       <input
-        ref={inputRef}
+        ref={refs.setReference}
         type='text'
         value={selectedBank}
         onClick={handleBankInputClick}
@@ -80,7 +104,8 @@ export const BankSelector = ({
 
       {isBankListOpen && (
         <div
-          ref={dropdownRef}
+          ref={refs.setFloating}
+          style={floatingStyles}
           className='absolute left-0 right-0 top-full z-20 mt-1 max-h-60 overflow-auto rounded-md border border-gray-300 bg-white shadow-lg'
         >
           {loadingBanks && (
