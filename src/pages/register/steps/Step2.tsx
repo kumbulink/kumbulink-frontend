@@ -19,7 +19,6 @@ import {
 
 import { useRegisterStore } from '@/shared/model'
 
-import 'react-datepicker/dist/react-datepicker.css'
 import '../style.css'
 
 const documentPlaceholder: Record<string, string> = {

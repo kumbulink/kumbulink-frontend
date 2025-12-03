@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 
 import { CloseIcon } from '@/shared/ui/utils'
 
@@ -13,13 +13,20 @@ export const PopupWrapper = ({
   onClose,
   children
 }: PopupWrapperProps) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("overflow-hidden")
+    } else {
+      document.body.classList.remove("overflow-hidden")
+    }
+  }, [isOpen])
   if (!isOpen) return null
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center p-4'>
       <div className='fixed inset-0 bg-black opacity-50' onClick={onClose} />
       <div
-        className={`relative h-auto max-h-[90vh]`}
+        className={`relative h-auto max-h-[90vh] scrolling-touch`}
       >
         <button
           onClick={onClose}

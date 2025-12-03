@@ -2,9 +2,16 @@ import { useEffect, useState } from 'react'
 
 import type { WP_REST_API_Post } from 'wp-types'
 
-import { OfferCard, OfferDetails } from '@/shared/ui'
+import { 
+  BackButton, 
+  OfferCard, 
+  OfferDetails, 
+  PaymentProofPopup, 
+  PopupWrapper, 
+  SearchBar, 
+  Spinner 
+} from '@/shared/ui'
 
-import { BackButton, PopupWrapper, SearchBar, Spinner } from '@/shared/ui'
 import { http } from '@/shared/lib'
 
 import { useUserStore } from '@/shared/model'
@@ -77,6 +84,7 @@ export const MyOffersPage = () => {
         <OfferDetails
           offer={response.data}
           onClose={() => setIsPopupOpen(false)}
+          handlePaymentProofSubmit={handlePaymentProofSubmit}
         />
       )
       setIsLoading(false)
@@ -85,6 +93,17 @@ export const MyOffersPage = () => {
       setIsLoading(false)
       console.error(err)
     }
+  }
+
+  const handlePaymentProofSubmit = () => {
+    setIsPopupOpen(false)
+    setPopupContent(
+      <PaymentProofPopup
+        onClose={() => setIsPopupOpen(false)}
+      />
+    )
+    setIsLoading(false)
+    setIsPopupOpen(true)
   }
 
   return (

@@ -1,10 +1,12 @@
 import { lazy, Suspense, useState } from 'react'
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import type { OfferWPPostWithACF } from '@/shared/types'
+import type { OfferWPPostWithACF, PaymentProofUpload } from '@/shared/types'
 import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
-import { BankSelector, PopupWrapper } from '@/shared/ui'
+import { BankSelector, PopupWrapper, BankForm } from '@/shared/ui'
+
+import { TransferDetails } from '@/shared/ui/transfer-details'
 
 import { OfferMatchedDialog } from '../OfferMatchedDialog'
 
@@ -12,16 +14,22 @@ const Flag = lazy(() => import('react-world-flags'))
 
 interface OfferDetailsProps {
   offer: OfferWPPostWithACF | null
-  onClose: () => void
+  onClose: () => void,
+  handlePaymentProofSubmit?: () => void
 }
 
-export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
+export const OfferDetails = ({ offer, onClose, handlePaymentProofSubmit }: OfferDetailsProps) => {
+  const showTransferDetails = !!handlePaymentProofSubmit
   const user = useUserStore(state => state.user)
   const isAuthenticated = !!user?.id
   const isOfferAuthor = user?.id === offer?.author
 
   const [isPopUpOpen, setIsPopupOpen] = useState(false)
   const [buyerBank, setBuyerBank] = useState<number | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+
+  const [popupContent, setPopupContent] = useState<React.ReactNode | null>(null)
+  const [refreshList, setRefreshList] = useState(0)
 
   const sellerFromCountry = offer?.acf.sellerFromCountry ?? ''
   const sellerToCountry = offer?.acf.sellerToCountry ?? ''
@@ -61,11 +69,46 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
         },
         status: 'publish'
       })
+      setPopupContent(<OfferMatchedDialog onClose={() => setIsPopupOpen(false)} />)
       setIsPopupOpen(true)
 
       if (response.status === 201) {
         setIsPopupOpen(true)
       }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const handleBankFormSuccess = () => {
+    setIsPopupOpen(false)
+    setRefreshList(prev => prev + 1)
+  }
+
+  const handleUpload = async () => {
+    if (!selectedFile) return
+
+    const formData = new FormData()
+    formData.append('file', selectedFile)
+    formData.append('post_id', String(51))
+    formData.append('type', 'buyer')
+
+    try {
+      const response = await http.post<PaymentProofUpload>('/custom/v1/payment-proof', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      console.log(response)
+      // const { temporary_url } = response.data
+
+      // await http.post(`/wp/v2/matches/${matchId}`, {
+      //   acf: {
+      //     buyerPaymentProof: temporary_url
+      //   }
+      // })
+      
+      if (showTransferDetails) handlePaymentProofSubmit()
     } catch (err) {
       console.error(err)
     }
@@ -147,20 +190,39 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
         </div>
       </div>
 
-      <div className='border border-dashed border-primary-orange rounded-md p-1 mt-4 mb-4'>
-        <div className='text-center text-center min-w-xs'>
-          <span className='text-primary-orange'>
-            Total a transferir ={' '}
-            <span className='font-semibold'>{formatCurrency(totalToTransfer, senderCurrency)}</span>
-          </span>
+      {isOfferAuthor && showTransferDetails && (
+        <TransferDetails 
+          total={totalToTransfer} 
+          currency={senderCurrency} 
+          fileCallback={setSelectedFile}
+        />
+      )}
+
+      {!showTransferDetails && (
+        <div className='border border-dashed border-primary-orange rounded-md p-1 mt-4 mb-4'>
+          <div className='text-center text-center min-w-xs'>
+            <span className='text-primary-orange'>
+              Total a transferir ={' '}
+              <span className='font-semibold'>{formatCurrency(totalToTransfer, senderCurrency)}</span>
+            </span>
+          </div>
         </div>
-      </div>
+      )}
 
       {!isOfferAuthor && (
         <div className='mt-10'>
           <h2 className='text-lg mb-4 text-gray-600'>Onde deseja receber</h2>
           <BankSelector
-            addBank={() => setIsPopupOpen(true)}
+            refreshList={refreshList}
+            addBank={() => {
+              setPopupContent(
+                <BankForm
+                  onCancel={() => setIsPopupOpen(false)}
+                  onSuccess={handleBankFormSuccess}
+                />
+              )
+              setIsPopupOpen(true)
+            }}
             setBank={bankId => setBuyerBank(bankId)}
           />
         </div>
@@ -174,19 +236,17 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
           >
             Voltar
           </button>
-          {!isOfferAuthor && (
-            <button
-              onClick={handleSubmit}
-              disabled={!buyerBank || !isAuthenticated}
-              className={`flex-1 cursor-pointer py-2 bg-primary-orange text-white font-medium rounded-md ${
-                !buyerBank || !isAuthenticated
-                  ? 'opacity-50 cursor-not-allowed'
-                  : ''
-              }`}
-            >
-              Aceitar
-            </button>
-          )}
+          <button
+            onClick={!isOfferAuthor && showTransferDetails ? handleSubmit : handleUpload}
+            disabled={!buyerBank || !isAuthenticated}
+            className={`flex-1 cursor-pointer py-2 bg-primary-orange text-white font-medium rounded-md ${
+              !buyerBank || !isAuthenticated
+                ? 'opacity-50 cursor-not-allowed'
+                : ''
+            }`}
+          >
+            {!isOfferAuthor && showTransferDetails ? 'Aceitar' : 'Enviar'}
+          </button>
         </div>
       </div>
 
@@ -197,7 +257,7 @@ export const OfferDetails = ({ offer, onClose }: OfferDetailsProps) => {
       )}
 
       <PopupWrapper isOpen={isPopUpOpen} onClose={() => setIsPopupOpen(false)}>
-        <OfferMatchedDialog onClose={() => setIsPopupOpen(false)} />
+        {popupContent}
       </PopupWrapper>
     </div>
   )
