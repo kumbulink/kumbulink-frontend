@@ -237,7 +237,7 @@ export const OfferDetails = ({ offer, onClose, handlePaymentProofSubmit }: Offer
             Voltar
           </button>
           <button
-            onClick={!isOfferAuthor && showTransferDetails ? handleSubmit : handleUpload}
+            onClick={!isOfferAuthor && !showTransferDetails ? handleSubmit : handleUpload}
             disabled={!buyerBank || !isAuthenticated}
             className={`flex-1 cursor-pointer py-2 bg-primary-orange text-white font-medium rounded-md ${
               !buyerBank || !isAuthenticated
@@ -245,7 +245,7 @@ export const OfferDetails = ({ offer, onClose, handlePaymentProofSubmit }: Offer
                 : ''
             }`}
           >
-            {!isOfferAuthor && showTransferDetails ? 'Aceitar' : 'Enviar'}
+            {!isOfferAuthor && !showTransferDetails ? 'Aceitar' : 'Enviar'}
           </button>
         </div>
       </div>
