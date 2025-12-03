@@ -1,20 +1,12 @@
-import { lazy, Suspense, useState, useRef } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import type { AcceptedOfferWPPostWithACF } from '@/shared/types'
+import type { AcceptedOfferWPPostWithACF, PaymentProofUpload } from '@/shared/types'
 import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
-
-import { PaymentKeys } from '@/shared/constants'
+import { TransferDetails } from '@/shared/ui/transfer-details'
 
 const Flag = lazy(() => import('react-world-flags'))
-
-interface PaymentProofUpload {
-    field: string,
-    key: string,
-    sucess: boolean,
-    temporary_url: string
-}
 
 interface AcceptedOfferDetailsProps extends AcceptedOfferWPPostWithACF {
   onClose: () => void,
@@ -22,6 +14,7 @@ interface AcceptedOfferDetailsProps extends AcceptedOfferWPPostWithACF {
 }
 
 export const AcceptedOfferDetails = ({
+  acf: customFields,
   id: matchId,
   offer,
   onClose,
@@ -29,10 +22,9 @@ export const AcceptedOfferDetails = ({
 }: AcceptedOfferDetailsProps) => {
   const user = useUserStore(state => state.user)
   const isAuthenticated = !!user?.id
+  const hasBuyerPaymentProof = customFields.buyerPaymentProof
 
-  const [copyFeedback, setCopyFeedback] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const sellerFromCountry = offer?.fields.sellerFromCountry ?? ''
   const sellerToCountry = offer?.fields.sellerToCountry ?? ''
@@ -50,25 +42,6 @@ export const AcceptedOfferDetails = ({
   const tax = 0.03 // 3%
   const totalToTransfer =
     parseFloat(sourceAmount) + parseFloat(sourceAmount) * tax
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(PaymentKeys.IBAN)
-      setCopyFeedback(true)
-      setTimeout(() => setCopyFeedback(false), 2000)
-    } catch (err) {
-      console.error('Failed to copy:', err)
-    }
-  }
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) setSelectedFile(file)
-  }
-
-  const handleFileClick = () => {
-    fileInputRef.current?.click()
-  }
 
   const handleUpload = async () => {
     if (!selectedFile) return
@@ -170,55 +143,18 @@ export const AcceptedOfferDetails = ({
         </div>
       </div>
 
-      <div className='border border-dashed border-primary-orange rounded-md p-1 mt-4 mb-4'>
-        <div className='text-center min-w-xs'>
-          <span className='text-primary-orange'>
-            Total a transferir ={' '}
-            <span className='font-semibold'>{formatCurrency(totalToTransfer, senderCurrency)}</span>
-          </span>
-        </div>
-      </div>
+      {!hasBuyerPaymentProof && (
+        <TransferDetails 
+          total={totalToTransfer} 
+          currency={senderCurrency} 
+          fileCallback={setSelectedFile}
+        />
+      )}
 
-      <div className='mt-4'>
-        <p className='text-xs text-gray-600 mb-2'>
-          Transfere à Kumbulink · MBWAY
-        </p>
-        <div className='flex justify-between items-center bg-gray-50 p-3 rounded-md gap-x-1'>
-          <span className='text-xs text-gray-600 max-w-[230px] block overflow-x-auto whitespace-nowrap'>
-            {PaymentKeys.IBAN}
-          </span>
-          <button
-            onClick={handleCopy}
-            className='text-primary-green text-xs cursor-pointer hover:opacity-80 transition-opacity'
-          >
-            {copyFeedback ? 'Copiado!' : 'Copiar'}
-          </button>
-        </div>
-      </div>
-
-      <div className='mt-4'>
-        <h3 className='text-gray-500 text-xs mb-2'>Anexar comprovativo</h3>
-        <div className='relative'>
-          <input
-            ref={fileInputRef}
-            type='file'
-            accept='.jpg,.jpeg,.png,.pdf'
-            className='hidden'
-            onChange={handleFileChange}
-          />
-          <div
-            onClick={handleFileClick}
-            className='flex justify-between items-center p-2 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-50'
-          >
-            <span className={`text-xs ${selectedFile ? 'text-gray-900' : 'text-gray-400'}`}>
-              {selectedFile ? selectedFile.name : 'Ficheiros jpg, png ou pdf'}
-            </span>
-            <button className='text-primary-green text-xs'>
-              {selectedFile ? 'Alterar' : 'Anexar'}
-            </button>
-          </div>
-        </div>
-      </div>
+      {hasBuyerPaymentProof && (
+        <p className='text-xs text-gray-400 mt-4 mb-4'>Comprovante anexado com sucesso. Se tudo estiver correto com as transferencias, você receberá seu cambio em até 72 horas ou seu dinheiro retorna automaticamente</p>
+      )}
+      
 
       <div className='flex gap-4 mt-6 justify-end'>
         <div className='flex gap-4 w-2/3'>
@@ -229,7 +165,7 @@ export const AcceptedOfferDetails = ({
             Voltar
           </button>
           <button
-            onClick={handleUpload}
+            onClick={!hasBuyerPaymentProof ? handleUpload : onClose}
             disabled={!isAuthenticated}
             className={`flex-1 cursor-pointer py-2 bg-primary-orange text-white font-medium rounded-md ${
               !isAuthenticated ? 'opacity-50 cursor-not-allowed' : ''
