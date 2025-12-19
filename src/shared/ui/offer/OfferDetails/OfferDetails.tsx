@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState } from 'react'
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import type { OfferWPPostWithACF, PaymentProofUpload } from '@/shared/types'
+import type { OfferWPPostWithACF } from '@/shared/types'
 import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
 import { BankSelector, PopupWrapper, BankForm } from '@/shared/ui'
@@ -16,6 +16,10 @@ interface OfferDetailsProps {
   offer: OfferWPPostWithACF | null
   onClose: () => void,
   handlePaymentProofSubmit?: () => void
+}
+
+interface MatchByOfferResponse {
+  match_id: number
 }
 
 export const OfferDetails = ({ offer, onClose, handlePaymentProofSubmit }: OfferDetailsProps) => {
@@ -85,29 +89,25 @@ export const OfferDetails = ({ offer, onClose, handlePaymentProofSubmit }: Offer
     setRefreshList(prev => prev + 1)
   }
 
+  const getMatchIdByOffer = async (offerId: number) => {
+    const res = await http.get<MatchByOfferResponse>(`/custom/v1/match-by-offer/${offerId}`)
+    return res.data.match_id
+  }
   const handleUpload = async () => {
     if (!selectedFile) return
-
+  
+    const matchId = await getMatchIdByOffer(offerId)
+  
     const formData = new FormData()
     formData.append('file', selectedFile)
-    formData.append('post_id', String(51))
-    formData.append('type', 'buyer')
-
+    formData.append('post_id', matchId.toString())
+    formData.append('type', 'seller')
+  
     try {
-      const response = await http.post<PaymentProofUpload>('/custom/v1/payment-proof', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+      await http.post('/custom/v1/payment-proof', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       })
-      console.log(response)
-      // const { temporary_url } = response.data
-
-      // await http.post(`/wp/v2/matches/${matchId}`, {
-      //   acf: {
-      //     buyerPaymentProof: temporary_url
-      //   }
-      // })
-      
+  
       if (showTransferDetails) handlePaymentProofSubmit()
     } catch (err) {
       console.error(err)
@@ -239,9 +239,9 @@ export const OfferDetails = ({ offer, onClose, handlePaymentProofSubmit }: Offer
           </button>
           <button
             onClick={!isOfferAuthor && !showTransferDetails ? handleSubmit : handleUpload}
-            disabled={!buyerBank || !isAuthenticated}
+            disabled={(!buyerBank && !isOfferAuthor) || !isAuthenticated}
             className={`flex-1 cursor-pointer py-2 bg-primary-orange text-white font-medium rounded-md ${
-              !buyerBank || !isAuthenticated
+              (!buyerBank && !isOfferAuthor) || !isAuthenticated
                 ? 'opacity-50 cursor-not-allowed'
                 : ''
             }`}

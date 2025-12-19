@@ -52,10 +52,3 @@ export interface AcceptedOfferWPPostWithACF extends WP_REST_API_Post {
     id: number
   }
 }
-
-export interface PaymentProofUpload {
-  field: string,
-  key: string,
-  sucess: boolean,
-  temporary_url: string
-}
