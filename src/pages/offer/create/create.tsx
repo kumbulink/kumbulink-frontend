@@ -30,19 +30,21 @@ const toNumeric = (value: string) => {
   return numeric === '' ? 0 : parseInt(numeric, 10)
 }
 
+const INITIAL_FORM_FIELDS = {
+  sellerFromCountry: 'Angola',
+  sellerToCountry: 'Brasil',
+  sellerFromCurrency: 'AOA',
+  sellerToCurrency: 'BRL',
+  sourceAmount: '',
+  targetAmount: '',
+  sellerFrom: null,
+  sellerTo: null,
+  exchangeRate: '',
+  total: ''
+}
+
 export const CreateOfferPage: React.FC = () => {
-  const [form, setForm] = useState<FormState>({
-    sellerFromCountry: 'Angola',
-    sellerToCountry: 'Brasil',
-    sellerFromCurrency: 'AOA',
-    sellerToCurrency: 'BRL',
-    sourceAmount: '',
-    targetAmount: '',
-    sellerFrom: null,
-    sellerTo: null,
-    exchangeRate: '',
-    total: ''
-  })
+  const [form, setForm] = useState<FormState>(INITIAL_FORM_FIELDS)
   const [isPopupOpen, setIsPopupOpen] = useState(false)
   const [bankDestinationTitle, setBankDestinationTitle] = useState('')
   const [popupContent, setPopupContent] = useState<React.ReactNode>(null)
@@ -102,6 +104,10 @@ export const CreateOfferPage: React.FC = () => {
       sellerFromCountry: value === 'AOA' ? 'Angola' : 'Brasil'
     }))
   }
+
+  // const resetForm = useCallback(() => {
+  //   setForm(INITIAL_FORM_FIELDS)
+  // }, [])
 
   const handleSubmitInternal = useCallback(async () => {
     try {
@@ -176,12 +182,21 @@ export const CreateOfferPage: React.FC = () => {
         <BankSelector
           refreshList={refreshList}
           addBank={() => {
+            setPopupContent(
+              <BankForm
+                title={bankDestinationTitle}
+                onSuccess={() => {
+                  setIsPopupOpen(false)
+                  setRefreshList(prev => prev + 1)
+                }}
+                onCancel={() => setIsPopupOpen(false)}
+              />
+            )
             setIsPopupOpen(true)
             setBankDestinationTitle('Conta de recebimento')
           }}
           setBank={bankId => {
             setIsPopupOpen(false)
-            setBankDestinationTitle('')
             setForm(prev => ({ ...prev, sellerTo: bankId }))
           }}
         />
@@ -236,7 +251,12 @@ export const CreateOfferPage: React.FC = () => {
         </button>
       </div>
 
-      <PopupWrapper isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
+      <PopupWrapper isOpen={isPopupOpen} onClose={() => {
+        setIsPopupOpen(false)
+        // TO-DO: Find a way to resetForm just for ConfirmDialog
+        // resetForm()
+        }}
+      >
         {popupContent}
       </PopupWrapper>
     </div>

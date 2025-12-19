@@ -101,7 +101,7 @@ export const CurrencyInput = ({
         />
       </div>
       <span className='text-gray-400 text-xs'>
-        {selectedCountryData?.currency ?? 'BRL'}
+        {selectedCountryData?.currency ?? 'AOA'}
       </span>
     </div>
   )
