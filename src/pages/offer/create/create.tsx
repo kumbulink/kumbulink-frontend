@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 import {
   CurrencyInput,
@@ -9,6 +9,7 @@ import {
   ConfirmedOfferDialog
 } from '@/shared/ui'
 import { formatCurrency, http } from '@/shared/lib'
+import { useDebouncedCallback } from '@/shared/hooks'
 
 interface FormState {
   sellerFromCountry: string
@@ -102,7 +103,7 @@ export const CreateOfferPage: React.FC = () => {
     }))
   }
 
-  const handleSubmit = async () => {
+  const handleSubmitInternal = useCallback(async () => {
     try {
       await http.post('/wp/v2/classifieds', {
         title: 'Anúncio de câmbio',
@@ -117,9 +118,11 @@ export const CreateOfferPage: React.FC = () => {
       )
       setIsPopupOpen(true)
     } catch (error) {
-      console.log('error', error)
+      console.log('error', error instanceof Error ? error.message : error)
     }
-  }
+  }, [form])
+
+  const handleSubmit = useDebouncedCallback(handleSubmitInternal)
 
   return (
     <div className='max-w-md mx-auto p-4'>
