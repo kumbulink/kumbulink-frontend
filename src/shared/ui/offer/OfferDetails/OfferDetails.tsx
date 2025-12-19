@@ -191,7 +191,8 @@ export const OfferDetails = ({ offer, onClose, handlePaymentProofSubmit }: Offer
       </div>
 
       {isOfferAuthor && showTransferDetails && (
-        <TransferDetails 
+        <TransferDetails
+          userType='seller' 
           total={totalToTransfer} 
           currency={senderCurrency} 
           fileCallback={setSelectedFile}

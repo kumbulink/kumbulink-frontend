@@ -144,7 +144,8 @@ export const AcceptedOfferDetails = ({
       </div>
 
       {!hasBuyerPaymentProof && (
-        <TransferDetails 
+        <TransferDetails
+          userType='buyer'
           total={totalToTransfer} 
           currency={senderCurrency} 
           fileCallback={setSelectedFile}

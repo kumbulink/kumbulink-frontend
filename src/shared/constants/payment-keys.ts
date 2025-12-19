@@ -1,4 +1,4 @@
 export enum PaymentKeys {
-  IBAN = 'AO06.0040.0000.8844.7571.1016.0',
-  PIX = '60759961000106'
+  IBAN = 'AO06.0040.0000.7967.5023.1011.4',
+  PIX = 'bbe459b8-b7d3-4cbf-a3ef-7dd203d4d825'
 }
