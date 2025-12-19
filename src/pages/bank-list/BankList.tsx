@@ -7,7 +7,7 @@ import { DeleteConfirmation } from './components/DeleteConfirmation'
 
 import {
   PopupWrapper,
-  DeleteIcon,
+  // DeleteIcon,
   EditIcon,
   BankForm,
   BackButton
@@ -146,14 +146,14 @@ export const BankListPage = () => {
                   <span className='text-xs'>{bank.acf.payment_key}</span>
                 </div>
                 <span className='flex items-center gap-4'>
-                  <button
+                  {/* <button
                     data-bank-id={bank.id}
                     className='text-primary-orange p-1'
                     title='Deletar'
                     onClick={e => handleOptionClick(e, 'delete')}
                   >
                     <DeleteIcon className='h-5 w-5' />
-                  </button>
+                  </button> */}
                   <button
                     data-bank-id={bank.id}
                     className='text-green-700 p-1'
