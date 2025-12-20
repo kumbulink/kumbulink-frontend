@@ -55,6 +55,11 @@ export const HelpPage = () => {
       title: 'A plataforma é regulamentada?',
       content:
         'Sim, operamos de acordo com as regulamentações financeiras dos países onde atuamos.'
+    },
+    {
+      title: 'Qual contato em caso de dúvidas ou sugestões?',
+      content:
+        'Qualquer dúvida, sugestão ou reclamação, entre em contato pelos canais: contato@kumbulink.com ou  +55 11 959163266'
     }
   ]
 

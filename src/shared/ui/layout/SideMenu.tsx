@@ -123,6 +123,12 @@ export const SideMenu = ({ isOpen, onClose }: SideMenuProps) => {
           </div>
         )}
 
+        <div className='p-4'>
+          <p className='text-xs text-gray-500'>Contato:</p>
+          <p className='text-xs text-gray-500'><a>contato@kumbulink.com</a></p>
+          <p className='text-xs text-gray-500'><a>+55 11 959163266</a></p>
+        </div>
+
         {isAuthenticated && (
           <div className='p-4'>
             <button

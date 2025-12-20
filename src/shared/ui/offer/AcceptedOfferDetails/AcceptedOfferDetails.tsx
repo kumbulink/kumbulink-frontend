@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState } from 'react'
 import { useUserStore } from '@/shared/model/providers/userStore'
 
-import type { AcceptedOfferWPPostWithACF, PaymentProofUpload } from '@/shared/types'
+import type { AcceptedOfferWPPostWithACF } from '@/shared/types'
 import { formatCurrency, http } from '@/shared/lib'
 import { useCountryInfo } from '@/shared/hooks'
 import { TransferDetails } from '@/shared/ui/transfer-details'
@@ -48,24 +48,15 @@ export const AcceptedOfferDetails = ({
 
     const formData = new FormData()
     formData.append('file', selectedFile)
-    formData.append('post_id', String(51))
+    formData.append('post_id', matchId.toString())
     formData.append('type', 'buyer')
 
     try {
-      const response = await http.post<PaymentProofUpload>('/custom/v1/payment-proof', formData, {
+      await http.post('/custom/v1/payment-proof', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       })
-      
-      const { temporary_url } = response.data
-
-      await http.post(`/wp/v2/matches/${matchId}`, {
-        acf: {
-          buyerPaymentProof: temporary_url
-        }
-      })
-      
 
       handlePaymentProofSubmit()
     } catch (err) {
@@ -144,7 +135,8 @@ export const AcceptedOfferDetails = ({
       </div>
 
       {!hasBuyerPaymentProof && (
-        <TransferDetails 
+        <TransferDetails
+          userType='buyer'
           total={totalToTransfer} 
           currency={senderCurrency} 
           fileCallback={setSelectedFile}

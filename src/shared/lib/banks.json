@@ -29,6 +29,13 @@
   },
   {
     "code": "",
+    "name": "Atlantico",
+    "site": "https://www.atlantico.ao/pt/particulares/para-si",
+    "country": "Angola",
+    "payment_method": "iban"
+  },
+  {
+    "code": "",
     "name": "Banco Bai",
     "site": "https://www.bancobai.ao",
     "country": "Angola",
@@ -38,6 +45,13 @@
     "code": "",
     "name": "Banco BFA",
     "site": "https://www.bfa.ao",
+    "country": "Angola",
+    "payment_method": "iban"
+  },
+  {
+    "code": "",
+    "name": "Banco BIC",
+    "site": "https://www.bancobic.ao/inicio/particulares/index",
     "country": "Angola",
     "payment_method": "iban"
   },
