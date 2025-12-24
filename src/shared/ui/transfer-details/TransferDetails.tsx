@@ -61,20 +61,20 @@ export const TransferDetails = ({ total, currency, userType, fileCallback } : Tr
       </div>
       <div className='mt-4'>
         <p className='text-xs text-gray-600 mb-2'>
-          {isAngola && ''}
-
-          {isAngola && (
-            <div className='flex justify-between items-center bg-gray-50 p-3 rounded-md gap-x-1'>
-              <span>Multicaixa Expresso: 924281790</span>
-              <button
-                onClick={() => handleCopy('924281790')}
-                className='text-primary-green text-xs cursor-pointer hover:opacity-80 transition-opacity'
-              >
-                {copyFeedback ? 'Copiado!' : 'Copiar'}
-              </button>
-            </div>
-          )}
+          {isAngola ? '' : 'Transfere à Kumbulink · PIX' }
         </p>
+        
+        {isAngola && (
+          <div className='flex justify-between items-center bg-gray-50 p-3 rounded-md gap-x-1'>
+            <span className='text-xs text-gray-600 mb-2'>Multicaixa Expresso: 924281790</span>
+            <button
+              onClick={() => handleCopy('924281790')}
+              className='text-primary-green text-xs cursor-pointer hover:opacity-80 transition-opacity'
+            >
+              {copyFeedback ? 'Copiado!' : 'Copiar'}
+            </button>
+          </div>
+        )}
         <div className='flex justify-between items-center bg-gray-50 p-3 rounded-md gap-x-1'>
           <span className='text-xs text-gray-600 max-w-[230px] block overflow-x-auto whitespace-nowrap'>
           {isAngola ? `IBAN: ${PaymentKeys.IBAN}` : `PIX: ${PaymentKeys.PIX}`}
