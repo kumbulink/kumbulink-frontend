@@ -15,6 +15,7 @@ interface UserStore {
   user: User | null
   setUser: (user: User) => void
   logout: () => void
+  logoutLocal: () => void
 }
 
 export const useUserStore = create<UserStore>()(
@@ -28,7 +29,12 @@ export const useUserStore = create<UserStore>()(
             await http.post('/custom/v1/logout')
           } catch (error) {
             console.error('Logout error:', error)
+          } finally {
+            set({ user: null })
+            window.location.href = '/'
           }
+        },
+        logoutLocal: () => {
           set({ user: null })
           window.location.href = '/'
         }
