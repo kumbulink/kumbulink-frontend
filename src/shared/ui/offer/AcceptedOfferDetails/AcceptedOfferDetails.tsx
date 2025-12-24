@@ -41,7 +41,7 @@ export const AcceptedOfferDetails = ({
   const exchangeRate = parseFloat(sourceAmount) / parseFloat(targetAmount)
   const tax = 0.03 // 3%
   const totalToTransfer =
-    parseFloat(sourceAmount) + parseFloat(sourceAmount) * tax
+    parseFloat(targetAmount) + parseFloat(targetAmount) * tax
 
   const handleUpload = async () => {
     if (!selectedFile) return
