@@ -10,14 +10,14 @@ export default defineConfig(({ mode }) => {
   const isDev = mode === 'development'
 
   return {
-    base: '/',    resolve: {
+    base: '/',    
+    resolve: {
       alias: {
         '@': path.resolve(__dirname, 'src')
       }
     },
     server: isDev
       ? {
-          https: false,
           host: 'localhost'
         }
       : {},
