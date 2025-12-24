@@ -3,7 +3,6 @@ import { VitePWA } from 'vite-plugin-pwa'
 import react from '@vitejs/plugin-react'
 import svgr from 'vite-plugin-svgr'
 import tailwindcss from '@tailwindcss/vite'
-import fs from 'fs'
 import path from 'path'
 
 // https://vite.dev/config/
@@ -18,15 +17,8 @@ export default defineConfig(({ mode }) => {
     },
     server: isDev
       ? {
-          https: {
-            key: fs.readFileSync(
-              path.resolve(__dirname, 'local.kumbulink.com-key.pem')
-            ),
-            cert: fs.readFileSync(
-              path.resolve(__dirname, 'local.kumbulink.com.pem')
-            )
-          },
-          host: 'local.kumbulink.com' // importante usar o mesmo host do certificado
+          https: false,
+          host: 'localhost'
         }
       : {},
     plugins: [
