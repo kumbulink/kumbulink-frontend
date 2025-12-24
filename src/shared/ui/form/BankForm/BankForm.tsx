@@ -112,10 +112,10 @@ export const BankForm = ({
     setLoading(true)
     setError(null)
 
-    let url = `https://api.kumbulink.com/wp-json/wp/v2/banks`
+    let url = `/wp/v2/banks`
 
     if (bankId) {
-      url = `https://api.kumbulink.com/wp-json/wp/v2/banks/${bankId}`
+      url = `/wp/v2/banks/${bankId}`
     }
 
     try {

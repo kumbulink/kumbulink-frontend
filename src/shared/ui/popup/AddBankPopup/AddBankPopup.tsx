@@ -53,7 +53,7 @@ export const AddBankPopup = ({
     setLoading(true)
     setError(null)
     try {
-      await http.post('https://api.kumbulink.com/wp-json/wp/v2/banks', {
+      await http.post('/wp/v2/banks', {
         title: PopupForm.accountName,
         acf: {
           country: PopupForm.country,
